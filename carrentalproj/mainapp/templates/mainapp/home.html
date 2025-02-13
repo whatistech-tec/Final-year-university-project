@@ -1,0 +1,76 @@
+
+{% extends 'mainapp/base.html' %}
+{% block title %}
+         Home   
+{% endblock title %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+        <div class="header__container" id="home">
+
+            <h1>PREMIUM CAR RENTAL</h1>
+            <div class="hero__btn btn">
+                <a href="{% url 'contact' %}">Get Started</a>
+            </div>
+            <form action="/">
+                <div class="input__group">
+                    <label for="location">Pick up & Return location</label>
+                    <input type="text" name="location" id="location" placeholder="Nairobi, Kenya">
+                </div>
+                <div class="input__group">
+                    <label for="start">Start</label>
+                    <input type="text" name="start" id="start" placeholder="Aug 16, 10:00 AM">
+                </div>
+                <div class="input__group">
+                    <label for="stop">Stop</label>
+                    <input type="text" name="stop" id="stop" placeholder="Aug 18, 10:00 AM">
+                </div>
+                <a href="{% url 'search' %}"class="btn">
+                    <i class="ri-search-line"></i>
+                </a>
+            </form>
+            <img src="{% static 'assets/istockphoto-495605964-612x612.webp' %}" alt="header"/>
+        </div>
+        <a href="#about" class="scroll__down">
+            <i class="ri-arrow-down-line"></i>
+        </a>
+    </header>
+    <section class="section__container range__container" id="about">
+        <h2 class="section__header">WIDE RANGE OF VEHICLES</h2>
+        <div class="range__grid">
+            <div class="range__card">
+                <img src="{% static 'assets/istockphoto-1379610301-612x612.webp' %}" alt="range" />
+                <div class="range__details">
+                    <h4>CARS</h4>
+                    <a href="{% url 'cars' %}"><i class="ri-arrow-right-line"></i></a>
+                </div>
+            </div>
+            <div class="range__card">
+                <img src="{% static 'assets/IMG_20240916_193355.jpg' %}" alt="range" />
+                <div class="range__details">
+                    <h4>VANS</h4>
+                    <a href="{% url 'vans' %}"><i class="ri-arrow-right-line"></i></a>
+                </div>
+            </div>
+            <div class="range__card">
+                <img src="{% static 'assets/istockphoto-1474471009-612x612.webp' %}" alt="range" />
+                <div class="range__details">
+                    <h4>SUVS</h4>
+                    <a href="{% url 'suvs' %}"><i class="ri-arrow-right-line"></i></a>
+                </div>
+            </div>
+            <div class="range__card">
+                <img src="{% static 'assets/istockphoto-1150931120-1024x1024.jpg' %}" alt="range" />
+                <div class="range__details">
+                    <h4>ELECTRIC</h4>
+                    <a href="{% url 'electric' %}"><i class="ri-arrow-right-line"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

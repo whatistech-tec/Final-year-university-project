@@ -1,0 +1,57 @@
+{% extends 'mainapp/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+<section class="contact">
+    <h1>Get in Touch for Your Dream Ride!</h1>
+    <p>
+        Have questions or need assistance? Our team is here to help you find the perfect car for your adventure.
+
+    </p>
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="PUT_YOUR_ACCES_KEY_HERE">
+        <div class="car__select">
+            <div class="car__select__item">
+                <label for="location">Location:</label>
+                <select name="location" class="car__select__input" id="location">
+                    <option value="Nairobi">Nairobi</option>
+                    <option value="Mombasa">Mombasa</option>
+                    <option value="Kisumu">Kisumu</option>
+                    <option value="Eldoret">Eldoret</option>
+                    <option value="Kisii">Kisii</option>
+                    <option value="Nakuru">Nakuru</option>
+                    <option value="Naivasha">Naivasha</option>
+                </select>
+            </div>
+            <div class="car__select__item">
+                <label for="car-type">Car to rent:</label>
+                <select name="car-type" class="car__select__input" id="car-type">
+                    <option value="Nairobi">Marcedez-AMG GT R</option>
+                    <option value="Mombasa">Lamborghini Venemo</option>
+                    <option value="Kisumu">ROlls Royce Dawn</option>
+                    <option value="Eldoret">Toyota 86 - Coupe</option>
+                    
+                </select>
+            </div>
+            <div class="car__select__item">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="car__select__input"/>
+            </div>
+        </div>
+        <div class="contact__form">
+            <input type="text" name="name" placeholder="Name" required/>
+            <input type="email" name="email" placeholder="Email" required/>
+            <input type="phone" name="phone" placeholder="Phone" required/>
+            <button type="submit" class="btn">Submit</button>
+        </div>
+    </form>
+</section>
+{% block contact %}
+
+{% endblock contact %}
+
+{% endblock content %}

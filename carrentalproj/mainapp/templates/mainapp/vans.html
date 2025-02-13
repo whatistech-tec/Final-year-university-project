@@ -1,0 +1,74 @@
+{% extends 'mainapp/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<section class="collection" id="collection-page">
+    <div class="collection__category">
+        <h1>Comfort Vans</h1>
+        <hr />
+        <div class="collection__container">
+            {% for item in vans_category %}
+            <div class="collection__car__item" id="collection-car-item-page">
+                <img src="{{item.car_image.url}}" ait="cars" id="collection-page-img"/>
+                <div class="car__info__container">
+                    <div class="car__info">
+                        <div class="car__price">
+                            <h5>ksh {{item.hire_amount}}</h5>
+                            <h6>/Day</h6>
+                        </div>
+                        <div class="car__location">
+                            <i class="bx bxs-map"></i>
+                            <h6>{{item.location}}</h6>
+                        </div>
+                    </div>
+                    <h2>{{item.car_name}}</h2>
+                    <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
+                </div>
+            </div>
+            {% endfor %}
+            {% comment %} <div class="collection__car__item" id="collection-car-item-page">
+                <img src="{% static 'assets/1726690417130.jpg' %}" ait="cars" id="collection-page-img"/>
+                <div class="car__info__container">
+                    <div class="car__info">
+                        <div class="car__price">
+                            <h5>ksh 5200</h5>
+                            <h6>/Day</h6>
+                        </div>
+                        <div class="car__location">
+                            <i class="bx bxs-map"></i>
+                            <h6>Kisii</h6>
+                        </div>
+                    </div>
+                    <h2>Toyota - B100</h2>
+                    <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
+                </div>
+            </div> {% endcomment %}
+            {% comment %} <div class="collection__car__item" id="collection-car-item-page">
+                <img src="{% static 'assets/1726690427061.jpg' %}" ait="cars" id="collection-page-img"/>
+                <div class="car__info__container">
+                    <div class="car__info">
+                        <div class="car__price">
+                            <h5>ksh 8100</h5>
+                            <h6>/Day</h6>
+                        </div>
+                        <div class="car__location">
+                            <i class="bx bxs-map"></i>
+                            <h6>Naivasha</h6>
+                        </div>
+                    </div>
+                    <h2>Ford 8324 - DC</h2>
+                    <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
+                </div>
+            </div> {% endcomment %}
+        </div>
+    </div>
+</section>
+
+{% block contact %}
+
+{% endblock contact %}
+
+{% endblock content %}

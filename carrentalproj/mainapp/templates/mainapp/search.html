@@ -1,0 +1,34 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}
+         Search   
+{% endblock title %}
+{% load static %}
+
+
+{% block css %}
+
+{% endblock css %}
+
+{% block content %}
+
+<body>
+    <div id="myOverlay" class="overlay">
+        <span class="closebtn" onclick="closeSearch()" title="Close Overlay">&#215</span>
+        <div class="overlay-content">
+            <form>
+                <input type="text" placeholder="Search Here.." name="search">
+                <button type="submit"><i class= "icon"></button>
+            </form>
+        </div>
+        <button class="openbtn" onclick="openSearch()">Click here to open search</button>
+    </div>
+    <script>
+        function openSearch(){
+            document.getElementById("myOverlay").style.display = "block";
+        }
+        function closeSearch(){
+            document.getElementById("myOverlay").style.display = "none";
+        }
+    </script>
+</body>
+{% endblock content %}

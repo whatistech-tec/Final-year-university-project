@@ -1,0 +1,146 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            
+        {% endblock title %}
+    </title>
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    {% endblock css %}
+
+    {% block searchcss %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% endblock searchcss %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet"
+        href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+</head>
+<body>
+    {% block nav %}
+    <header>
+        
+        <nav>
+            <div class="nav__header">
+                <div class="nav__logo">
+                    <a href="#">SONA</a>
+                </div>
+                <div class="nav__menu__btn" id="menu-btn">
+                    <i class="ri-menu-line"></i>
+                </div>
+            </div>
+            <ul class="nav__links" id="nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'rent' %}">Rent</a></li>
+                <li><a href="{% url 'ride' %}">Ride</a></li>
+                <li><a href="{% url 'stories' %}">Stories</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+            <div class="nav__btn">
+                <button class="btn" onclick="window.location.href='contact.html'">Get Started</button>
+            </div>
+        </nav>
+        {% endblock nav %}
+
+        {% block content %}
+
+        {% endblock content %}
+
+        {% block contact %}
+        <section class="download">
+            <div class="section__container download__container">
+                <div class="download__content">
+                    <h2 class="section__header">PREMIUM CAR RENTAL</h2>
+                    <p>Need assistance or ready to reserve your wheels? Contact us now for prompt  service and effortless booking !</p>
+                    <div class="download__links">
+                        <a href="#">
+                            <img src="{% static 'assets/1726518533713.jpg' %}" alt="apple">
+                        </a>
+                        <a href="#">
+                            <img src="{% static 'assets/1726518606050.jpg' %}" alt="google">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        {% endblock contact %}
+        <section class="news" id="contact">
+            <div class="section__container news__container">
+                <h2 class="section__header">Stay upto date on all the latest news</h2>
+                <form action="/">
+                    <input type="text" placeholder="Your Email" />
+                    <button class="btn">
+                        <i class="ri-send-plane-fill"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    
+        <footer>
+            <div class="section__container footer__container">
+                <div class="footer__col">
+                    <h4>Resources</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Installation Manual</a></li>
+                        <li><a href="#">Release Note</a></li>
+                        <li><a href="#">Community Help</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4>Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Career</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4>Product</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Demo</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4>Follow Us</h4>
+                    <ul class="footer__socials">
+                        <li>
+                            <a href="#"><i class="ri-facebook-fill"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="ri-twitter-fill"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="ri-linkedin-fill"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bar">
+                Copyright © 2024 Hesborn Nyandarua. All rights reserved.
+            </div>
+        </footer>
+    
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script src="{% static 'index.js' %}" defer></script>
+    </body>
+    </html>

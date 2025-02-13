@@ -1,0 +1,145 @@
+{% extends 'mainapp/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+        
+
+<section class="select__container" id="ride">
+    <h2 class="section__header">PICK YOUR DREAM CAR TODAY</h2>
+    <div class="heading">
+        <h1>Rent With 3 Easy Steps !</h1>
+        <div class="ride__container">
+            <div class="box">
+                <i class="bx bxs-map"></i>
+                <h2>Choose A location</h2>
+                <p>
+                    Whether you are looking for a luxury sedan, a spacious suv, or a sporty convertible,
+                    our easy-to-use tool helps you find the ideal car for your journey.
+                    Simply enter tour location and let us connect you with top-tier vehicles ready for rental.
+                </p>
+            </div>
+            <div class="box">
+                <i class="bx bxs-calendar-check"></i>
+                <h2>Pick Up Date</h2>
+                <p>
+                    Whether you are looking for a luxury sedan, a spacious suv, or a sporty convertible,
+                    our easy-to-use tool helps you find the ideal car for your journey.
+                    Simply enter tour location and let us connect you with top-tier vehicles ready for rental.
+                </p>
+            </div>
+            <div class="box">
+                <i class="bx bxs-calendar-star"></i>
+                <h2>Book A Car</h2>
+                <p>
+                    Whether you are looking for a luxury sedan, a spacious suv, or a sporty convertible,
+                    our easy-to-use tool helps you find the ideal car for your journey.
+                    Simply enter tour location and let us connect you with top-tier vehicles ready for rental.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+            {% comment %} <div class="swiper-slide">
+                <div class="select__card">
+                    <img src="{% static 'assets/1726690360594.jpg' %}" alt="select">
+                    <div class="select__info">
+                        <div class="select__info__card">
+                            <span><i class="ri-speed-up-line"></i></span>
+                            <h4>200 <span>km/h</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-settings-5-line"></i></span>
+                            <h4>6 <span>speed</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-roadster-line"></i></span>
+                            <h4>2 <span>seats</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-signpost-line"></i></span>
+                            <h4>15 <span>milage</span></h4>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div> {% endcomment %}
+            
+            {% for item in renting_cars %}
+            <div class="swiper-slide">
+                <div class="select__card">
+                    <img src="{{item.car_image.url}}" alt="select">
+                    <div class="select__info">
+                        <div class="select__info__card">
+                            <span><i class="ri-speed-up-line"></i></span>
+                            <h4>{{item.speed}} <span>km/h</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-settings-5-line"></i></span>
+                            <h4>{{item.settings}} <span>speed</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-roadster-line"></i></span>
+                            <h4>{{item.seats}} <span>seats</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-signpost-line"></i></span>
+                            <h4>{{item.milage}} <span>milage</span></h4>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% comment %} <div class="swiper-slide">
+                <div class="select__card">
+                    <img src="{% static 'assets/1726690346560.jpg' %}" alt="select">
+                    <div class="select__info">
+                        <div class="select__info__card">
+                            <span><i class="ri-speed-up-line"></i></span>
+                            <h4>350 <span>km/h</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-settings-5-line"></i></span>
+                            <h4>9 <span>speed</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-roadster-line"></i></span>
+                            <h4>5 <span>seats</span></h4>
+                        </div>
+                        <div class="select__info__card">
+                            <span><i class="ri-signpost-line"></i></span>
+                            <h4>9 <span>milage</span></h4>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div> {% endcomment %}
+
+        </div>
+       
+    </div>
+    <form action="/" class="select__form">
+        <div class="select__price">
+            <span><i class="ri-price-tag-3-line"></i></span>
+            <div><span id="select-price">340</span> /day</div>
+        </div>
+        <div class="select__btns">
+            <button class="btn">View Details</button>
+            <button class="btn" href="{% url 'contact' %}">Rent Now</button>
+        </div>
+    </form>
+
+</section>
+{% block contact %}
+
+{% endblock contact %}
+
+
+
+{% endblock content %}

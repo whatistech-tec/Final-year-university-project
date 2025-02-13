@@ -1,0 +1,61 @@
+{% extends 'mainapp/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section__container story__container">
+    <h2 class="section__header">STORIES BEHIND THE WHEEL</h2>
+    <div class="story__grid">
+        {% for item in item_card %}
+        <div class="story__card">
+            <div class="story__date">
+                <span>{{item.date}}</span>
+                <div>
+                    <p>{{item.month}}</p>
+                    <p>{{item.year}}</p>
+                </div>
+            </div>
+            <h4>{{item.header}}</h4>
+            <p>
+                {{item.story}}
+            </p>
+            <img src="{{item.story_image.url}}"  alt="story"/>
+        </div>
+        {% endfor %}
+       
+        {% comment %} <div class="story__card">
+            <div class="story__date">
+                <span>18</span>
+                <div>
+                    <p>January</p>
+                    <p>2025</p>
+                </div>
+            </div>
+            <h4>Cars that Adapt to your Lifestyle</h4>
+            <p>
+                Read about how our versatile vehicles have seamlessly integrated into the lives of professionals and
+                and families alike.
+            </p>
+            <img src="{% static 'assets/1726690427061.jpg' %}" alt="story"/>
+        </div> {% endcomment %}
+    </div>
+</section>
+<section class="banner__container">
+    <div class="banner__wrapper">
+        <img src="{% static 'assets/png-transparent-chevrolet-logo-chevrolet-general-motors-car-bow-tie-logo-chevrolet-angle-necktie-cross-thumbnail.png' %}" alt="banner">
+        <img src="{% static 'assets/Audi-logo-A172888F41-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/ferrari-logo-C75D80471C-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/Jaguar-logo-82CE6ABAAD-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/land-rover-logo-86296C9BE7-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/peugeot-logo-BF5B2383EF-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/lexus-logo-B1AD49685D-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/mercedes-benz-logo-B29195852E-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/tesla-logo-8068FDA2E7-seeklogo.com.png' %}" alt="banner">
+        <img src="{% static 'assets/porsche-logo-4ED16BAFB1-seeklogo.com.png' %}" alt="banner">
+    </div>
+</section>
+{% block contact %}
+
+{% endblock contact %}
+{% endblock content %}
