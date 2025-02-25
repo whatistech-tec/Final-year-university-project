@@ -1,34 +1,71 @@
-{% extends 'mainapp/base.html' %}
-{% block title %}
-         Search   
-{% endblock title %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background: rgba(0,0,0,0.5);
+            background-size: cover;
+            font-family: sans-serif;
+        }
+        h1{
+            margin: 0 0 10px;
+            padding: 0;
+            font-size: 24px;
+        }
+        .box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            transform: translate(-50%, -50%);
 
+        }
+        input{
+            position: relative;
+            display: inline-block;
+            font-size: 20px;
+            box-sizing: border-box;
+            transition: -5s;
 
-{% block css %}
+        }
+        input[type="text"]{
+            background: #fff;
+            width: 340px;
+            height: 50px;
+            border: none;
+            outline: none;
+            padding: 0 25px;
+            border-radius: 25px 0 0 25px;
+            
+        }
+        input[type="submit"]{
+            position: relative;
+            border-radius: 0 25px 25px 0;
+            height: 50px;
+            width: 150px;
+            border: none;
+            cursor: pointer;
+            background: #ffc107;
 
-{% endblock css %}
-
-{% block content %}
+        }
+        input[type="submit"]:hover{
+            background: #ff5722;
+        }
+    </style>
+</head>
 
 <body>
-    <div id="myOverlay" class="overlay">
-        <span class="closebtn" onclick="closeSearch()" title="Close Overlay">&#215</span>
-        <div class="overlay-content">
-            <form>
-                <input type="text" placeholder="Search Here.." name="search">
-                <button type="submit"><i class= "icon"></button>
-            </form>
-        </div>
-        <button class="openbtn" onclick="openSearch()">Click here to open search</button>
+    <div class="box">
+        <form action="">
+            <input type="text" name="" placeholder="Type...">
+            <input type="submit" name="" value="Search">
+        </form>
     </div>
-    <script>
-        function openSearch(){
-            document.getElementById("myOverlay").style.display = "block";
-        }
-        function closeSearch(){
-            document.getElementById("myOverlay").style.display = "none";
-        }
-    </script>
+    
 </body>
-{% endblock content %}
+</html>

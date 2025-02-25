@@ -14,9 +14,10 @@
 
             <h1>PREMIUM CAR RENTAL</h1>
             <div class="hero__btn btn">
-                <a href="{% url 'contact' %}">Get Started</a>
+                <a href="{% url 'contact' %}">Welcome {{myuser.username}}</a>
             </div>
             <form action="/">
+                {% csrf_token %}
                 <div class="input__group">
                     <label for="location">Pick up & Return location</label>
                     <input type="text" name="location" id="location" placeholder="Nairobi, Kenya">
@@ -33,7 +34,7 @@
                     <i class="ri-search-line"></i>
                 </a>
             </form>
-            <img src="{% static 'assets/istockphoto-495605964-612x612.webp' %}" alt="header"/>
+            <img src="{% static 'assets/1726690360594.jpg' %}" alt="header"/>
         </div>
         <a href="#about" class="scroll__down">
             <i class="ri-arrow-down-line"></i>

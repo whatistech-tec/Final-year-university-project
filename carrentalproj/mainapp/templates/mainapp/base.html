@@ -14,10 +14,6 @@
     <link rel="stylesheet" href="{% static 'index.css' %}">
     {% endblock css %}
 
-    {% block searchcss %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    {% endblock searchcss %}
-    <link rel="stylesheet" href="{% static 'login.css' %}">
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
         rel="stylesheet"
@@ -33,7 +29,6 @@
 <body>
     {% block nav %}
     <header>
-        
         <nav>
             <div class="nav__header">
                 <div class="nav__logo">
@@ -50,8 +45,10 @@
                 <li><a href="{% url 'stories' %}">Stories</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
+            <a href="/" class="nav__links" >Welcome {{user.username}}</a>
+
             <div class="nav__btn">
-                <button class="btn" onclick="window.location.href='contact.html'">Get Started</button>
+                <a href="/login" class="btn" >Logout</a>
             </div>
         </nav>
         {% endblock nav %}

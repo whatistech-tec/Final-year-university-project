@@ -1,44 +1,151 @@
-{% extends 'mainapp/base.html' %}
-{% block title %}
-     Authentication   
-{% endblock title %}
-{% load static %}
-
-{% block css %}
-
-{% endblock css %}
-
-{% block searchcss %}
-
-{% endblock searchcss %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Auth</title>
+    <!-- <link rel="stylesheet" type="text/css" href="slidestyle.css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Jost', sans-serif;
+            background: rgba(0,0,0,0.5);
+        }
         
+        .main{
+            width: 350px;
+            height: 500px;
+            background: red;
+            
+            overflow: hidden;
+            background: url("1.jpg") no-repeat center / cover;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px #000;
+        
+        }
+        
+        #chk{
+            display: none;
+        }
+        
+        .signup{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        label{
+            color: #fff;
+            font-size: 2.3rem;
+            justify-content: center;
+            display: flex;
+            margin: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .5s ease-in-out;
+        }
+        
+        input{
+            width: 60%;
+            height: 20px;
+            background: #e0dede;
+            justify-content: center;
+            display: flex;
+            margin: 20px auto;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+        }
+        
+        button{
+            width: 60%;
+            height: 40px;
+            margin: 10px auto;
+            justify-content: center;
+            display: block;
+            color: #fff;
+            background: #573b8a;
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 20px;
+            outline: none;
+            border-radius: 5px;
+            transition: .2s ease-in;
+            cursor: pointer;
+        
+        }
+        
+        button:hover{
+            background: #6d44b8;
+        }
+        
+        .login{
+            height: 460px;
+            border-radius: 60% / 10%;
+            transition: .8s ease-in-out;
+        }
+        
+        .login label{
+            color: #573b8a;
+            transform: scale(.6);
+        }
+        
+        #chk:checked ~ .login{
+            transform: translateY(-500px);
+        }
+        
+        #chk:checked ~ .login label{
+            transform: scale(1);
+        }
+        
+        #chk:checked ~ .signup label{
+            transform: scale(.6);
+        }
+        p{
+            text-align: center;
+        }
+        
+        .alert{
+            text-align: center;
+        }
+        h3{
+            text-align: right;
+            padding: 20px;
+        }
+        
+    </style>
+</head>
+
 <body>
     <div class="main">
         <input type="checkbox" id="chk" aria-hidden="true">
-
+        
+        {% block content %}
         <div class="signup">
-            <form>
+            <form action="/auth" method="post">
+                {% csrf_token %}
                 <label for="chk" aria-hidden="true">Sign Up</label>
-                <input type="text" name="txt" placeholder="User name" required="">
-                <input type="email" name="email" placeholder="Email" required="">
-                <input type="password" name="pswd" placeholder="Password" required="">
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    <strong></strong> {{message}}
+                </div>
+                {% endfor %}
+                {% comment %} <input type="text" name="username" placeholder="User name" required=""> {% endcomment %}
+                <input type="email" name="email"  id="email" placeholder="Email" required="">
+                <input type="password" name="pass1" id ="pass1" placeholder="Password" required="">
+                <input type="password" name="pass2" id="pass2" placeholder="Confirm Password" required="">
                 <button> Sign Up</button>
+                <p>Already have an account? <a href="/login">Login</a></p>
             </form> 
         </div>
-
-        <div class="login">
-            <form>
-                <label for="chk" aria-hidden="true">Login</label>
-                <input type="email" name="email" placeholder="Email">
-                <input type="Password" name="pswd" placeholder="Password">
-                <button> Login</button>
-
-            </form>
-        </div>
+        {% endblock content %}
     </div>
-    
 </body>
-{% endblock content %}
+</html>
