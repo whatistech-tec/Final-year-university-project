@@ -11,16 +11,26 @@
         {% csrf_token %}
         <label for="chk" aria-hidden="true">Login</label>
         {% for message in messages %}
-            <div class="alert alert-{{message.tags}}" role="alert">
-                <strong></strong> {{message}}
-            </div>
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+           <p id="message-timer" class="alert alert-success float-center text-center message-text">
+
+            <i class='fa fa-check' aria-hidden="true"></i> &nbsp; {{message}}
+
+           </P> 
+
+        {% endif %}
         {% endfor %}
         <input type="email" name="email" placeholder="Email">
         <input type="Password" name="pass1" placeholder="Password">
         <button> Login</button>
         <p>Forgot Password? <a href="/">Reset</a></p>
         <p>Don't have account? <a href="/auth">Sign Up</a></p>
-        <h3><a href="/">Admin</a></h3>
+        <div class="admin">
+
+            <h2><a href="/crudapp/templates/my-login.html" >Admin</a></h2>
+        </div>
 
     </form>
 </div>

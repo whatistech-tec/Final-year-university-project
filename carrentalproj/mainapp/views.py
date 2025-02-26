@@ -44,7 +44,7 @@ def auth(request):
         password=request.POST['pass1']
         confirm_password=request.POST['pass2']
         if password!=confirm_password:
-            messages.warning(request,"Password is Not Matching")
+            messages.error(request,"Password is Not Matching")
             return render(request,'mainapp/auth.html')                   
         try:
             if User.objects.get(username=email):
@@ -68,7 +68,7 @@ def auth(request):
         
         email_message = EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[email],)
         EmailThread(email_message).start()
-        messages.info(request,"Activate account by clicking link on your email ")
+        messages.success(request,"Activate account by clicking link on your email ")
         return redirect('/login')
     
     context={}
@@ -84,7 +84,7 @@ class ActivateAccountView(View):
         if user is not None and generate_token.check_token(user,token):
             user.is_active=True
             user.save()
-            messages.info(request, "Account activated successifully!")
+            messages.sucess(request, "Account activated successifully!")
             return redirect('/login')
         return render(request,'activatefail.html')
 

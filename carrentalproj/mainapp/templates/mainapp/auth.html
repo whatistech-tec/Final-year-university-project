@@ -1,11 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide Auth</title>
-    <!-- <link rel="stylesheet" type="text/css" href="slidestyle.css"> -->
     <link href="https://fonts.googleapis.com/css?family=Jost:wght@500&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body{
             margin: 0;
@@ -24,7 +28,7 @@
             background: red;
             
             overflow: hidden;
-            background: url("1.jpg") no-repeat center / cover;
+            background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("static/assets/mercedes-benz-logo-B29195852E-seeklogo.com.png") no-repeat center / cover;
             border-radius: 10px;
             box-shadow: 5px 20px 50px #000;
         
@@ -110,16 +114,31 @@
         }
         p{
             text-align: center;
+            line-height: 26px;
+            font-size: 500;
         }
-        
+        p a{
+            text-align: center;
+            line-height: 26px;
+            font-size: 500;
+            color: blue;
+        }
         .alert{
             text-align: center;
         }
-        h3{
+        .admin{  
             text-align: right;
-            padding: 20px;
+            padding-right:20px;
+
         }
-        
+        .admin h2 a{
+            text-decoration: none;
+            font-weight: 700;
+            color: blue;
+        }
+        .message-text{
+            color: white;
+        }
     </style>
 </head>
 
@@ -128,23 +147,32 @@
         <input type="checkbox" id="chk" aria-hidden="true">
         
         {% block content %}
-        <div class="signup">
-            <form action="/auth" method="post">
-                {% csrf_token %}
-                <label for="chk" aria-hidden="true">Sign Up</label>
-                {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    <strong></strong> {{message}}
-                </div>
-                {% endfor %}
-                {% comment %} <input type="text" name="username" placeholder="User name" required=""> {% endcomment %}
-                <input type="email" name="email"  id="email" placeholder="Email" required="">
-                <input type="password" name="pass1" id ="pass1" placeholder="Password" required="">
-                <input type="password" name="pass2" id="pass2" placeholder="Confirm Password" required="">
-                <button> Sign Up</button>
-                <p>Already have an account? <a href="/login">Login</a></p>
-            </form> 
-        </div>
+            <div class="signup">
+                <form action="/auth" method="post">
+                    {% csrf_token %}
+                    <label for="chk" aria-hidden="true">Sign Up</label>
+                    {% for message in messages %}
+
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+                        <p id="message-timer" class="alert alert-success float-center text-center message-text">
+
+                            <i class='fa fa-check' aria-hidden="true"></i> &nbsp; {{message}}
+
+                        </P> 
+
+                        {% endif %}
+                    {% endfor %}
+                   
+                    
+                    {% comment %} <input type="text" name="username" placeholder="User name" required=""> {% endcomment %}
+                    <input type="email" name="email"  id="email" placeholder="Email" required="">
+                    <input type="password" name="pass1" id ="pass1" placeholder="Password" required="">
+                    <input type="password" name="pass2" id="pass2" placeholder="Confirm Password" required="">
+                    <button> Sign Up</button>
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </form> 
+            </div>
         {% endblock content %}
     </div>
 </body>
