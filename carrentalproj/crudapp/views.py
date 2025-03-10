@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, LoginForm, CreateRecordForm, UpdateRecordForm
+from .forms import CreateUserForm, LoginForm, CreateRecordForm, UpdateRecordForm, UploadVehicle
 
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate
@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
-from .models import Record
+from .models import Record,AllVehicles,MyCars,MyVans,MySuvs,MyElectric
 
 def home(request):
    
@@ -53,7 +53,7 @@ def my_login(request):
 
                 messages.success(request, "You have logged in successifully!")
 
-                return redirect("dashboard")
+                return redirect("all")
 
     context = {'form':form}
     return render(request, 'my-login.html', context=context)
@@ -70,7 +70,38 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context=context)
 
+@login_required(login_url='my-login')
+def search_venue(request):
+
+    if request.method == "POST":
+        searched = request.POST['searched']
+        records = Record.objects.filter(plate_number__contains=searched)
+
+        return render(request, 'search_venue.html', {'searched':searched},{'records':records})
+
+    else:
+        return render(request, 'search_venue.html', context=context)
 #logout
+
+def cars(request):
+    cars_category = MyCars.objects.all()
+    return render(request, "my-cars.html", {'cars_category':cars_category})
+
+def vans(request):
+    vans_category = MyVans.objects.all()
+    return render(request, "my-vans.html", {'vans_category':vans_category})
+
+def electric(request):
+    electric_category = MyElectric.objects.all()
+    return render(request, "my-electrics.html", {'electric_category':electric_category})
+def suvs(request):
+    suvs_category = MySuvs.objects.all()
+    return render(request, "my-suvs.html", {'suvs_category':suvs_category})
+
+
+def all(request):
+    all_vehicles = AllVehicles.objects.all()
+    return render(request, "all.html", {'all_vehicles':all_vehicles})
 
 @login_required(login_url='my-login')
 def user_logout(request):
@@ -82,6 +113,28 @@ def user_logout(request):
     return redirect("my-login")
 
 #create a record
+
+@login_required(login_url='my-login')
+def upload_vehicle(request): 
+
+    form = UploadVehicle()
+
+    if request.method == "POST":
+
+        form = UploadVehicle(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your record was created!")
+
+
+            return redirect("dashboard")
+                
+    context = {"form":form}
+
+    return render(request, 'upload-new-vehicle.html', context=context)
 
 @login_required(login_url='my-login')
 def create_record(request): 

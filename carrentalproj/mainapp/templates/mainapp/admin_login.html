@@ -1,0 +1,52 @@
+{% extends 'mainapp/admin_base.html' %}
+
+{% block nav %}
+
+{% endblock nav %}
+
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <style>
+        .form-layout{
+            border-radius: 15px;
+            width: 500px;
+            
+        }
+    </style>
+    <br>
+    <br>
+    <body>
+
+        <div class = "container bg-light shadow-md p-5 form-layout">
+
+            <h3> Admin Login </h3>
+
+            <hr>
+            <br>
+
+            <form method="POST" autocomplete="off">
+
+                {% csrf_token %}
+
+                {{form.username|as_crispy_field}}
+
+                <br>
+                
+                {{form.password|as_crispy_field}}
+
+                <br>
+                
+                <button type="submit" class="btn btn-primary w-100 btn-block p-2"> Login  &nbsp; <i class='fa fa-key'></i></button>
+            </form>
+
+            <br>
+
+            <div class="text-center">
+                <p> Not an Admin ? </p> <a href="{% url 'login' %}">Login as Regular </a>
+            </div>
+        </div>
+    </body>
+
+{% endblock content %}

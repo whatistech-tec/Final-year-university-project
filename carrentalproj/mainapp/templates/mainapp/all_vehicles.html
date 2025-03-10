@@ -1,0 +1,64 @@
+{% extends 'mainapp/dash_board.html' %}
+
+{% block main %}
+
+<hr>
+{% block record %}
+<a class="btn btn-outline-primary btn-sm" href="{% url 'create_record' %}">
+    Create a new record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
+</a>
+{% endblock record %}
+
+<hr>
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
+
+        <tr>
+            
+            <th scope="col"> ID </th>
+           
+            {% comment %} <th scope="col">Car Image </th> {% endcomment %}
+            <th scope="col"> Plate Number </th>
+            <th scope="col"> Vehicle Model </th>
+            <th scope="col"> Vehicle Color </th>
+           
+            <th scope="col"> Category</th>
+            <th scope="col"> Location </th>
+            <th scope="col"> Hire Amount </th>
+
+            <th scope="col"> Date Created </th>
+            
+            <th scope="col"> View </th>
+            
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% if vehicle_details %}
+       
+            {% for detail in vehicle_details %} 
+            
+                <tr >
+                    <td>{{detail.id}}</td>
+            
+                    {% comment %} <td>{{detail.vehicle_image.url}}  {% endcomment %}
+                    <td>{{detail.plate_number}}</td>
+                    <td>{{detail.vehicle_name}}</td>
+                    <td>{{detail.vehicle_color}}</td>
+                    <td>{{detail.vehicle_category}}</td>
+                    <td>{{detail.location}}</td>
+                    <td>KES {{detail.hire_amount}}</td>
+                    <td>{{detail.creation_date}}</td>
+            
+                    <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
+            
+                </tr>
+            
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+
+{% endblock main %}

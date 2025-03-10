@@ -5,6 +5,10 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import auth
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+from .forms import LoginForm,CreateRecordForm,UpdateRecordForm
+
 
 # to activate the user account
 from django.contrib.sites.shortcuts import get_current_site
@@ -27,7 +31,7 @@ from django.core.mail.message import EmailMessage
 import threading
 
 
-from .models import MyCars,MyVans,MySuvs,MyElectric,ForRent,Stories
+from .models import VehicleDetail, MyCars,MyVans,MySuvs,MyElectric,ForRent,Stories
 
 
 class EmailThread(threading.Thread):
@@ -108,9 +112,126 @@ def handlelogin(request):
     context={}
     return render(request, "mainapp/login.html", context)
 
+
+#login
+
+def admin_login(request):
+
+    form = LoginForm()
+
+    if request.method == "POST":
+        form = LoginForm(request, data=request.POST)
+
+        if form.is_valid():
+
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                auth.login(request, user)
+
+                messages.success(request, "You have logged in successifully!")
+
+                return redirect("dash_board")
+
+    context = {'form':form}
+    return render(request, 'mainapp/admin_login.html', context=context)
+
+
+def dash_board(request):
+
+    return render(request, 'mainapp/dash_board.html', context=context)
+
+
+def all_vehicles(request):
+    
+    vehicle_details = VehicleDetail.objects.all()
+
+    context = {'vehicle_details':vehicle_details}
+
+    return render(request, 'mainapp/all_vehicles.html', context=context)
+
+
+def create_record(request): 
+
+    form = CreateRecordForm()
+
+    if request.method == "POST":
+
+        form = CreateRecordForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your record was created!")
+
+
+            return redirect("all_vehicles")
+                
+    context = {"form":form}
+
+    return render(request, 'mainapp/create_record.html', context=context)
+
+#update a record
+
+def update_record(request, pk):
+
+    record = VehicleDetail.objects.get(id=pk)
+
+    form = UpdateRecordForm(instance=record)
+
+    if request.method =='POST':
+
+        form = UpdateRecordForm(request.POST, instance=record)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your record was updated!")
+
+            return redirect("all_vehicles")
+
+    context = {'form':form}
+
+    return render(request, 'mainapp/update_record.html', context=context)
+
+#view a single record
+
+def single_record(request, pk):
+
+    all_records = VehicleDetail.objects.get(id=pk)
+
+    context = {'detail':all_records}
+
+    return render(request, 'mainapp/view_record.html', context=context)
+
+
+
+#delete a record
+
+
+def delete_detail(request, pk):
+
+    detail = VehicleDetail.objects.get(id=pk)
+
+    detail.delete()
+
+    messages.success(request, "Your record was deleted!")
+
+
+    return redirect("all_vehicles")
+
+
 def home(request):
     context={}
     return render(request, "mainapp/home.html", context)
+
+def dash_board(request):
+    return render(request, 'mainapp/dash_board.html')
 
 def search(request):
     context={}
@@ -152,3 +273,8 @@ def handlelogout(request):
     logout(request)
     messages.info(request,"Logout Success")
     return redirect('/login')
+
+def admin_logout(request):
+    logout(request)
+    messages.info(request,"Logout Success")
+    return redirect('/admin_login')

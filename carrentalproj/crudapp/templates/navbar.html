@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
 
-    <a class="navbar-brand main-heading" href="{% url '' %}"> 
+    <a class="navbar-brand main-heading" href="{% url 'all' %}"> 
             
       &nbsp; Sona
     
@@ -31,13 +31,27 @@
   
           {% if user.is_authenticated %}
   
-            <li class="nav-item">
-        
-              <a class="nav-link" href="{% url 'dashboard' %}">Dashboard &nbsp; <i class="fa fa-home" aria-hidden="true"></i> </a>
+            <li class="nav-item"><a class="nav-link" href="{% url 'all' %}">Dashboard &nbsp; <i class="fa fa-caret-down" aria-hidden="true"></i> </a>
+                {% comment %} <ul class="bg-primary">
+                  <li><a href="#">Dropdown 1</a></li>
+                  <li><a href="#">Dropdown 2</a></li>
+                  <li><a href="#">Dropdown 3</a></li>
+                  <li><a href="#">Dropdown 4</a></li>
+                </ul> {% endcomment %}
   
             </li>
   
+            
+            &nbsp;     &nbsp;     &nbsp; 
   
+  
+            <li class="nav-item">
+  
+              <a class="nav-link" href="{% url 'dashboard' %}">Rent Out &nbsp; </a>
+  
+            </li>
+            
+            
             &nbsp;     &nbsp;     &nbsp; 
   
   
@@ -46,8 +60,6 @@
               <a class="nav-link" href="{% url 'user-logout' %}">Sign out &nbsp; <i class="fa fa-sign-out" aria-hidden="true"></i> </a>
   
             </li>
-  
-  
         </ul>
   
         {% else %}

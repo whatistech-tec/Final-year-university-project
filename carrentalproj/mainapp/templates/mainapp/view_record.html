@@ -1,0 +1,64 @@
+
+{% extends 'mainapp/admin_base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block nav %}
+
+{% endblock nav %}
+<style>
+    .card-layout{
+        display: block;
+        width: 1000px;
+        margin: auto;
+        
+    }
+</style>
+{% block content %}
+    <body class="card-layout">
+
+        <div class="card ">
+
+            <div class="card-body">
+
+                <i class='fa fa-user-circle-o' aria-hidden="true"></i> &nbsp;
+
+            <strong>
+
+                    {{detail.vehicle_name|upper}}
+                    &nbsp; &nbsp;
+        
+                    {{detail.plate_number}}
+        
+                </strong>
+        
+                <hr>
+
+                <p> <strong>ID: </strong>&nbsp; {{detail.id}}</p>
+                <p> <strong>Plate Number: </strong>&nbsp; {{detail.plate_number}}</p>
+                <p> <strong>Vehicle Model: </strong>&nbsp; {{detail.vehicle_name}}</p>
+                <p> <strong>Color: </strong>&nbsp; {{detail.vehicle_color}}</p>
+                <p> <strong>Category: </strong>&nbsp; {{detail.vehicle_category}}</p>
+                <p> <strong>Location: </strong>&nbsp; {{detail.location}}</p>
+                <p> <strong>Hire Amount: </strong>&nbsp; {{detail.hire_amount}}</p>
+            
+                <p> <strong>Date: </strong>&nbsp; {{detail.creation_date}}</p>
+            
+            </div>
+        </div>
+
+        <br>
+
+        <a href="{% url 'all_vehicles' %}" class="btn btn-secondary">Return &nbsp; <i class='fa fa-arrow-left' aria-hidden="true"></i></a>
+        
+        &nbsp;
+        
+        <a href="{% url 'update_record' detail.id %}" class="btn btn-info">Update record  &nbsp; <i class='fa fa-plus' aria-hidden="true"></i></a>
+        
+        &nbsp;
+        
+        <a href="{% url 'delete_detail' detail.id %}" class="btn btn-danger">Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i></a> 
+    </body>
+    
+{% endblock %}

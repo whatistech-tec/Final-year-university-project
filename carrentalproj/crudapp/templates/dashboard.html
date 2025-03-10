@@ -1,14 +1,77 @@
 {% extends 'base.html' %}
 
+
+{% block search %}
+
+{% endblock search %}
+
 {% block content %}
 
 <h5>Welcome to the dashboard {{user}}!</h5>
+    <style>
+       
+        h1{
+            margin: 0 0 10px;
+            padding: 0;
+            font-size: 24px;
+        }
+        .box{
+            position: relative;
+            top: 20%;
+            left: 80%;
+            width: 500px;
+            transform: translate(-50%, -50%);
+
+        }
+        input{
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: -5s;
+            color: black;
+
+        }
+        input[type="text"]{
+            background: antiquewhite;
+            width: 340px;
+            height: 40px;
+            border: none;
+            outline: none;
+            padding: 0 16px;
+            border-radius: 25px 0 0 25px;
+            
+        }
+        input[type="submit"]{
+            position: relative;
+            border-radius: 0 25px 25px 0;
+            height: 40px;
+            width: 150px;
+            border: none;
+            cursor: pointer;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <form action="{% url 'search_venue' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="searched" placeholder="Type...">
+            <input type="submit" class="bg-primary" name="" value="Search">
+        </form>
+    </div>
+    
+</body>
+</html>
 
 <hr>
-
+{% block record %}
 <a class="btn btn-outline-primary btn-sm" href="{% url 'create-record' %}">
     Create a new record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
 </a>
+{% endblock record %}
 
 <hr>
 
@@ -17,20 +80,25 @@
         <thead class="table-light">
 
             <tr>
-
+                {% block humaninfo %}
                 <th scope="col"> ID </th>
                 <th scope="col"> Full Name </th>
                 <th scope="col"> Email </th>
                 <th scope="col"> Phone </th>
                 <th scope="col"> Address </th>
-                <th scope="col"> Company Branch </th>
+                {% endblock humaninfo %}
+                {% block carinfo %}
                 <th scope="col"> Car Model </th>
                 <th scope="col"> Plate Number </th>
                 <th scope="col"> Car Color </th>
+                <th scope="col"> Company Branch </th>
+                {% endblock carinfo %}
+                {% block agentinfo %}
                 <th scope="col"> Agent Name </th>
                 <th scope="col"> Agent Number </th>
+                {% endblock agentinfo %}
                 <th scope="col"> Date Created </th>
-
+                
                 <th scope="col"> View </th>
                 
             </tr>
@@ -71,3 +139,4 @@
     </table>
 
 {% endblock content %}
+

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Record
+from .models import Record, AllVehicles
 
 from django import forms
 
@@ -24,8 +24,15 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput())
     password = forms.CharField(widget=PasswordInput())
 
-#create a record
 
+class UploadVehicle(forms.ModelForm):
+    
+    class Meta:
+
+        model = AllVehicles
+        fields = ['plate_number', 'car_model', 'car_color', 'hire_amount', 'available','company_branch']
+        
+#create a record
 class CreateRecordForm(forms.ModelForm):
 
     class Meta:

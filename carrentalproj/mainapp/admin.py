@@ -1,8 +1,10 @@
 from django.contrib import admin
 
-from .models import MyCars,MyVans,MySuvs,MyElectric,ForRent,Stories
+from .models import VehicleDetail,MyCars,MyVans,MySuvs,MyElectric,ForRent,Stories
 
 
+
+admin.site.register(VehicleDetail)
 admin.site.register(MyCars)
 admin.site.register(MyVans)
 admin.site.register(MySuvs)

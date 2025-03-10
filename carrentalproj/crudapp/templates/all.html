@@ -1,0 +1,53 @@
+
+{% extends 'dashboard.html' %}
+
+
+{% block record %}
+<a class="btn btn-outline-primary btn-sm" href="{% url 'upload-new-vehicle' %}">
+    Create a new record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
+</a>
+{% endblock record %}
+
+{% block humaninfo %}
+
+{% endblock humaninfo %}
+
+{% block agentinfo %}
+
+{% endblock agentinfo %}
+
+{% block carinfo %}
+<th scope="col"> Vehicle Model </th>
+<th scope="col"> Plate Number </th>
+<th scope="col"> Car Color </th>
+<th scope="col"> Hire Amount </th>
+<th scope="col"> Company Branch </th>
+<th scope="col"> Available </th>
+
+{% endblock carinfo %}
+
+<tbody>
+           
+    {% if records %}
+
+        {% for record in records %} 
+
+            <tr>
+
+                <td>{{record.car_model}}</td>
+                <td>{{record.plate_number}}</td>
+                <td>{{record.car_color}}</td>
+                <td>{{record.hire_amount}}</td>
+                <td>{{record.company_branch}}</td>
+                <td>{{record.available}}</td>
+                <td>{{record.creation_date}}</td>
+
+                <td> <a class="btn btn-success btn-sm" href="{% url 'view-record' record.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
+
+            </tr>
+
+        {% endfor %}
+
+    {% endif %}
+
+</tbody>
