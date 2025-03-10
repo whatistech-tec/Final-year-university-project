@@ -7,7 +7,7 @@ from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm,CreateRecordForm,UpdateRecordForm
+from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm
 
 
 # to activate the user account
@@ -153,6 +153,14 @@ def all_vehicles(request):
 
     return render(request, 'mainapp/all_vehicles.html', context=context)
 
+def all_stories(request):
+    
+    my_stories = Stories.objects.all()
+
+    context = {'my_stories':my_stories}
+
+    return render(request, 'mainapp/all_stories.html', context=context)
+   
 
 def create_record(request): 
 
@@ -160,7 +168,7 @@ def create_record(request):
 
     if request.method == "POST":
 
-        form = CreateRecordForm(request.POST)
+        form = CreateRecordForm(request.POST, request.FILES)
 
         if form.is_valid():
 
@@ -175,10 +183,31 @@ def create_record(request):
 
     return render(request, 'mainapp/create_record.html', context=context)
 
+def create_story(request): 
+
+    form = CreateStoryForm()
+
+    if request.method == "POST":
+
+        form = CreateStoryForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your story was created!")
+
+
+            return redirect("all_stories")
+                
+    context = {"form":form}
+
+    return render(request, 'mainapp/create_story.html', context=context)
+
 #update a record
 
 def update_record(request, pk):
-
+    
     record = VehicleDetail.objects.get(id=pk)
 
     form = UpdateRecordForm(instance=record)
@@ -199,15 +228,45 @@ def update_record(request, pk):
 
     return render(request, 'mainapp/update_record.html', context=context)
 
+def update_story(request, pk):
+
+    my_stories = Stories.objects.get(id=pk)
+
+    form = UpdateStoryForm(instance=record)
+
+    if request.method =='POST':
+
+        form = UpdateStoryForm(request.POST, instance=record)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your story was updated!")
+
+            return redirect("all_stories")
+
+    context = {'form':form}
+
+    return render(request, 'mainapp/update_story.html', context=context)
+
 #view a single record
 
 def single_record(request, pk):
-
+    
     all_records = VehicleDetail.objects.get(id=pk)
 
     context = {'detail':all_records}
 
     return render(request, 'mainapp/view_record.html', context=context)
+
+def view_story(request, pk):
+
+    my_stories = Stories.objects.get(id=pk)
+
+    context = {'my_stories':my_stories}
+
+    return render(request, 'mainapp/view_story.html', context=context)
 
 
 
@@ -215,7 +274,7 @@ def single_record(request, pk):
 
 
 def delete_detail(request, pk):
-
+    
     detail = VehicleDetail.objects.get(id=pk)
 
     detail.delete()
@@ -224,6 +283,17 @@ def delete_detail(request, pk):
 
 
     return redirect("all_vehicles")
+
+def delete_story(request, pk):
+
+    my_stories = Stories.objects.get(id=pk)
+
+    story.delete()
+
+    messages.success(request, "Your story was deleted!")
+
+
+    return redirect("all_stories")
 
 
 def home(request):
@@ -246,9 +316,9 @@ def ride(request):
     return render(request, "mainapp/ride.html", context)
 
 def stories(request):
-    item_card = Stories.objects.all()
-    context={}
-    return render(request, "mainapp/stories.html", {'item_card':item_card})
+    my_stories = Stories.objects.all()
+    context = {'my_stories':my_stories}
+    return render(request, 'mainapp/stories.html', context=context)
 
 def cars(request):
     cars_category = MyCars.objects.all()

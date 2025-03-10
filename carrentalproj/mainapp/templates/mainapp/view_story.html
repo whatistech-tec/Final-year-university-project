@@ -1,0 +1,51 @@
+
+{% extends 'mainapp/admin_base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block nav %}
+
+{% endblock nav %}
+
+{% block content %}
+    <body class="card-layout">
+
+        <div class="card ">
+
+            <div class="card-body">
+
+                <i class='fa fa-user-circle-o' aria-hidden="true"></i> &nbsp;
+
+            <strong>
+
+                    {{story.header|upper}}
+                    &nbsp; &nbsp;
+        
+                </strong>
+        
+                <hr>
+               
+
+                <p> <strong>ID: </strong>&nbsp; {{story.id}}</p>
+                <p> <strong>Date: </strong>&nbsp; {{story.date}}&nbsp;/&nbsp;{{story.month}}&nbsp;/&nbsp;{{story.year}}</p>
+                <p> <strong>Vehicle Model: </strong>&nbsp; {{story.story}}</p>
+                <p> <strong>Story Image: </strong><br>  <img src="{{story.story_image.url}}" width=200 height=200></p>
+            
+            </div>
+        </div>
+
+        <br>
+
+        <a href="{% url 'all_stories' %}" class="btn btn-secondary">Return &nbsp; <i class='fa fa-arrow-left' aria-hidden="true"></i></a>
+        
+        &nbsp;
+        
+        <a href="{% url 'update_story' story.id %}" class="btn btn-info">Update Story  &nbsp; <i class='fa fa-plus' aria-hidden="true"></i></a>
+        
+        &nbsp;
+        
+        <a href="{% url 'delete-story' story.id %}" class="btn btn-danger">Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i></a>
+    </body>
+    
+{% endblock %}

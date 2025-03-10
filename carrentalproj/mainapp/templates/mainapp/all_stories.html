@@ -1,0 +1,59 @@
+{% extends 'mainapp/all_vehicles.html' %}
+
+
+{% block record %}
+<a class="btn btn-outline-primary btn-sm" href="{% url 'create_story' %}">
+    Create a new record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
+</a>
+{% endblock record %}
+
+{% block table %}
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
+
+        <tr>
+            
+            <th scope="col"> ID </th>
+           
+           <th scope="col">Story Image </th>
+            <th scope="col"> Date </th>
+            <th scope="col"> Month </th>
+            <th scope="col"> Year </th>
+           
+            <th scope="col"> Header</th>
+            <th scope="col"> Story </th>
+            
+            <th scope="col"> View </th>
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% if my_stories%}
+       
+            {% for story in my_stories %} 
+            
+                <tr >
+                    <td>{{story.id}}</td>
+                    {% if story.story_image %}
+                    <td>
+                            <img src="{{story.story_image.url}}" width=80 height=80 >
+                        
+                    </td> 
+                    {% endif %}
+            
+                    <td>{{story.date}}</td>
+                    <td>{{story.month}}</td>
+                    <td>{{story.year}}</td>
+                    <td>{{story.header}}</td>
+                    <td>{{story.story}}</td>
+            
+                    <td> <a class="btn btn-success btn-sm" href="{% url 'view_story' story.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
+            
+                </tr>
+            
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+{% endblock table %}

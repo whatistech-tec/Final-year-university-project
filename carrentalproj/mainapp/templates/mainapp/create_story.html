@@ -1,80 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'mainapp/admin_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
+<style>
+    .form-layout{
+        border-radius: 15px;
+        width: 500px;
+        
+    }
+</style>
 
     <body>
 
         <div class = "container bg-light shadow-md p-5 form-layout">
 
-            <h3> Create record</h3>
+            <h3> Create story</h3>
 
             <h6>Add the required details</h6>
 
             <hr>
             <br>
 
-            <form method="POST" autocomplete="off">
+            <form method="POST" autocomplete="off" enctype="multipart/form-data">
 
                 {% csrf_token %}
 
                 {% block form %}
 
-                {{form.first_name|as_crispy_field}}
+                {{form.story_image|as_crispy_field}}
 
                 <br>
                 
-                {{form.last_name|as_crispy_field}}
+                {{form.date|as_crispy_field}}
 
                 <br>
                 
-                {{form.email|as_crispy_field}}
+                {{form.month|as_crispy_field}}
 
                 <br>
                 
-                {{form.phone|as_crispy_field}}
+                {{form.year|as_crispy_field}}
 
                 <br>
                 
-                {{form.address|as_crispy_field}}
+                {{form.header|as_crispy_field}}
 
                 <br>
                 
-                {{form.company_branch|as_crispy_field}}
+                {{form.story|as_crispy_field}}
 
                 <br>
                 
-                {{form.car_model|as_crispy_field}}
-
-                <br>
                 
-                {{form.plate_number|as_crispy_field}}
-
-                <br>
-                {{form.car_color|as_crispy_field}}
-
-                <br>
                 
-                {{form.agent_name|as_crispy_field}}
-
-                <br>
-                
-                {{form.agent_number|as_crispy_field}}
-
-                <br>
                 {% endblock form %}
 
                 
                 <button type="submit" class="btn btn-primary">
 
-                     Create record &nbsp; <i class='fa fa-check' aria-hidden="true"></i>
+                     Create story &nbsp; <i class='fa fa-check' aria-hidden="true"></i>
 
                 </button>
 
                 &nbsp;
                 {% block return %}
-                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                <a href="{% url 'all_stories' %}" class="btn btn-secondary">
 
                     Return &nbsp;  <i class='fa fa-arrow-left' aria-hidden="true"></i>
 

@@ -10,6 +10,7 @@
 {% endblock record %}
 
 <hr>
+{% block table %}
 <table class="table table-hover table-bordered">
     <thead class="table-light">
 
@@ -17,7 +18,7 @@
             
             <th scope="col"> ID </th>
            
-            {% comment %} <th scope="col">Car Image </th> {% endcomment %}
+           <th scope="col">Car Image </th>
             <th scope="col"> Plate Number </th>
             <th scope="col"> Vehicle Model </th>
             <th scope="col"> Vehicle Color </th>
@@ -35,14 +36,19 @@
     </thead>
     <tbody>
 
-        {% if vehicle_details %}
+        {% if vehicle_details%}
        
             {% for detail in vehicle_details %} 
             
                 <tr >
                     <td>{{detail.id}}</td>
+                    {% if detail.vehicle_image %}
+                    <td>
+                            <img src="{{detail.vehicle_image.url}}" width=80 height=80 >
+                        
+                    </td> 
+                    {% endif %}
             
-                    {% comment %} <td>{{detail.vehicle_image.url}}  {% endcomment %}
                     <td>{{detail.plate_number}}</td>
                     <td>{{detail.vehicle_name}}</td>
                     <td>{{detail.vehicle_color}}</td>
@@ -59,6 +65,7 @@
         {% endif %}
     </tbody>
 </table>
+{% endblock table %}
 
 
 {% endblock main %}

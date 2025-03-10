@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
 from django import forms
-from .models import VehicleDetail
+from .models import VehicleDetail, Stories
 
 from django.forms.widgets import PasswordInput, TextInput
 
@@ -30,3 +30,18 @@ class UpdateRecordForm(forms.ModelForm):
 
         model = VehicleDetail
         fields = [ 'vehicle_image', 'plate_number', 'vehicle_name', 'vehicle_color', 'vehicle_category', 'location','hire_amount']
+        
+#stories
+class CreateStoryForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Stories
+        fields = [ 'story_image', 'date', 'month', 'year', 'header', 'story']
+        
+class UpdateStoryForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Stories
+        fields = [ 'story_image', 'date', 'month', 'year', 'header', 'story']

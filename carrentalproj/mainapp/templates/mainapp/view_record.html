@@ -34,6 +34,7 @@
                 </strong>
         
                 <hr>
+               
 
                 <p> <strong>ID: </strong>&nbsp; {{detail.id}}</p>
                 <p> <strong>Plate Number: </strong>&nbsp; {{detail.plate_number}}</p>
@@ -42,8 +43,8 @@
                 <p> <strong>Category: </strong>&nbsp; {{detail.vehicle_category}}</p>
                 <p> <strong>Location: </strong>&nbsp; {{detail.location}}</p>
                 <p> <strong>Hire Amount: </strong>&nbsp; {{detail.hire_amount}}</p>
-            
                 <p> <strong>Date: </strong>&nbsp; {{detail.creation_date}}</p>
+                <p> <strong>Car Image: </strong><br>  <img src="{{detail.vehicle_image.url}}" width=200 height=200></p>
             
             </div>
         </div>

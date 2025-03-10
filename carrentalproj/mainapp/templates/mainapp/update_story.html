@@ -1,16 +1,23 @@
-{% extends 'base.html' %}
+{% extends 'mainapp/admin_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
+<style>
+    .form-layout{
+        border-radius: 15px;
+        width: 500px;
+        
+    }
+</style>
 
 <body>
 
     <div class = "container bg-light shadow-md p-5 form-layout">
 
-        <h3> Update record</h3>
+        <h3> Update story</h3>
 
-        <h6>update your record down below!</h6>
+        <h6>update your story down below!</h6>
 
         <hr>
         <br>
@@ -24,7 +31,7 @@
             <br>
             
             
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary w-40">
+            <a href="{% url 'all_stories' %}" class="btn btn-secondary w-40">
                 
                 Return &nbsp; <i class='fa fa-arrow-left' aria-hidden="true"></i>
             </a>

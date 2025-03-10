@@ -7,20 +7,20 @@
 <section class="section__container story__container">
     <h2 class="section__header">STORIES BEHIND THE WHEEL</h2>
     <div class="story__grid">
-        {% for item in item_card %}
+        {% for story in my_stories %}
         <div class="story__card">
             <div class="story__date">
-                <span>{{item.date}}</span>
+                <span>{{story.date}}</span>
                 <div>
-                    <p>{{item.month}}</p>
-                    <p>{{item.year}}</p>
+                    <p>{{story.month}}</p>
+                    <p>{{story.year}}</p>
                 </div>
             </div>
-            <h4>{{item.header}}</h4>
+            <h4>{{story.header}}</h4>
             <p>
-                {{item.story}}
+                {{story.story}}
             </p>
-            <img src="{{item.story_image.url}}"  alt="story"/>
+            <img src="{{story.story_image.url}}"  alt="story"/>
         </div>
         {% endfor %}
        

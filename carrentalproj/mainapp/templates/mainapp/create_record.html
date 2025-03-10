@@ -22,7 +22,7 @@
             <hr>
             <br>
 
-            <form method="POST" autocomplete="off">
+            <form method="POST" autocomplete="off" enctype="multipart/form-data">
 
                 {% csrf_token %}
 
@@ -68,7 +68,7 @@
 
                 &nbsp;
                 {% block return %}
-                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                <a href="{% url 'dash_board' %}" class="btn btn-secondary">
 
                     Return &nbsp;  <i class='fa fa-arrow-left' aria-hidden="true"></i>
 
