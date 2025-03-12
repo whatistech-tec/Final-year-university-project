@@ -27,33 +27,33 @@
 
 </head>
 <body>
-    {% block nav %}
-    <header>
-        <nav>
-            <div class="nav__header">
-                <div class="nav__logo">
-                    <a href="#">SONA</a>
-                </div>
-                <div class="nav__menu__btn" id="menu-btn">
-                    <i class="ri-menu-line"></i>
-                </div>
+    
+{% block nav %}
+<header>
+    <nav>
+        <div class="nav__header">
+            <div class="nav__logo">
+                <a href="#">SONA</a>
             </div>
-            <ul class="nav__links" id="nav-links">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'rent' %}">Rent</a></li>
-                <li><a href="{% url 'ride' %}">Ride</a></li>
-                <li><a href="{% url 'stories' %}">Stories</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
-            <a href="/" class="nav__links" >Welcome {{user.username}}</a>
-
-            <div class="nav__btn">
-                <a href="/login" class="btn" >Logout</a>
+            <div class="nav__menu__btn" id="menu-btn">
+                <i class="ri-menu-line"></i>
             </div>
-        </nav>
-        {% endblock nav %}
+        </div>
+        <ul class="nav__links" id="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'rent' %}">Rent</a></li>
+            <li><a href="{% url 'ride' %}">Ride</a></li>
+            <li><a href="{% url 'stories' %}">Stories</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <a href="/" class="nav__links" >Welcome {{user.username}}</a>
 
-        {% block content %}
+        <div class="nav__btn">
+            <a href="/login" class="btn" >Logout</a>
+        </div>
+    </nav>
+    {% endblock nav %}
+    {% block content %}
 
         {% endblock content %}
 

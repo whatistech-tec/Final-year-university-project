@@ -7,7 +7,7 @@ from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm
+from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm,CreateRentalForm,UpdateRentalForm
 
 
 # to activate the user account
@@ -31,7 +31,8 @@ from django.core.mail.message import EmailMessage
 import threading
 
 
-from .models import VehicleDetail, MyCars,MyVans,MySuvs,MyElectric,ForRent,Stories
+from .models import VehicleDetail,RentedVehicle, MyCars,MyVans,MySuvs,MyElectric,Stories
+from .filters import VehicleDetailFilter, RentedVehicleFilter, StoriesFilter
 
 
 class EmailThread(threading.Thread):
@@ -153,6 +154,15 @@ def all_vehicles(request):
 
     return render(request, 'mainapp/all_vehicles.html', context=context)
 
+
+def all_rentals(request):
+    
+    my_rentals = RentedVehicle.objects.all()
+
+    context = {'my_rentals':my_rentals}
+
+    return render(request, 'mainapp/all_rentals.html', context=context)
+
 def all_stories(request):
     
     my_stories = Stories.objects.all()
@@ -183,6 +193,7 @@ def create_record(request):
 
     return render(request, 'mainapp/create_record.html', context=context)
 
+
 def create_story(request): 
 
     form = CreateStoryForm()
@@ -203,6 +214,27 @@ def create_story(request):
     context = {"form":form}
 
     return render(request, 'mainapp/create_story.html', context=context)
+
+def create_rental(request): 
+
+    form = CreateRentalForm()
+
+    if request.method == "POST":
+
+        form = CreateRentalForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your your rental went through successifully!")
+
+
+            return redirect("all_rentals")
+                
+    context = {"form":form}
+
+    return render(request, 'mainapp/create_rental.html', context=context)
 
 #update a record
 
@@ -229,14 +261,14 @@ def update_record(request, pk):
     return render(request, 'mainapp/update_record.html', context=context)
 
 def update_story(request, pk):
-
+    
     my_stories = Stories.objects.get(id=pk)
 
-    form = UpdateStoryForm(instance=record)
+    form = UpdateStoryForm(instance=my_stories)
 
     if request.method =='POST':
 
-        form = UpdateStoryForm(request.POST, instance=record)
+        form = UpdateStoryForm(request.POST, instance=my_stories)
 
         if form.is_valid():
 
@@ -250,6 +282,28 @@ def update_story(request, pk):
 
     return render(request, 'mainapp/update_story.html', context=context)
 
+def update_rental(request, pk):
+
+    my_rental = RentedVehicle.objects.get(id=pk)
+
+    form = UpdateRentalForm(instance=my_rental)
+
+    if request.method =='POST':
+
+        form = UpdateRentalForm(request.POST, instance=my_rental)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Your rental info was updated!")
+
+            return redirect("all_rentals")
+
+    context = {'form':form}
+
+    return render(request, 'mainapp/update_rental.html', context=context)
+
 #view a single record
 
 def single_record(request, pk):
@@ -260,13 +314,22 @@ def single_record(request, pk):
 
     return render(request, 'mainapp/view_record.html', context=context)
 
-def view_story(request, pk):
 
+def view_story(request, pk):
+    
     my_stories = Stories.objects.get(id=pk)
 
-    context = {'my_stories':my_stories}
+    context = {'story':my_stories}
 
     return render(request, 'mainapp/view_story.html', context=context)
+
+def view_rental(request, pk):
+
+    my_rentals = RentedVehicle.objects.get(id=pk)
+
+    context = {'rental':my_rentals}
+
+    return render(request, 'mainapp/view_rental.html', context=context)
 
 
 
@@ -285,15 +348,37 @@ def delete_detail(request, pk):
     return redirect("all_vehicles")
 
 def delete_story(request, pk):
-
+    
     my_stories = Stories.objects.get(id=pk)
 
-    story.delete()
+    my_stories.delete()
 
     messages.success(request, "Your story was deleted!")
 
 
     return redirect("all_stories")
+
+def delete_rental(request, pk):
+
+    rental = RentedVehicle.objects.get(id=pk)
+
+    rental.delete()
+
+    messages.success(request, "Your rental info was deleted!")
+
+
+    return redirect("all_rentals")
+
+
+#filters
+
+def filtered_vehicles(request):
+    
+    vehicles = VehicleDetail.objects.all()
+    
+    vehicle_filter = VehicleDetailFilter(request.GET, queryset=vehicles)
+
+    return render(request, "mainapp/filtered_vehicles.html", {'vehicle_filter':vehicle_filter})
 
 
 def home(request):
@@ -308,7 +393,7 @@ def search(request):
     return render(request, "mainapp/search.html", context)
 
 def rent(request):
-    renting_cars = ForRent.objects.all()
+    renting_cars = VehicleDetail.objects.all()
     return render(request, "mainapp/rent.html", {'renting_cars':renting_cars})
 
 def ride(request):

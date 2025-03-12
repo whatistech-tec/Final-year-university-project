@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mainapp.apps.MainappConfig',
 
     'crispy_forms',
+    'django_filters',
     
     
 ]

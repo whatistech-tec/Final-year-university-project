@@ -43,36 +43,12 @@
     <div class="swiper">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
-          <!-- Slides -->
-            {% comment %} <div class="swiper-slide">
-                <div class="select__card">
-                    <img src="{% static 'assets/1726690360594.jpg' %}" alt="select">
-                    <div class="select__info">
-                        <div class="select__info__card">
-                            <span><i class="ri-speed-up-line"></i></span>
-                            <h4>200 <span>km/h</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-settings-5-line"></i></span>
-                            <h4>6 <span>speed</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-roadster-line"></i></span>
-                            <h4>2 <span>seats</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-signpost-line"></i></span>
-                            <h4>15 <span>milage</span></h4>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div> {% endcomment %}
+         
             
             {% for item in renting_cars %}
             <div class="swiper-slide">
                 <div class="select__card">
-                    <img src="{{item.car_image.url}}" alt="select">
+                    <img src="{{item.vehicle_image.url}}" alt="select">
                     <div class="select__info">
                         <div class="select__info__card">
                             <span><i class="ri-speed-up-line"></i></span>
@@ -96,31 +72,6 @@
             </div>
             {% endfor %}
             
-            {% comment %} <div class="swiper-slide">
-                <div class="select__card">
-                    <img src="{% static 'assets/1726690346560.jpg' %}" alt="select">
-                    <div class="select__info">
-                        <div class="select__info__card">
-                            <span><i class="ri-speed-up-line"></i></span>
-                            <h4>350 <span>km/h</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-settings-5-line"></i></span>
-                            <h4>9 <span>speed</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-roadster-line"></i></span>
-                            <h4>5 <span>seats</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-signpost-line"></i></span>
-                            <h4>9 <span>milage</span></h4>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div> {% endcomment %}
-
         </div>
        
     </div>

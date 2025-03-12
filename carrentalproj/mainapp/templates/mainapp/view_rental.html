@@ -1,0 +1,53 @@
+{% extends 'mainapp/admin_base.html' %}
+
+{% block nav %}
+
+{% endblock nav %}
+
+{% block content %}
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <i class='fa fa-user-circle-o' aria-hidden="true"></i> &nbsp;
+
+            <strong>
+
+                {{rental.last_name|upper}}
+    
+                {{rental.first_name}}
+    
+            </strong>
+    
+            <hr>
+
+            <p> <strong>ID: </strong>{{rental.id}}</p>
+            <p> <strong>Email: </strong>{{rental.email}}</p>
+            <p> <strong>Phone: </strong>{{rental.phone}}</p>
+            <p> <strong>Address: </strong>{{rental.address}}</p>
+            <p> <strong> Company Branch: </strong>{{rental.company_branch}}</p>
+            <p> <strong>Car Model: </strong>{{rental.car_model}}</p>
+            <p> <strong>Plate Number: </strong>{{rental.plate_number}}</p>
+            <p> <strong>Car Color: </strong>{{rental.car_color}}</p>
+            <p> <strong>Agent Name: </strong>{{rental.agent_name}}</p>
+            <p> <strong>Agent Number: </strong>{{rental.agent_number}}</p>
+
+            <p> <strong>Date: </strong>{{rental.creation_date}}</p>
+          
+        </div>
+    </div>
+
+    <br>
+
+    <a href="{% url 'all_rentals' %}" class="btn btn-secondary">Return &nbsp; <i class='fa fa-arrow-left' aria-hidden="true"></i></a>
+    
+    &nbsp;
+    
+    <a href="{% url 'update_rental' rental.id %}" class="btn btn-info">Update Info  &nbsp; <i class='fa fa-plus' aria-hidden="true"></i></a>
+    
+    &nbsp;
+    
+    <a href="{% url 'delete_rental' rental.id %}" class="btn btn-danger">Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i></a>
+    
+{% endblock %}

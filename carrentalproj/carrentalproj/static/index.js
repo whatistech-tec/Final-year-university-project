@@ -77,7 +77,7 @@ ScrollReveal().reveal(".car__info__container .btn", {
 const selectCards = document.querySelectorAll(".select__card");
 selectCards[0].classList.add("show__info");
 
-const price = ["225", "275", "625", "395"];
+const price = ["1225", "2275", "10625", "22395","1025", "2375", "13625", "15395"];
 
 const priceEl = document.getElementById("select-price");
 
@@ -106,6 +106,7 @@ const swiper = new Swiper(".swiper",{
         slideShadows: false,
         stretch: -100,
     },
+    
     onAny(event, ...args){
         updateSwiperImage(event, args);
     },

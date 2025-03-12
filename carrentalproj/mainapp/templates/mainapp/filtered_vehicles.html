@@ -36,9 +36,9 @@
     </thead>
     <tbody>
 
-        {% if vehicle_details%}
+        {% if vehicle_filter%}
        
-            {% for detail in vehicle_details %} 
+            {% for detail in vehicle_filter.qs %} 
             
                 <tr >
                     <td>{{detail.id}}</td>
@@ -64,6 +64,8 @@
                     <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
             
                 </tr>
+            {% empty %}
+                <li> No car matching your search! </li>
             
             {% endfor %}
         {% endif %}

@@ -767,7 +767,7 @@ nav{
     animation: scroll 45s linear infinite;
 }
 
-.banner__wrapper img{
+.banner wrapper img{
     height: 100px;
 }
 
@@ -1308,5 +1308,3 @@ footer{
 .story__grid{
     padding: 1.5rem;
 }
-
-

@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
 <style>
     .form-layout{
         border-radius: 15px;
@@ -15,80 +16,73 @@
 
         <div class = "container bg-light shadow-md p-5 form-layout">
 
-            <h3> Create record</h3>
+            <h3> Rent Out</h3>
 
             <h6>Add the required details</h6>
 
             <hr>
             <br>
 
-            <form method="POST" autocomplete="off" enctype="multipart/form-data">
+            <form method="POST" autocomplete="off">
 
                 {% csrf_token %}
 
-                {% block form %}
+                {{form.first_name|as_crispy_field}}
 
-                {{form.vehicle_image|as_crispy_field}}
+                <br>
+                
+                {{form.last_name|as_crispy_field}}
+
+                <br>
+                
+                {{form.email|as_crispy_field}}
+
+                <br>
+                
+                {{form.phone|as_crispy_field}}
+
+                <br>
+                
+                {{form.address|as_crispy_field}}
+
+                <br>
+                
+                {{form.company_branch|as_crispy_field}}
+
+                <br>
+                
+                {{form.car_model|as_crispy_field}}
 
                 <br>
                 
                 {{form.plate_number|as_crispy_field}}
 
                 <br>
-                
-                {{form.vehicle_name|as_crispy_field}}
+                {{form.car_color|as_crispy_field}}
 
                 <br>
                 
-                {{form.vehicle_color|as_crispy_field}}
+                {{form.agent_name|as_crispy_field}}
 
                 <br>
                 
-                {{form.vehicle_category|as_crispy_field}}
+                {{form.agent_number|as_crispy_field}}
 
                 <br>
-                
-                {{form.milage|as_crispy_field}}
-
-                <br>
-                
-                {{form.speed|as_crispy_field}}
-
-                <br>
-                {{form.settings|as_crispy_field}}
-
-                <br>
-                {{form.seats|as_crispy_field}}
-
-                <br>
-                
-                {{form.location|as_crispy_field}}
-
-                <br>
-                
-                {{form.hire_amount|as_crispy_field}}
-
-                <br>
-                
-                
-                {% endblock form %}
-
                 
                 <button type="submit" class="btn btn-primary">
 
-                     Create record &nbsp; <i class='fa fa-check' aria-hidden="true"></i>
+                     Rent Out &nbsp; <i class='fa fa-check' aria-hidden="true"></i>
 
                 </button>
 
                 &nbsp;
-                {% block return %}
-                <a href="{% url 'dash_board' %}" class="btn btn-secondary">
+
+                <a href="{% url 'all_rentals' %}" class="btn btn-secondary">
 
                     Return &nbsp;  <i class='fa fa-arrow-left' aria-hidden="true"></i>
 
                 </a>
-                {% endblock return %}
-
             </form>
 
         </div>

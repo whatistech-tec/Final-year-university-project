@@ -10,19 +10,14 @@
     <!-- Navbar -->
         <nav class="homenav">
             <i class='bx bx-menu'></i>
-            <form action="#">
+            <form action="#" method="get">
+                {% comment %} {{vehicle_filter.form.as_p}} {% endcomment %}
                 <div class="form-input">
                         <input type="search" placeholder="Search...">
                         <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                     </div>
                 </form>
-                <a href="#" class="notif">
-                    <i class='bx bx-bell'></i>
-                    <span class="count">12</span>
-                </a>
-                <a href="#" class="profile">
-                    <img src="images/logo.png">
-                </a>
+                
         </nav>
         
         <!-- End of Navbar -->
@@ -31,13 +26,6 @@
             <div class="header">
                 <div class="left">
                     <h1>Dashboard</h1>
-                    <ul class="breadcrumb">
-                        <li><a href="#">
-                                Available
-                            </a></li>
-                        /
-                        <li><a href="#" class="active">Rented</a></li>
-                    </ul>
                 </div>
                 <a href="#" class="report">
                     <i class='bx bx-cloud-download'></i>
@@ -48,12 +36,14 @@
             <!-- Insights -->
             <ul class="insights">
                 <li>
-                    <i class='bx bx-calendar-check'></i>
+                    <a href="{% url 'all_rentals' %}">
+                        <i class='bx bx-calendar-check'></i>
+                    </a>
                     <span class="info">
                         <h3>
-                            1,074
+                            74
                         </h3>
-                        <p>Paid Bookings</p>
+                        <p>Rented Cars</p>
                     </span>
                 </li>
                 <li><i class='bx bx-show-alt'></i>
