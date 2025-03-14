@@ -1,5 +1,5 @@
 
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm,CreateRentalForm,UpdateRentalForm
+from .cart import Cart
+from django.http import JsonResponse
 
 
 # to activate the user account
@@ -31,8 +33,9 @@ from django.core.mail.message import EmailMessage
 import threading
 
 
-from .models import VehicleDetail,RentedVehicle, MyCars,MyVans,MySuvs,MyElectric,Stories
+from .models import VehicleDetail,RentedVehicle,Stories
 from .filters import VehicleDetailFilter, RentedVehicleFilter, StoriesFilter
+from .admin import VehicleDetailAdmin
 
 
 class EmailThread(threading.Thread):
@@ -131,7 +134,7 @@ def admin_login(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                auth.login(request, user)
+                login(request, user)
 
                 messages.success(request, "You have logged in successifully!")
 
@@ -140,21 +143,73 @@ def admin_login(request):
     context = {'form':form}
     return render(request, 'mainapp/admin_login.html', context=context)
 
-
+@login_required(login_url='admin_login')
 def dash_board(request):
 
     return render(request, 'mainapp/dash_board.html', context=context)
 
+@login_required(login_url='admin_login')
+def vehicle_categories(request,foo):
+    # foo = foo.replace('-',' ')
+    try:
+        vehicle_category = Category.objects.get(category_name=foo)
+        vehicle_detail = VehicleDetail.objects.filter(vehicle_category=vehicle_category)
+        return render(request, 'mainapp/vehicle_categories.html', {'vehicle_detail':vehicle_detail,'vehicle_category':vehicle_category})
+    except:
+        messages.success(request,("That Category Doesn't Exist!"))
+        return redirect('all_vehicles')
 
+
+@login_required(login_url='admin_login')
 def all_vehicles(request):
     
-    vehicle_details = VehicleDetail.objects.all()
+    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
+    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
+    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
+    electrics = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
 
-    context = {'vehicle_details':vehicle_details}
-
+    context = {
+        'cars': cars,
+        'suvs': suvs,
+        'vans': vans,
+        'electrics': electrics,
+    }
     return render(request, 'mainapp/all_vehicles.html', context=context)
 
+def admin_cars(request):
+    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
+    return render(request, 'mainapp/admin_cars.html', {'vehicles': cars})
 
+def admin_suvs(request):
+    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
+    return render(request, 'mainapp/admin_suvs.html', {'vehicles': suvs})
+
+def admin_vans(request):
+    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
+    return render(request, 'mainapp/admin_vans.html', {'vehicles': vans})
+
+def admin_electrics(request):
+    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
+    return render(request, 'mainapp/admin_electrics.html', {'vehicles': electric_cars})
+
+
+def cars(request):
+    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
+    return render(request, "mainapp/cars.html", {'vehicles': cars})
+
+def suvs(request):
+    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
+    return render(request, "mainapp/vans.html", {'vehicles': suvs})
+
+def vans(request):
+    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
+    return render(request, "mainapp/electric.html", {'vehicles': vans})
+def electric(request):
+    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
+    return render(request, "mainapp/suvs.html", {'vehicles': electric_cars})
+
+
+@login_required(login_url='admin_login')
 def all_rentals(request):
     
     my_rentals = RentedVehicle.objects.all()
@@ -163,6 +218,7 @@ def all_rentals(request):
 
     return render(request, 'mainapp/all_rentals.html', context=context)
 
+@login_required(login_url='admin_login')
 def all_stories(request):
     
     my_stories = Stories.objects.all()
@@ -172,6 +228,7 @@ def all_stories(request):
     return render(request, 'mainapp/all_stories.html', context=context)
    
 
+@login_required(login_url='admin_login')
 def create_record(request): 
 
     form = CreateRecordForm()
@@ -194,6 +251,7 @@ def create_record(request):
     return render(request, 'mainapp/create_record.html', context=context)
 
 
+@login_required(login_url='admin_login')
 def create_story(request): 
 
     form = CreateStoryForm()
@@ -215,6 +273,8 @@ def create_story(request):
 
     return render(request, 'mainapp/create_story.html', context=context)
 
+
+@login_required(login_url='admin_login')
 def create_rental(request): 
 
     form = CreateRentalForm()
@@ -238,6 +298,8 @@ def create_rental(request):
 
 #update a record
 
+
+@login_required(login_url='admin_login')
 def update_record(request, pk):
     
     record = VehicleDetail.objects.get(id=pk)
@@ -260,6 +322,8 @@ def update_record(request, pk):
 
     return render(request, 'mainapp/update_record.html', context=context)
 
+
+@login_required(login_url='admin_login')
 def update_story(request, pk):
     
     my_stories = Stories.objects.get(id=pk)
@@ -282,6 +346,8 @@ def update_story(request, pk):
 
     return render(request, 'mainapp/update_story.html', context=context)
 
+
+@login_required(login_url='admin_login')
 def update_rental(request, pk):
 
     my_rental = RentedVehicle.objects.get(id=pk)
@@ -306,6 +372,7 @@ def update_rental(request, pk):
 
 #view a single record
 
+@login_required(login_url='admin_login')
 def single_record(request, pk):
     
     all_records = VehicleDetail.objects.get(id=pk)
@@ -315,6 +382,7 @@ def single_record(request, pk):
     return render(request, 'mainapp/view_record.html', context=context)
 
 
+@login_required(login_url='admin_login')
 def view_story(request, pk):
     
     my_stories = Stories.objects.get(id=pk)
@@ -323,6 +391,8 @@ def view_story(request, pk):
 
     return render(request, 'mainapp/view_story.html', context=context)
 
+
+@login_required(login_url='admin_login')
 def view_rental(request, pk):
 
     my_rentals = RentedVehicle.objects.get(id=pk)
@@ -335,7 +405,7 @@ def view_rental(request, pk):
 
 #delete a record
 
-
+@login_required(login_url='admin_login')
 def delete_detail(request, pk):
     
     detail = VehicleDetail.objects.get(id=pk)
@@ -347,6 +417,8 @@ def delete_detail(request, pk):
 
     return redirect("all_vehicles")
 
+
+@login_required(login_url='admin_login')
 def delete_story(request, pk):
     
     my_stories = Stories.objects.get(id=pk)
@@ -358,6 +430,8 @@ def delete_story(request, pk):
 
     return redirect("all_stories")
 
+
+@login_required(login_url='admin_login')
 def delete_rental(request, pk):
 
     rental = RentedVehicle.objects.get(id=pk)
@@ -370,13 +444,26 @@ def delete_rental(request, pk):
     return redirect("all_rentals")
 
 
+
+
 #filters
 
+@login_required(login_url='admin_login')
 def filtered_vehicles(request):
     
     vehicles = VehicleDetail.objects.all()
     
     vehicle_filter = VehicleDetailFilter(request.GET, queryset=vehicles)
+
+    return render(request, "mainapp/filtered_vehicles.html", {'vehicle_filter':vehicle_filter})
+
+
+@login_required(login_url='admin_login')
+def search_vehicles(request):
+    
+    vehicles = VehicleDetail.objects.all()
+    
+    vehicle_filter = VehicleDetailAdmin(request.GET, queryset=vehicles)
 
     return render(request, "mainapp/filtered_vehicles.html", {'vehicle_filter':vehicle_filter})
 
@@ -387,6 +474,9 @@ def home(request):
 
 def dash_board(request):
     return render(request, 'mainapp/dash_board.html')
+
+def rent_now(request):
+    return render(request, 'mainapp/rent_now.html')
 
 def search(request):
     context={}
@@ -405,24 +495,19 @@ def stories(request):
     context = {'my_stories':my_stories}
     return render(request, 'mainapp/stories.html', context=context)
 
-def cars(request):
-    cars_category = MyCars.objects.all()
-    return render(request, "mainapp/cars.html", {'cars_category':cars_category})
-
-def vans(request):
-    vans_category = MyVans.objects.all()
-    return render(request, "mainapp/vans.html", {'vans_category':vans_category})
-
-def electric(request):
-    electric_category = MyElectric.objects.all()
-    return render(request, "mainapp/electric.html", {'electric_category':electric_category})
-def suvs(request):
-    suvs_category = MySuvs.objects.all()
-    return render(request, "mainapp/suvs.html", {'suvs_category':suvs_category})
 
 def contact(request):
     context={}
     return render(request, "mainapp/contact.html", context)
+
+
+# def get_users(request):
+    
+#     user_details = UsersInfo.objects.all()
+
+#     context = {'user_details':user_details}
+
+#     return render(request, 'mainapp/get_users.html', context=context)
 
 def handlelogout(request):
     logout(request)
@@ -433,3 +518,25 @@ def admin_logout(request):
     logout(request)
     messages.info(request,"Logout Success")
     return redirect('/admin_login')
+
+
+#cart
+def cart_summary(request):
+    
+    return render(request, "mainapp/cart_summary.html")
+
+def add_to_cart(request):
+    cart = Cart(request)
+    if request.POST.get(action) == 'post':
+        detail_id = int(request.POST.get('detail_id'))
+        detail = get_object_or_404(VehicleDetail,id=detail_id)
+        cart.add(detail=detail)
+        
+        response = JsonResponse({'Car Name':detail.vehicle_name})
+        return response
+
+def delete_from_cart(request):
+    pass
+
+def update_cart(request):
+    pass

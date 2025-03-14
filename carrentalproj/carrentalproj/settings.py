@@ -25,7 +25,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     
-    'django.contrib.admin',
+    # 'django.contrib.admin',
+    
+    'hide_admin.apps.HideAdminConfig',
+    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -36,6 +39,8 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'django_filters',
+    'djangoql',
+    
     
     
 ]
@@ -65,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.cart',
             ],
         },
     },

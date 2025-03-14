@@ -1,22 +1,24 @@
 from django.db import models
 
-
 class VehicleDetail(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     vehicle_image = models.ImageField(null=True, blank=True)
     plate_number = models.CharField(max_length=200, default='')
     vehicle_name = models.CharField(max_length=250)
     vehicle_color = models.CharField(max_length=200, default='')
-    vehicle_category = models.CharField(max_length=250)
+    vehicle_category = models.CharField(max_length=200, default='')
     milage = models.FloatField(default=0)
     speed = models.IntegerField(default=0)
     settings = models.IntegerField(default=0)
     seats = models.IntegerField(default=0)
     location = models.CharField(max_length=50)
     hire_amount = models.FloatField(default=0)
+    in_stock = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.vehicle_name}"
+    
+
     
 class RentedVehicle(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -45,41 +47,16 @@ class Stories(models.Model):
     
     def __str__(self):
         return f"{self.header}"
+    
+    
+    # class UsersInfo(models.Model):
+    #     username = models.CharField(max_length=50)
+    #     email = models.CharField(max_length=250)
+    #     is_admin = models.BooleanField(default=True)
+        
+    #     def __str__(self):
+    #         return f"{self.username}"
+    
 
 
-class MyCars(models.Model):
-    car_image = models.ImageField(null=True, blank=True)
-    hire_amount = models.FloatField(default=0)
-    location = models.CharField(max_length=50)
-    car_name = models.CharField(max_length=250)
-    
-    def __str__(self):
-        return f"{self.car_name}"
-    
-class MyVans(models.Model):
-    car_image = models.ImageField(null=True, blank=True)
-    hire_amount = models.FloatField(default=0)
-    location = models.CharField(max_length=50)
-    car_name = models.CharField(max_length=250)
-    
-    def __str__(self):
-        return f"{self.car_name}"
-    
-class MySuvs(models.Model):
-    car_image = models.ImageField(null=True, blank=True)
-    hire_amount = models.FloatField(default=0)
-    location = models.CharField(max_length=50)
-    car_name = models.CharField(max_length=250)
-    
-    def __str__(self):
-        return f"{self.car_name}"
-    
-class MyElectric(models.Model):
-    car_image = models.ImageField(null=True, blank=True)
-    hire_amount = models.FloatField(default=0)
-    location = models.CharField(max_length=50)
-    car_name = models.CharField(max_length=250)
-    
-    def __str__(self):
-        return f"{self.car_name}"
-    
+

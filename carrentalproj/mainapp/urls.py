@@ -6,7 +6,10 @@ urlpatterns = [
     path('dash_board', views.dash_board, name="dash_board"),
     path('admin_login', views.admin_login, name="admin_login"),
     path('all_vehicles', views.all_vehicles, name="all_vehicles"),
+    path('rent_now', views.rent_now, name="rent_now"),
+    # path('get_users', views.get_users, name="get_users"),
     path('filtered_vehicles', views.filtered_vehicles, name="filtered_vehicles"),
+    path('filtered_vehicles', views.search_vehicles, name="filtered_vehicles"),
     path('all_rentals', views.all_rentals, name="all_rentals"),
     path('all_stories', views.all_stories, name="all_stories"),
     path('admin_logout', views.admin_logout, name="admin_logout"),
@@ -17,6 +20,8 @@ urlpatterns = [
     path('update_story/<int:pk>', views.update_story, name="update_story"),
     path('update_rental/<int:pk>', views.update_rental, name="update_rental"),
     path('view_record/<int:pk>', views.single_record, name="view_record"),
+    path('vehicle_categories/<str:foo>', views.vehicle_categories, name="vehicle_categories"),
+
     path('view_story/<int:pk>', views.view_story, name="view_story"),
     path('view_rental/<int:pk>', views.view_rental, name="view_rental"),
     path('delete_detail/<int:pk>', views.delete_detail, name="delete_detail"),
@@ -40,5 +45,19 @@ urlpatterns = [
     path('vans', views.vans, name="vans"),
     path('electric', views.electric, name="electric"),
     path('contact', views.contact, name="contact"),
+    
+    path('admin_cars/', views.admin_cars, name='admin_cars'),
+    path('admin_suvs/', views.admin_suvs, name='admin_suvs'),
+    path('admin_vans/', views.admin_vans, name='admin_vans'),
+    path('admin_electrics/', views.admin_electrics, name='admin_electrics'),
+    
+    
+    #cart
+    path('cart_summary', views.cart_summary, name="cart_summary"),
+    # path('add_to_cart', views.add_to_cart, name="add_to_cart"),
+    path('delete_from_cart', views.delete_from_cart, name="delete_from_cart"),
+    path('update_cart', views.update_cart, name="update_cart"),
+    
+ 
  
 ]

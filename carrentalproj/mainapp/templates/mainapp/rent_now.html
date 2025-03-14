@@ -1,19 +1,17 @@
 {% extends 'mainapp/base.html' %}
 
-{% load static %}
-
-
 {% block content %}
+<style>
+    .formal{
+        top:50;
+    }
+</style>
+{% block nav %}
+{% endblock nav %}
 
-
-<section class="contact">
-    {% block header %}
+<section class="contact formal">
     <h1>Get in Touch for Your Dream Ride!</h1>
-    <p>
-        Have questions or need assistance? Our team is here to help you find the perfect car for your adventure.
-
-    </p>
-    {% endblock header %}
+    
     <form action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="PUT_YOUR_ACCES_KEY_HERE">
         <div class="car__select">
@@ -29,7 +27,7 @@
                     <option value="Naivasha">Naivasha</option>
                 </select>
             </div>
-            <div class="car__select__item">
+           <div class="car__select__item">
                 <label for="car-type">Car to rent:</label>
                 <select name="car-type" class="car__select__input" id="car-type">
                     <option value="Nairobi">Marcedez-AMG GT R</option>
@@ -40,20 +38,57 @@
                 </select>
             </div>
             <div class="car__select__item">
-                <label for="date">Date:</label>
+                <label for="date">Pick Up Date:</label>
+                <input type="date" id="date" name="date" class="car__select__input"/>
+            </div>
+            <div class="car__select__item">
+                <label for="date">Return Date:</label>
                 <input type="date" id="date" name="date" class="car__select__input"/>
             </div>
         </div>
         <div class="contact__form">
-            <input type="text" name="name" placeholder="Name" required/>
+            <input type="text" name="name" placeholder="Full Name" required/>
             <input type="email" name="email" placeholder="Email" required/>
             <input type="phone" name="phone" placeholder="Phone" required/>
-            <button type="submit" class="btn">Submit</button>
+            <input type="text" name="address" placeholder="Address" required/>
+            <div class="my_buttons">
+                <button class="btn " onclick="window.location.href='{% url 'home' %}'"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;Back</button>
+
+                <button type="submit" value="{{detail.id}}" class="btn_primary"><i class="fa fa-cart-plus" aria-hidden="true" id="add_cart"></i>&nbsp;Add To Cart</button>
+                {% comment %} <button type="submit" class="btn_primary"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>&nbsp;Add To Cart</button> {% endcomment %}
+            </div>
         </div>
     </form>
+
+    {% comment %} <script>
+        $(document).on('click','#add_cart',function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'add_to_cart' %}',
+                data: {
+                    detail_id: $('#add_cart').val(),
+                    csrfmiddlewaretoken: '{{csrf_token}}',
+                    action: 'post'
+                },
+                success: function(json){
+                    console.log(json)
+                },
+                error: function(xhr, errmsg,err){
+
+                }
+
+            })
+        })
+    </script> {% endcomment %}
 </section>
+
 {% block contact %}
 
 {% endblock contact %}
+
+{% block footer %}
+
+{% endblock footer %}
 
 {% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'mainapp/dash_board.html' %}
+
+{% block main %}
+
+<hr>
+{% block table %}
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
+
+        <tr>
+            
+            <th scope="col"> Username </th>
+            <th scope="col">Email </th>
+            <th scope="col"> Staff Status </th>
+            
+            <th scope="col"> View </th>
+            
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% if user_details%}
+       
+            {% for detail in user_details %} 
+            
+                <tr >
+                    <td>{{detail.id}}</td>
+            
+                    <td>{{detail.username}}</td>
+                    <td>{{detail.email}}</td>
+                    <td>{{detail.is_admin}}</td>
+                   
+            
+                    {% comment %} <td> <a class="btn btn-success btn-sm" href="{% url 'view_user' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td> {% endcomment %}
+            
+                </tr>
+            
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+{% endblock table %}
+
+
+{% endblock main %}

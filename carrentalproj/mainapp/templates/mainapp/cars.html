@@ -4,12 +4,14 @@
 
 {% block content %}
 <div class="collection__category">
+    {% block categories %}
     <h1>Choose Your Favorite Car</h1>
+    {% endblock categories %}
     <hr />
     <div class="collection__container">
-        {% for item in cars_category %}
+        {% for item in vehicles %}
         <div class="collection__car__item" id="collection-car-item-page">
-            <img src="{{item.car_image.url}}" ait="cars" id="collection-page-img"/>
+            <img src="{{item.vehicle_image.url}}" ait="cars" id="collection-page-img"/>
             <div class="car__info__container">
                 <div class="car__info">
                     <div class="car__price">
@@ -23,7 +25,7 @@
 
                 </div>
                 <h2>{{item.car_name}}</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='{% url 'contact' %}'">Book Now</button> </button>
+                <button class="btn btn__car btn__collection__page" onclick="window.location.href='{% url 'rent_now' %}'">Book Now</button>
             </div>
         </div>
         {% endfor %}

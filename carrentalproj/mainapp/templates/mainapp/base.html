@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'index.css' %}">
     {% endblock css %}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
         rel="stylesheet"
@@ -24,11 +25,14 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 
 </head>
 <body>
     
 {% block nav %}
+
 <header>
     <nav>
         <div class="nav__header">
@@ -47,6 +51,8 @@
             <li><a href="{% url 'contact' %}">Contact</a></li>
         </ul>
         <a href="/" class="nav__links" >Welcome {{user.username}}</a>
+        <a href="{% url 'cart_summary'%}" class="btn" ><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+
 
         <div class="nav__btn">
             <a href="/login" class="btn" >Logout</a>
@@ -58,7 +64,7 @@
         {% endblock content %}
 
         {% block contact %}
-        <section class="download">
+        {% comment %} <section class="download">
             <div class="section__container download__container">
                 <div class="download__content">
                     <h2 class="section__header">PREMIUM CAR RENTAL</h2>
@@ -73,9 +79,11 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> {% endcomment %}
     
         {% endblock contact %}
+
+        {% block footer %}
         <section class="news" id="contact">
             <div class="section__container news__container">
                 <h2 class="section__header">Stay upto date on all the latest news</h2>
@@ -135,6 +143,7 @@
                 Copyright © 2024 Hesborn Nyandarua. All rights reserved.
             </div>
         </footer>
+        {% endblock footer %}
     
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="https://unpkg.com/scrollreveal"></script>

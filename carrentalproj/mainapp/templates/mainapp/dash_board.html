@@ -6,20 +6,30 @@
 <h5 class="text-center">Welcome to the  Dashboard {{user}}</h5>
 {% block content %}
 
-    <div class="content ">
+
+<div class="content ">
+        {% block nav %}
+        {% include 'mainapp/admin_nav.html' %}
+        {% endblock nav %}
+        {% block upperbar %}
     <!-- Navbar -->
         <nav class="homenav">
             <i class='bx bx-menu'></i>
             <form action="#" method="get">
-                {% comment %} {{vehicle_filter.form.as_p}} {% endcomment %}
+                {{vehicle_filter.form.as_p}}
                 <div class="form-input">
                         <input type="search" placeholder="Search...">
                         <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                     </div>
                 </form>
+                <a href="#" class="notif">
+                    <i class='bx bx-bell'></i>
+                    <span class="count">12</span>
+                </a>
+
                 
         </nav>
-        
+        {% endblock upperbar %}
         <!-- End of Navbar -->
         {% block main %}
         <main>

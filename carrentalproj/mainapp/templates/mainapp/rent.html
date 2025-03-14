@@ -82,7 +82,10 @@
         </div>
         <div class="select__btns">
             <button class="btn">View Details</button>
-            <button class="btn" href="{% url 'contact' %}">Rent Now</button>
+
+            <button class="btn " onclick="window.location.href='{% url 'rent_now' %}'">Rent Now</button>
+
+            {% comment %} <button class="btn" href="{% url 'rent_now' %}">Rent Now</button> {% endcomment %}
         </div>
     </form>
 

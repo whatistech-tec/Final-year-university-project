@@ -1,34 +1,32 @@
-{% extends 'mainapp/dash_board.html' %}
+{% extends 'mainapp/admin_base.html' %}
 
-{% block main %}
+{% block title %}
+<title>Cart</title>
+{% endblock title %}
+
+{% block upperbar %}
+
+{% endblock upperbar %}
+
+{% block content %}
 
 <hr>
-{% block record %}
-<a class="btn btn-outline-primary btn-sm" href="{% url 'create_record' %}">
-    Create a new record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
-</a>
-{% endblock record %}
-
+<h3 class="text-center"> View Your Cart... </h3>
 <hr>
 {% block table %}
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered ">
     <thead class="table-light">
 
         <tr>
             
             <th scope="col"> ID </th>
-           <th scope="col">Car Image </th>
-            <th scope="col"> Plate Number </th>
             <th scope="col"> Vehicle Model </th>
             <th scope="col"> Vehicle Color </th>
-            <th scope="col"> Category</th>
-            <th scope="col"> Milage </th>
-            {% comment %} <th scope="col"> Speed </th> {% endcomment %}
             <th scope="col"> Acceleration </th>
             <th scope="col"> Seats</th>
             <th scope="col"> Location </th>
             <th scope="col"> Hire Amount </th>
-            <th scope="col"> Date Created </th>
+            <th scope="col"> Date Of Order </th>
             <th scope="col"> View </th>
             
         </tr>
@@ -42,20 +40,9 @@
             
                 <tr >
                     <td>{{detail.id}}</td>
-                    {% if detail.vehicle_image %}
-                    <td>
-                            <img src="{{detail.vehicle_image.url}}" width=80 height=80 >
-                        
-                    </td> 
-                    {% endif %}
             
-                    <td>{{detail.plate_number}}</td>
                     <td>{{detail.vehicle_name}}</td>
                     <td>{{detail.vehicle_color}}</td>
-                    <td>{{detail.vehicle_category}}</td>
-                    <td>{{detail.milage}}</td>
-                    {% comment %} <td>{{detail.speed}}&nbsp;km/h</td> {% endcomment %}
-                    <td>{{detail.settings}}</td>
                     <td>{{detail.seats}}</td>
                     <td>{{detail.location}}</td>
                     <td>KES {{detail.hire_amount}}</td>
@@ -72,4 +59,4 @@
 {% endblock table %}
 
 
-{% endblock main %}
+{% endblock content %}

@@ -1,74 +1,9 @@
-{% extends 'mainapp/base.html' %}
+{% extends 'mainapp/cars.html' %}
 
 {% load static %}
 
-{% block content %}
 
-<div class="collection__category">
-    <h1>Spacious Suvs</h1>
-    <hr />
-    <div class="collection__container">
-        {% for item in suvs_category %}
-        <div class="collection__car__item" id="collection-car-item-page">
-            <img src="{{item.car_image.url}}" ait="cars" id="collection-page-img"/>
-            <div class="car__info__container">
-                <div class="car__info">
-                    <div class="car__price">
-                        <h5>ksh {{item.hire_amount}}</h5>
-                        <h6>/Day</h6>
-                    </div>
-                    <div class="car__location">
-                        <i class="bx bxs-map"></i>
-                        <h6>{{item.location}}</h6>
-                    </div>
-                </div>
-                <h2>{{item.car_name}}</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
-            </div>
-        </div>
-        {% endfor %}
-
-        {% comment %} <div class="collection__car__item" id="collection-car-item-page">
-            <img src="{% static 'assets/1726690191070.jpg' %}" ait="cars" id="collection-page-img"/>
-            <div class="car__info__container">
-                <div class="car__info">
-                    <div class="car__price">
-                        <h5>ksh 5200</h5>
-                        <h6>/Day</h6>
-                    </div>
-                    <div class="car__location">
-                        <i class="bx bxs-map"></i>
-                        <h6>Nairobi</h6>
-                    </div>
-                </div>
-                <h2>Lexus - B100</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
-            </div>
-        </div> {% endcomment %}
-        {% comment %} <div class="collection__car__item" id="collection-car-item-page">
-            <img src="{% static 'assets/1726690164448.jpg' %}" ait="cars" id="collection-page-img"/>
-            <div class="car__info__container">
-                <div class="car__info">
-                    <div class="car__price">
-                        <h5>ksh 4100</h5>
-                        <h6>/Day</h6>
-                    </div>
-                    <div class="car__location">
-                        <i class="bx bxs-map"></i>
-                        <h6>Nairobi</h6>
-                    </div>
-                </div>
-                <h2>Land Rover 8324 - EG</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
-            </div>
-        </div> {% endcomment %}
-    </div>
-</div>
-<br>
-<br>
-<br>
-{% block contact %}
-
-{% endblock contact %}
-
-{% endblock content %}
+    {%  block categories %}
+    <h1>Fast and Luxurious Electric</h1>
+    {%  endblock categories %}
+   

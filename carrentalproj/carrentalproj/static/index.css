@@ -18,6 +18,21 @@
     box-sizing: border-box;
 }
 
+.btn_primary{
+    padding: 1rem 1.5rem;
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    color: var(--white);
+    background: #284de3 ;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.btn_primary:hover{
+    background: var(--text-dark); ;
+}
+
 .section__container{
     max-width: var(--max-width);
     margin: auto;
@@ -140,6 +155,10 @@ nav{
     color: var(--text-dark);
 }
 
+i .fa{
+    font: 800;
+}
+
 .nav__btn{
     display: none;
 }
@@ -185,7 +204,7 @@ nav{
 .header__container form{
     max-width: 800px;
     margin-inline: auto;
-    margin-bottom: 4rem;
+    /* margin-bottom: 2rem; */
     padding: 1rem;
     display: flex;
     align-items: center;
@@ -934,7 +953,7 @@ footer{
 }
 
 .contact{
-    margin-top: 150px;
+    /* margin-top: 50px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1001,21 +1020,34 @@ footer{
 }
 
 .contact__form input{
-    height: 60px;
+    height: 30px;
     border: none;
     border-bottom: 1px solid var(--text-dark);
-    font-size: 32px;
+    font-size: 25px;
     color: var(--text-dark);
     background-color: transparent;
     outline: none;
 }
 
+.contact__form .my_buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+}
 .contact__form button{
     width: 200px;
     height: 50px;
     margin-bottom: 3rem;
 
 
+}
+
+.contact__form a{
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
 @media (width > 540px){

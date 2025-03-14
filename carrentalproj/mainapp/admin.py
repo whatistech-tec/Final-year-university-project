@@ -1,13 +1,16 @@
 from django.contrib import admin
 
-from .models import VehicleDetail,MyCars,MyVans,MySuvs,MyElectric,RentedVehicle,Stories
+from djangoql.admin import DjangoQLSearchMixin
+
+from .models import VehicleDetail,RentedVehicle,Stories
 
 
 
 admin.site.register(VehicleDetail)
-admin.site.register(MyCars)
-admin.site.register(MyVans)
-admin.site.register(MySuvs)
-admin.site.register(MyElectric)
+
+class VehicleDetailAdmin(DjangoQLSearchMixin,admin.ModelAdmin):
+    list_display = ['plate_number','vehicle_name','vehicle_color','vehicle_category','milage','speed','settings','seats','location','hire_amount','in_stock']
+
 admin.site.register(RentedVehicle)
 admin.site.register(Stories)
+# admin.site.register(UsersInfo)
