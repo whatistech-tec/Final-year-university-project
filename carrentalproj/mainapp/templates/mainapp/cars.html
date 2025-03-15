@@ -11,6 +11,7 @@
     <div class="collection__container">
         {% for item in vehicles %}
         <div class="collection__car__item" id="collection-car-item-page">
+            <div id="root"></div>
             <img src="{{item.vehicle_image.url}}" ait="cars" id="collection-page-img"/>
             <div class="car__info__container">
                 <div class="car__info">
@@ -19,41 +20,41 @@
                         <h6>/Day</h6>
                     </div>
                     <div class="car__location">
-                        <i class="bx bxs-map"></i>
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
                         <h6>{{item.location}}</h6>
                     </div>
 
                 </div>
                 <h2>{{item.car_name}}</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='{% url 'rent_now' %}'">Book Now</button>
+                <button type="submit" value="{{detail.id}}" class="btn btn__car btn__collection__page" id="add_cart">&nbsp;Book Now</button>
+
+                {% comment %} <button class="btn btn__car btn__collection__page" onclick="window.location.href='{% url 'rent_now' %}'">Book Now</button> {% endcomment %}
             </div>
         </div>
         {% endfor %}
         
-        {% comment %} <div class="collection__car__item" id="collection-car-item-page">
-            <img src="{% static 'assets/download (7)' %}.jpeg" ait="cars" id="collection-page-img"/>
-            <div class="car__info__container">
-                <div class="car__info">
-                    <div class="car__price">
-                        <h5>ksh 720</h5>
-                        <h6>/Day</h6>
-                    </div>
-                    <div class="car__location">
-                        <i class="bx bxs-map"></i>
-                        <h6>Nairobi</h6>
-                    </div>
-                </div>
-                <h2>Audi 421 - DC</h2>
-                <button class="btn btn__car btn__collection__page" onclick="window.location.href='contact.html'">Book Now</button> </button>
-            </div>
-        </div> {% endcomment %}
+       
     </div>
 </div>
 <br>
 <br>
 <br>
-{% block contact %}
 
-{% endblock contact %}
+<script>
+    function addToCart(carId) {
+        fetch('/add_to_cart/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'car_id=' + add_cart
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const counter = document.getElementById('cart-counter');
+                counter.textContent = parseInt(counter.textContent) + 1;
+            }
+        });
+    }
+</script> 
 
 {% endblock content %}

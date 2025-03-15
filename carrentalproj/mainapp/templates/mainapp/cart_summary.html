@@ -22,7 +22,7 @@
             <th scope="col"> ID </th>
             <th scope="col"> Vehicle Model </th>
             <th scope="col"> Vehicle Color </th>
-            <th scope="col"> Acceleration </th>
+            {% comment %} <th scope="col"> Acceleration </th> {% endcomment %}
             <th scope="col"> Seats</th>
             <th scope="col"> Location </th>
             <th scope="col"> Hire Amount </th>
@@ -39,16 +39,16 @@
             {% for detail in vehicle_details %} 
             
                 <tr >
-                    <td>{{detail.id}}</td>
+                    <td>{{detail.vehicle.id}}</td>
             
-                    <td>{{detail.vehicle_name}}</td>
-                    <td>{{detail.vehicle_color}}</td>
-                    <td>{{detail.seats}}</td>
-                    <td>{{detail.location}}</td>
-                    <td>KES {{detail.hire_amount}}</td>
-                    <td>{{detail.creation_date}}</td>
+                    <td>{{detail.vehicle.vehicle_name}}</td>
+                    <td>{{detail.vehicle.vehicle_color}}</td>
+                    <td>{{detail.vehicle.seats}}</td>
+                    <td>{{detail.vehicle.location}}</td>
+                    <td>KES {{detail.vehicle.hire_amount}}</td>
+                    <td>{{detail.vehicle.creation_date}}</td>
             
-                    <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
+                    <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.vehicle.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
             
                 </tr>
             

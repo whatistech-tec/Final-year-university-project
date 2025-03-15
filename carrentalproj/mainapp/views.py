@@ -7,10 +7,10 @@ from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm,CreateRentalForm,UpdateRentalForm
+from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm,CreateRentalForm,UpdateRentalForm,PaymentForm
 from .cart import Cart
 from django.http import JsonResponse
-
+from django.views.decorators.csrf import csrf_exempt
 
 # to activate the user account
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,10 +18,10 @@ from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from django.urls import NoReverseMatch,reverse
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes,force_str,DjangoUnicodeDecodeError
-
+from datetime import datetime
 #getting token from utils.py
 from .utils import TokenGenerator,generate_token
-
+from dotenv import load_dotenv
 #email import
 from django.core.mail import send_mail,EmailMultiAlternatives
 from django.core.mail import BadHeaderError,send_mail
@@ -31,12 +31,119 @@ from django.core.mail.message import EmailMessage
 
 #threading
 import threading
+import os, base64
 
-
-from .models import VehicleDetail,RentedVehicle,Stories
+from .models import VehicleDetail,RentedVehicle,Stories,UsersInfo
 from .filters import VehicleDetailFilter, RentedVehicleFilter, StoriesFilter
 from .admin import VehicleDetailAdmin
 
+load_dotenv()
+
+CONSUMER_KEY = os.getenv("CONSUMER_KEY")
+CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
+MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
+
+MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
+CALLBACK_URL = os.getenv("CALLBACK_URL")
+MPESA_BASE_URL = os.getenv("MPESA_BASE_URL")
+
+# Generate M-Pesa access token
+def generate_access_token():
+    try:
+        credentials = f"{CONSUMER_KEY}:{CONSUMER_SECRET}"
+        encoded_credentials = base64.b64encode(credentials.encode()).decode()
+
+        headers = {
+            "Authorization": f"Basic {encoded_credentials}",
+            "Content-Type": "application/json",
+        }
+        response = requests.get(
+            f"{MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials",
+            headers=headers,
+        ).json()
+
+        if "access_token" in response:
+            return response["access_token"]
+        else:
+            raise Exception("Access token missing in response.")
+
+    except requests.RequestException as e:
+        raise Exception(f"Failed to connect to M-Pesa: {str(e)}")
+
+# Initiate STK Push and handle response
+def initiate_stk_push(phone, amount):
+    try:
+        token = generate_access_token()
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        stk_password = base64.b64encode(
+            (MPESA_SHORTCODE + MPESA_PASSKEY + timestamp).encode()
+        ).decode()
+
+        request_body = {
+            "BusinessShortCode": MPESA_SHORTCODE,
+            "Password": stk_password,
+            "Timestamp": timestamp,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": MPESA_SHORTCODE,
+            "PhoneNumber": phone,
+            "CallBackURL": CALLBACK_URL,
+            "AccountReference": "account",
+            "TransactionDesc": "Payment for goods",
+        }
+
+        response = requests.post(
+            f"{MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest",
+            json=request_body,
+            headers=headers,
+        ).json()
+
+        return response
+
+    except Exception as e:
+        print(f"Failed to initiate STK Push: {str(e)}")
+        return e
+        
+# Phone number formatting and validation
+def format_phone_number(phone):
+    phone = phone.replace("+", "")
+    if re.match(r"^254\d{9}$", phone):
+        return phone
+    elif phone.startswith("0") and len(phone) == 10:
+        return "254" + phone[1:]
+    else:
+        raise ValueError("Invalid phone number format")
+
+
+def make_payment(request):
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            try:
+                phone = format_phone_number(form.cleaned_data["phone_number"])
+                amount = form.cleaned_data["amount"]
+                response = initiate_stk_push(phone, amount)
+                print(response)
+
+                if response.get("ResponseCode") == "0":
+                    checkout_request_id = response["CheckoutRequestID"]
+                    return render(request, "pending.html", {"checkout_request_id": checkout_request_id})
+                else:
+                    error_message = response.get("errorMessage", "Failed to send STK push. Please try again.")
+                    return render(request, "mainapp/make_payment.html", {"form": form, "error_message": error_message})
+
+            except ValueError as e:
+                return render(request, "mainapp/make_payment.html", {"form": form, "error_message": str(e)})
+            except Exception as e:
+                return render(request, "mainapp/make_payment.html", {"form": form, "error_message": f"An unexpected error occurred: {str(e)}"})
+
+    else:
+        form = PaymentForm()
+
+    return render(request, "mainapp/make_payment.html", {"form": form})
 
 class EmailThread(threading.Thread):
     def __init__(self, email_message):
@@ -226,6 +333,13 @@ def all_stories(request):
     context = {'my_stories':my_stories}
 
     return render(request, 'mainapp/all_stories.html', context=context)
+def get_users(request):
+    
+    my_users = UsersInfo.objects.all()
+
+    context = {'my_users':my_users}
+
+    return render(request, 'mainapp/get_users.html', context=context)
    
 
 @login_required(login_url='admin_login')
@@ -414,7 +528,6 @@ def delete_detail(request, pk):
 
     messages.success(request, "Your record was deleted!")
 
-
     return redirect("all_vehicles")
 
 
@@ -500,15 +613,6 @@ def contact(request):
     context={}
     return render(request, "mainapp/contact.html", context)
 
-
-# def get_users(request):
-    
-#     user_details = UsersInfo.objects.all()
-
-#     context = {'user_details':user_details}
-
-#     return render(request, 'mainapp/get_users.html', context=context)
-
 def handlelogout(request):
     logout(request)
     messages.info(request,"Logout Success")
@@ -525,18 +629,28 @@ def cart_summary(request):
     
     return render(request, "mainapp/cart_summary.html")
 
+@csrf_exempt
 def add_to_cart(request):
-    cart = Cart(request)
-    if request.POST.get(action) == 'post':
-        detail_id = int(request.POST.get('detail_id'))
-        detail = get_object_or_404(VehicleDetail,id=detail_id)
-        cart.add(detail=detail)
-        
-        response = JsonResponse({'Car Name':detail.vehicle_name})
-        return response
+    vehicle_id = request.POST.get('vehicle_id')
+    vehicle = VehicleDetail.objects.get(id=vehicle_id)
+    vehicle_details, created = VehicleDetail.objects.get_or_create(vehicle=vehicle)
+    if not created:
+        vehicle_detail.quantity += 1
+        vehicle_detail.save()
+    return JsonResponse({'status': 'success', 'quantity': vehicle_detail.quantity})
+
+@csrf_exempt
+def cart_summary(request):
+    vehicle_details = VehicleDetail.objects.select_related('vehicle').all()
+    total_quantity = sum(item.quantity for item in cart_items)
+    context = {'vehicle_details': vehicle_details, 'total_quantity': total_quantity}
+    return render(request, 'mainapp/cart_summary.html', context)
+
 
 def delete_from_cart(request):
     pass
 
 def update_cart(request):
     pass
+
+    

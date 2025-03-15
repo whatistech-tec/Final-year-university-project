@@ -1,15 +1,8 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-<style>
-    .formal{
-        top:50;
-    }
-</style>
-{% block nav %}
-{% endblock nav %}
 
-<section class="contact formal">
+<section class="contact">
     <h1>Get in Touch for Your Dream Ride!</h1>
     
     <form action="https://api.web3forms.com/submit" method="POST">
@@ -54,33 +47,13 @@
             <div class="my_buttons">
                 <button class="btn " onclick="window.location.href='{% url 'home' %}'"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;Back</button>
 
-                <button type="submit" value="{{detail.id}}" class="btn_primary"><i class="fa fa-cart-plus" aria-hidden="true" id="add_cart"></i>&nbsp;Add To Cart</button>
+                {% comment %} <button type="submit" value="{{detail.id}}" class="btn_primary"><i class="fa fa-cart-plus" aria-hidden="true" id="add_cart"></i>&nbsp;Add To Cart</button> {% endcomment %}
                 {% comment %} <button type="submit" class="btn_primary"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>&nbsp;Add To Cart</button> {% endcomment %}
             </div>
         </div>
     </form>
 
-    {% comment %} <script>
-        $(document).on('click','#add_cart',function(e){
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '{% url 'add_to_cart' %}',
-                data: {
-                    detail_id: $('#add_cart').val(),
-                    csrfmiddlewaretoken: '{{csrf_token}}',
-                    action: 'post'
-                },
-                success: function(json){
-                    console.log(json)
-                },
-                error: function(xhr, errmsg,err){
-
-                }
-
-            })
-        })
-    </script> {% endcomment %}
+    
 </section>
 
 {% block contact %}

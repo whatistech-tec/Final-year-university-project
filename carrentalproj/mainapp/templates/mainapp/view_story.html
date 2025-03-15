@@ -45,7 +45,12 @@
         
         &nbsp;
         
-        <a href="{% url 'delete-story' story.id %}" class="btn btn-danger">Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i></a>
+        
+        <a hx-delete="{% url 'delete-story' story.id %}" class="btn btn-danger"
+            hx-confirm="Are you sure you wish to delete this story?">
+            Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i>
+        </a>  
+           
     </body>
     
 {% endblock %}

@@ -155,3 +155,5 @@ sr.reveal(".about h1", {delay: "500"});
 sr.reveal(".about", {delay: "700"});
 sr.reveal(".about", {delay: "1000"});
 sr.reveal(".contact");
+
+

@@ -7,11 +7,11 @@ urlpatterns = [
     path('admin_login', views.admin_login, name="admin_login"),
     path('all_vehicles', views.all_vehicles, name="all_vehicles"),
     path('rent_now', views.rent_now, name="rent_now"),
-    # path('get_users', views.get_users, name="get_users"),
     path('filtered_vehicles', views.filtered_vehicles, name="filtered_vehicles"),
     path('filtered_vehicles', views.search_vehicles, name="filtered_vehicles"),
     path('all_rentals', views.all_rentals, name="all_rentals"),
     path('all_stories', views.all_stories, name="all_stories"),
+    path('get_users', views.get_users, name="get_users"),
     path('admin_logout', views.admin_logout, name="admin_logout"),
     path('create_record', views.create_record, name="create_record"),
     path('create_story', views.create_story, name="create_story"),
@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('view_story/<int:pk>', views.view_story, name="view_story"),
     path('view_rental/<int:pk>', views.view_rental, name="view_rental"),
-    path('delete_detail/<int:pk>', views.delete_detail, name="delete_detail"),
+    path('delete_detail/<int:pk>/delete/', views.delete_detail, name="delete_detail"),
     path('delete-story/<int:pk>', views.delete_story, name="delete-story"),
     path('delete-rental/<int:pk>', views.delete_rental, name="delete_rental"),
 
@@ -54,10 +54,11 @@ urlpatterns = [
     
     #cart
     path('cart_summary', views.cart_summary, name="cart_summary"),
-    # path('add_to_cart', views.add_to_cart, name="add_to_cart"),
+    path('add_to_cart', views.add_to_cart, name="add_to_cart"),
     path('delete_from_cart', views.delete_from_cart, name="delete_from_cart"),
     path('update_cart', views.update_cart, name="update_cart"),
     
- 
+    path('make_payment', views.make_payment, name="make_payment"),
+    
  
 ]

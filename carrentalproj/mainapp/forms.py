@@ -60,3 +60,7 @@ class UpdateRentalForm(forms.ModelForm):
         model = RentedVehicle
         fields = [ 'first_name', 'last_name', 'email', 'phone', 'address', 'company_branch','car_model','plate_number','car_color','agent_name','agent_number']
         
+class PaymentForm(forms.Form):
+    
+        phone_number = forms.CharField(label='Phone Number',max_length=15)
+        amount = forms.IntegerField(label='Amount',min_value=1)

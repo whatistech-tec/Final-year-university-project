@@ -19,3 +19,7 @@ class Cart():
             self.cart[detail_id] = {'hire_amount': str(detail.hire_amount)}
             
         self.session.modified = True
+        
+        
+def __len__(self):
+    return len(self.cart)

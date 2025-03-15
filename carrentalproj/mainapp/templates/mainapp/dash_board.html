@@ -3,8 +3,8 @@
 {% load static %}
 
 <!-- Main Content -->
-<h5 class="text-center">Welcome to the  Dashboard {{user}}</h5>
 {% block content %}
+<h5 class="text-center">Welcome to the  Dashboard {{user}}</h5>
 
 
 <div class="content ">
@@ -16,7 +16,7 @@
         <nav class="homenav">
             <i class='bx bx-menu'></i>
             <form action="#" method="get">
-                {{vehicle_filter.form.as_p}}
+                {% comment %} {{vehicle_filter.form.as_p}} {% endcomment %}
                 <div class="form-input">
                         <input type="search" placeholder="Search...">
                         <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>

@@ -50,13 +50,23 @@
             <li><a href="{% url 'stories' %}">Stories</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
         </ul>
-        <a href="/" class="nav__links" >Welcome {{user.username}}</a>
-        <a href="{% url 'cart_summary'%}" class="btn" ><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
-
+        <h5>Welcome {{user.username}}</h5>
+        
+        <a href="{% url 'cart_summary'%}" class="cart" >
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            <span id="cart-counter">{{counter}}</span>
+        </a>
 
         <div class="nav__btn">
-            <a href="/login" class="btn" >Logout</a>
+            {% if request.user.is_authenticated %}
+
+            <button class="btn " onclick="window.location.href='{% url 'handlelogout' %}'">Logout</button>
+            
+            {% else %}
+            <button class="btn " onclick="window.location.href='{% url 'login' %}'">Sign In</button>
+            {% endif %}
         </div>
+
     </nav>
     {% endblock nav %}
     {% block content %}
