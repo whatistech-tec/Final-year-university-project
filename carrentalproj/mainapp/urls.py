@@ -40,7 +40,7 @@ urlpatterns = [
     path('search', views.search, name="search"),
     path('rent', views.rent, name="rent"),
     path('ride', views.ride, name="ride"),
-    path('stories', views.stories, name="stories"),
+    path('stories/', views.stories, name="stories"),
     path('cars', views.cars, name="cars"),
     path('suvs', views.suvs, name="suvs"),
     path('vans', views.vans, name="vans"),
@@ -52,12 +52,7 @@ urlpatterns = [
     path('admin_vans/', views.admin_vans, name='admin_vans'),
     path('admin_electrics/', views.admin_electrics, name='admin_electrics'),
     
-    
-    #cart
-    path('cart_summary', views.cart_summary, name="cart_summary"),
-    path('add_to_cart', views.add_to_cart, name="add_to_cart"),
-    path('delete_from_cart', views.delete_from_cart, name="delete_from_cart"),
-    path('update_cart', views.update_cart, name="update_cart"),
+    path('maps', views.maps, name="maps"),
     
     path('make_payment', views.payment_view, name="make_payment"),
     path('stk-status/', views.stk_status_view, name='stk_status'),

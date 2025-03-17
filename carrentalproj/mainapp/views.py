@@ -343,8 +343,12 @@ def admin_login(request):
 
 @login_required(login_url='admin_login')
 def dash_board(request):
-
+    context={}
     return render(request, 'mainapp/dash_board.html', context=context)
+
+def maps(request):
+
+    return render(request, 'mainapp/maps.html')
 
 @login_required(login_url='admin_login')
 def vehicle_categories(request,foo):

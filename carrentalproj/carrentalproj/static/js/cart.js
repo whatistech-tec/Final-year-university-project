@@ -1,13 +1,3 @@
-const navEl = document.querySelector('.my-navbar')
-window.addEventListener('scroll', () => {
-    if(window.scrollY >= 60){
-        navEl.classList.add('.navbar-scrolled');
-    }else if (window.scrollY < 60){
-        navEl.classList.remove('.navbar-scrolled');
-    }
-});
-
-
 
 const cartIcon = document.querySelector("#cart-icon");
 const cart = document.querySelector(".cart");
@@ -24,6 +14,7 @@ addCartButtons.forEach(button =>{
     });
 });
 
+// const cartFromLocalStorage = JSON.parse(localStorage.getItem('cart') || '[]')
 const cartContent = document.querySelector(".cart-content");
 const addToCart = productBox =>{
     const productImgSrc = productBox.querySelector("img").src;
@@ -52,6 +43,8 @@ const addToCart = productBox =>{
         cartBox.remove();
         updateTotalPrice();
         updateCartCount(-1);
+        // cartFromLocalStorage();
+        // localStorage.setItem("cart",JSON.stringify(cart));
     });
     cartBox.querySelector(".cart-quantity").addEventListener("click", event =>{
         const numberElement = cartBox.querySelector(".number");

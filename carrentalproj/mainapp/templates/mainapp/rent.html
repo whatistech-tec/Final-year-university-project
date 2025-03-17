@@ -40,55 +40,57 @@
             </div>
         </div>
     </div>
-    <div class="swiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper">
-         
+    <div class="product-box">
+        <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
             
-            {% for item in renting_cars %}
-            <div class="swiper-slide">
-                <div class="select__card">
-                    <img src="{{item.vehicle_image.url}}" alt="select">
-                    <div class="select__info">
-                        <div class="select__info__card">
-                            <span><i class="ri-speed-up-line"></i></span>
-                            <h4>{{item.speed}} <span>km/h</span></h4>
+                
+                {% for item in renting_cars %}
+                <div class="swiper-slide">
+                    <div class="select__card">
+                        <img src="{{item.vehicle_image.url}}" alt="select">
+                        <div class="select__info">
+                            <div class="select__info__card">
+                                <span><i class="ri-speed-up-line"></i></span>
+                                <h4>{{item.speed}} <span>km/h</span></h4>
+                            </div>
+                            <div class="select__info__card">
+                                <span><i class="ri-settings-5-line"></i></span>
+                                <h4>{{item.settings}} <span>speed</span></h4>
+                            </div>
+                            <div class="select__info__card">
+                                <span><i class="ri-roadster-line"></i></span>
+                                <h4 >{{item.seats}} <span>seats</span></h4>
+                            </div>
+                            <div class="select__info__card">
+                                <span><i class="ri-signpost-line"></i></span>
+                                <h4>{{item.milage}} <span>milage</span></h4>
+                            </div>
+                            
                         </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-settings-5-line"></i></span>
-                            <h4>{{item.settings}} <span>speed</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-roadster-line"></i></span>
-                            <h4>{{item.seats}} <span>seats</span></h4>
-                        </div>
-                        <div class="select__info__card">
-                            <span><i class="ri-signpost-line"></i></span>
-                            <h4>{{item.milage}} <span>milage</span></h4>
-                        </div>
-                        
                     </div>
                 </div>
+                {% endfor %}
+                
             </div>
-            {% endfor %}
-            
+        
         </div>
-       
-    </div>
-    <div class="select__form">
-        <div class="select__price">
-            <span><i class="ri-price-tag-3-line"></i></span>
-            <div><span class="price" id="select-price">340</span> /day</div>
-        </div>
-        <div class="select__btns">
-            <button class="btn">View Details</button>
+        <div class="select__form">
+            <div class="select__price">
+                <span><i class="ri-price-tag-3-line"></i></span>
+                <div><span class="price" id="select-price">KES {{item.hire_amount}}</span> /day</div>
+            </div>
+            <div class="select__btns">
+                <button class="btn">View Details</button>
 
 
-            <button type="submit" value="{{detail.id}}" class="btn  add-cart">&nbsp;Rent Now</button>
+                <button type="submit" value="{{detail.id}}" class="btn  add-cart">&nbsp;Rent Now</button>
 
-            {% comment %} <button class="btn add-cart">Rent Now</button> {% endcomment %}
+                {% comment %} <button class="btn add-cart">Rent Now</button> {% endcomment %}
 
-            {% comment %} <button class="btn" href="{% url 'rent_now' %}">Rent Now</button> {% endcomment %}
+                {% comment %} <button class="btn" href="{% url 'rent_now' %}">Rent Now</button> {% endcomment %}
+            </div>
         </div>
     </div>
 

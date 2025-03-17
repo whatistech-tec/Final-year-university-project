@@ -82,6 +82,7 @@ ul{
 html,
 body{
     scroll-behavior: smooth;
+    
 }
 
 body{
@@ -94,6 +95,36 @@ header{
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+.my-mapcontainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+/* .image-overlay{
+    background-color: rgba(255,166,0,0.5);
+    display:flex;
+    justify-content: center;
+    letter-spacing: 5px;
+    font-size: 3rem;
+    z-index: 10000;
+} */
+
+/* .my-mapcontainer h1{
+    margin-bottom : 60px;
+    text-align: center;
+    font-size: 30px;
+
+} */
+iframe{
+    width: 80%;
+    height: 500px;
+    margin-bottom: 50px;
 }
 
 .nav__header{
@@ -144,8 +175,11 @@ header{
     color: var(--white);
 }
 
-.nav__links a:hover{
-    color: var(--text-dark);
+.nav__links a:hover,
+.nav__links a.active
+{
+    color: var(--primary-color);
+    border-bottom: 2.5px solid var(--primary-color);
 }
 
 i .fa{
@@ -498,7 +532,11 @@ i .fa{
     font-weight: 700;
     margin: 10px;
 }
-
+.car__location{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 .car__location i{
     font-size: 34px;
     padding: 10px;
@@ -777,10 +815,10 @@ i .fa{
     align-items: center;
     gap: 8rem;
 
-    animation: scroll 45s linear infinite;
+    animation: scroll 30s linear infinite;
 }
 
-.banner wrapper img{
+.banner__wrapper img{
     height: 100px;
 }
 

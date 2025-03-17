@@ -2,6 +2,21 @@ const menuBtn = document.getElementById("menu-btn");
 const navLinks = document.getElementById("nav-links");
 const menuBtnIcon = menuBtn.querySelector("i");
 
+const navLinkEls = document.querySelectorAll(".nav__links");
+const windowPathName = window.location.pathname;
+
+
+document.addEventListener('scroll', ()=>{
+    const header = document.querySelector('nav-header');
+    if (window.scrollY > 0){
+        header.classList.add('navbar-scrolled');
+    }else{
+        
+        header.classList.remove('navbar-scrolled');
+    }
+})
+
+
 menuBtn.addEventListener("click",(e) => {
     navLinks.classList.toggle("open");
 

@@ -42,11 +42,11 @@
             </div>
         </div>
 
+        {% endblock content %}
         <br>
         {% block buttons %}
         <a href="{% url 'all_vehicles' %}" class="btn btn-secondary">Return &nbsp; <i class='fa fa-arrow-left' aria-hidden="true"></i></a>
         
-        {% endblock buttons %}
         &nbsp;
         
         <a href="{% url 'update_record' detail.id %}" class="btn btn-info">Update record  &nbsp; <i class='fa fa-plus' aria-hidden="true"></i></a>
@@ -55,6 +55,6 @@
             hx-confirm="Are you sure you wish to delete this record?">
             Delete  &nbsp; <i class='fa fa-minus-square' aria-hidden="true"></i>
         </a>  
+        {% endblock buttons %}
     </body>
-    {% endblock content %}
     

@@ -33,11 +33,15 @@
 
 </head>
 <body>
-    
+    {% url 'home' as home %}
+    {% url 'rent' as rent %}
+    {% url 'ride' as ride %}
+    {% url 'stories' as stories %}
+    {% url 'contact' as contact %}
     
     {% block nav %}
     <header>
-        <nav-header class="my-navbar">
+        <nav-header>
             <div class="nav__header ">
                 <div class="nav__logo">
                     <a href="#">SONA</a>
@@ -47,11 +51,11 @@
                 </div>
             </div>
             <ul class="nav__links" id="nav-links">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'rent' %}">Rent</a></li>
-                <li><a href="{% url 'ride' %}">Ride</a></li>
-                <li><a href="{% url 'stories' %}">Stories</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'home' %}" class="{% if request.path == home %} active {% endif %}">Home</a></li>
+                <li><a href="{% url 'rent' %}" class="{% if request.path == rent %} active {% endif %}">Rent</a></li>
+                <li><a href="{% url 'ride' %}" class="{% if request.path == ride %} active {% endif %}">Ride</a></li>
+                <li><a href="{% url 'stories' %}" class="{% if request.path == stories %} active {% endif %}">Stories</a></li>
+                <li><a href="{% url 'contact' %}" class="{% if request.path == contact %} active {% endif %}">Contact</a></li>
             </ul>
             <div id="cart-icon">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -98,7 +102,8 @@
         </div>
         <br>
         <br>
-        <br>
+       
+    
         
             {% block content %}
 
@@ -186,6 +191,7 @@
         </footer>
         {% endblock footer %}
     
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="https://unpkg.com/scrollreveal"></script>
         <script src="{% static 'index.js' %}" defer></script>
