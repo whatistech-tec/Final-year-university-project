@@ -12,6 +12,7 @@ urlpatterns = [
     path('all_rentals', views.all_rentals, name="all_rentals"),
     path('all_stories', views.all_stories, name="all_stories"),
     path('get_users', views.get_users, name="get_users"),
+    path('pending', views.pending, name="pending"),
     path('admin_logout', views.admin_logout, name="admin_logout"),
     path('create_record', views.create_record, name="create_record"),
     path('create_story', views.create_story, name="create_story"),
@@ -58,7 +59,10 @@ urlpatterns = [
     path('delete_from_cart', views.delete_from_cart, name="delete_from_cart"),
     path('update_cart', views.update_cart, name="update_cart"),
     
-    path('make_payment', views.make_payment, name="make_payment"),
-    
+    path('make_payment', views.payment_view, name="make_payment"),
+    path('stk-status/', views.stk_status_view, name='stk_status'),
+    path('callback/', views.payment_callback, name='payment_callback'),
+
+
  
 ]

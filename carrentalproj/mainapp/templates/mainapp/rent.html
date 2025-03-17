@@ -75,19 +75,22 @@
         </div>
        
     </div>
-    <form action="/" class="select__form">
+    <div class="select__form">
         <div class="select__price">
             <span><i class="ri-price-tag-3-line"></i></span>
-            <div><span id="select-price">340</span> /day</div>
+            <div><span class="price" id="select-price">340</span> /day</div>
         </div>
         <div class="select__btns">
             <button class="btn">View Details</button>
 
-            <button class="btn " onclick="window.location.href='{% url 'rent_now' %}'">Rent Now</button>
+
+            <button type="submit" value="{{detail.id}}" class="btn  add-cart">&nbsp;Rent Now</button>
+
+            {% comment %} <button class="btn add-cart">Rent Now</button> {% endcomment %}
 
             {% comment %} <button class="btn" href="{% url 'rent_now' %}">Rent Now</button> {% endcomment %}
         </div>
-    </form>
+    </div>
 
 </section>
 {% block contact %}

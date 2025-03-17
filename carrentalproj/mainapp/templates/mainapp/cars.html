@@ -10,13 +10,12 @@
     <hr />
     <div class="collection__container">
         {% for item in vehicles %}
-        <div class="collection__car__item" id="collection-car-item-page">
-            <div id="root"></div>
+        <div class=" product-box collection__car__item" id="collection-car-item-page">
             <img src="{{item.vehicle_image.url}}" ait="cars" id="collection-page-img"/>
             <div class="car__info__container">
                 <div class="car__info">
                     <div class="car__price">
-                        <h5>ksh {{item.hire_amount}}</h5>
+                        <h5 class="price" >KES {{item.hire_amount}}</h5>
                         <h6>/Day</h6>
                     </div>
                     <div class="car__location">
@@ -25,8 +24,8 @@
                     </div>
 
                 </div>
-                <h2>{{item.car_name}}</h2>
-                <button type="submit" value="{{detail.id}}" class="btn btn__car btn__collection__page" id="add_cart">&nbsp;Book Now</button>
+                <h2 class="product-title">{{item.vehicle_name}}</h2>
+                <button type="submit" value="{{detail.id}}" class="btn btn__car btn__collection__page add-cart">&nbsp;Book Now</button>
 
                 {% comment %} <button class="btn btn__car btn__collection__page" onclick="window.location.href='{% url 'rent_now' %}'">Book Now</button> {% endcomment %}
             </div>
@@ -40,7 +39,7 @@
 <br>
 <br>
 
-<script>
+{% comment %} <script>
     function addToCart(carId) {
         fetch('/add_to_cart/', {
             method: 'POST',
@@ -55,6 +54,6 @@
             }
         });
     }
-</script> 
+</script>  {% endcomment %}
 
 {% endblock content %}

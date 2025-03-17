@@ -13,6 +13,9 @@
     {% block css %}
     <link rel="stylesheet" href="{% static 'index.css' %}">
     {% endblock css %}
+    
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
@@ -31,48 +34,76 @@
 </head>
 <body>
     
-{% block nav %}
+    
+    {% block nav %}
+    <header>
+        <nav-header class="my-navbar">
+            <div class="nav__header ">
+                <div class="nav__logo">
+                    <a href="#">SONA</a>
+                </div>
+                <div class="nav__menu__btn" id="menu-btn">
+                    <i class="ri-menu-line"></i>
+                </div>
+            </div>
+            <ul class="nav__links" id="nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'rent' %}">Rent</a></li>
+                <li><a href="{% url 'ride' %}">Ride</a></li>
+                <li><a href="{% url 'stories' %}">Stories</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+            <div id="cart-icon">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <span class="cart-item-count"></span>
+            </div>    
 
-<header>
-    <nav>
-        <div class="nav__header">
-            <div class="nav__logo">
-                <a href="#">SONA</a>
+            <div class="nav__btn">
+                {% if request.user.is_authenticated %}
+
+                <button class="btn " onclick="window.location.href='{% url 'handlelogout' %}'">Logout</button>
+                
+                {% else %}
+                <button class="btn " onclick="window.location.href='{% url 'login' %}'">Sign In</button>
+                {% endif %}
             </div>
-            <div class="nav__menu__btn" id="menu-btn">
-                <i class="ri-menu-line"></i>
-            </div>
+
+        </nav-header>
+
+        {% endblock nav %}
+        <div class="cart">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="cart-content">
+
+                <!-- <div class="cart-box">
+                    <img src="{{item.vehicle_image.url}}" class="cart-img" alt="">
+                    <div class="cart-detail">
+                        <h2 class="cart-product-title">{{item.car_name}}</h2>
+                        <span class="cart-price">ksh {{item.hire_amount}}</span>
+                        <div class="cart-quantity">
+                            <button id="decrement">-</button>
+                            <span class="number">1</span>
+                            <button id="increment"></button>
+                        </div>
+                    </div>
+                    <p class="cart-remove">Remove</p>
+                </div> -->
         </div>
-        <ul class="nav__links" id="nav-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'rent' %}">Rent</a></li>
-            <li><a href="{% url 'ride' %}">Ride</a></li>
-            <li><a href="{% url 'stories' %}">Stories</a></li>
-            <li><a href="{% url 'contact' %}">Contact</a></li>
-        </ul>
-        <h5>Welcome {{user.username}}</h5>
+            <div class="total">
+                <div class="total-title">Total</div>
+                <div class="total-price">$0</div>
+            </div>
+            <button class="btn-buy">Proceed To Rent</button>
+            <i class="fa fa-times" aria-hidden="true" id="cart-close"></i>
+        </div>
+        <br>
+        <br>
+        <br>
         
-        <a href="{% url 'cart_summary'%}" class="cart" >
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            <span id="cart-counter">{{counter}}</span>
-        </a>
+            {% block content %}
 
-        <div class="nav__btn">
-            {% if request.user.is_authenticated %}
-
-            <button class="btn " onclick="window.location.href='{% url 'handlelogout' %}'">Logout</button>
-            
-            {% else %}
-            <button class="btn " onclick="window.location.href='{% url 'login' %}'">Sign In</button>
-            {% endif %}
-        </div>
-
-    </nav>
-    {% endblock nav %}
-    {% block content %}
-
-        {% endblock content %}
-
+            {% endblock content %}
+   
         {% block contact %}
         {% comment %} <section class="download">
             <div class="section__container download__container">
@@ -158,5 +189,6 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="https://unpkg.com/scrollreveal"></script>
         <script src="{% static 'index.js' %}" defer></script>
+        <script src="{% static 'js/cart.js' %}" defer></script>
     </body>
     </html>
