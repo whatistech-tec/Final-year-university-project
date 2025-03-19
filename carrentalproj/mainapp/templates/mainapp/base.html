@@ -58,8 +58,7 @@
                 <li><a href="{% url 'contact' %}" class="{% if request.path == contact %} active {% endif %}">Contact</a></li>
             </ul>
             <div id="cart-icon">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                <span class="cart-item-count"></span>
+                <i class="fa fa-car" aria-hidden="true"></i>
             </div>    
 
             <div class="nav__btn">
@@ -76,7 +75,7 @@
 
         {% endblock nav %}
         <div class="cart">
-            <h2 class="cart-title">Your Cart</h2>
+            <h2 class="cart-title">Your Car Collection</h2>
             <div class="cart-content">
 
                 <!-- <div class="cart-box">
@@ -97,7 +96,8 @@
                 <div class="total-title">Total</div>
                 <div class="total-price">$0</div>
             </div>
-            <button class="btn-buy">Proceed To Rent</button>
+            <button class="btn-buy" data-url="{% url 'checkout' %}">Proceed To Rent</button>
+            {% comment %} <button class="btn-buy">Proceed To Rent</button> {% endcomment %}
             <i class="fa fa-times" aria-hidden="true" id="cart-close"></i>
         </div>
         <br>

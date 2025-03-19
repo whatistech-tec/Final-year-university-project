@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin_login', views.admin_login, name="admin_login"),
     path('all_vehicles', views.all_vehicles, name="all_vehicles"),
     path('rent_now', views.rent_now, name="rent_now"),
+    path('checkout', views.checkout, name="checkout"),
     path('filtered_vehicles', views.filtered_vehicles, name="filtered_vehicles"),
     path('filtered_vehicles', views.search_vehicles, name="filtered_vehicles"),
     path('all_rentals', views.all_rentals, name="all_rentals"),

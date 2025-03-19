@@ -347,8 +347,12 @@ def dash_board(request):
     return render(request, 'mainapp/dash_board.html', context=context)
 
 def maps(request):
-
+    
     return render(request, 'mainapp/maps.html')
+
+def checkout(request):
+
+    return render(request, 'mainapp/checkout.html')
 
 @login_required(login_url='admin_login')
 def vehicle_categories(request,foo):
