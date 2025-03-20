@@ -1,0 +1,43 @@
+{% extends 'mainapp/checkout.html' %}
+
+{%  load static %}
+
+{% block checkout %}
+{% endblock checkout %}
+{% block form %}
+<div class="right ">
+    <h1 class="search_form">Search With...</h1>
+    
+    <div class="form ">
+        <div class="group">
+            <input type="text" placeholder= "Vehicle Model.." name="name" id="name">
+        </div>
+
+        <div class="group">
+            <input type="text"placeholder="Number of Seats.." name="phone" id="phone">
+        </div>
+
+        <div class="group">
+            <input type="text"placeholder="Milage" name="address" id="address">
+        </div>
+        
+        <div class="group">
+            <select name="city" id="city" placeholder="City">
+                <option value="">Nairobi</option>
+                <option value="">Kisumu</option>
+                <option value="">Eldoret</option>
+                <option value="">Nakuru</option>
+                <option value="">Naivasha</option>
+                <option value="">Kisii</option>
+            </select>
+        </div>
+        <div class="group">
+            <input type="budget" name="budget" id="budget" placeholder="Budget">
+            
+        </div>
+
+    </div>
+    {% endblock form %}
+
+    {% block measure %}
+    {% endblock measure %}

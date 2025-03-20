@@ -11,6 +11,22 @@ setTimeout(function()
 
 }, 4000);
 
+document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.querySelector(".btn");
+    const checkoutLayout = document.querySelector(".checkoutLayout");
+
+    searchButton.addEventListener("click", function () {
+        if (checkoutLayout.style.visibility === "hidden") {
+            checkoutLayout.style.visibility = "visible";
+        } else {
+            checkoutLayout.style.visibility = "hidden";
+        }
+    });
+});
+
+
+
+
 
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 

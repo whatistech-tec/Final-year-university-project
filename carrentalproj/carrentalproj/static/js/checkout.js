@@ -53,3 +53,12 @@ function displayCheckoutCars() {
     totalQuantityElement.textContent = `${totalQuantity}`;
     totalPriceElement.textContent = `KES ${total}`;
 }
+
+document.querySelector('.buttonCheckout').addEventListener('click', function(e) {
+    e.preventDefault(); 
+
+    const form = document.getElementById('rentalForm');
+    
+    form.submit();
+});
+

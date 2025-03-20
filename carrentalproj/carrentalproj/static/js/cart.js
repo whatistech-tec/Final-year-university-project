@@ -9,7 +9,12 @@ cartClose.addEventListener("click", () => cart.classList.remove("active"));
 const addCartButtons = document.querySelectorAll(".add-cart");
 addCartButtons.forEach(btn =>{
     btn.addEventListener("click", addItemFunction)
-       
+
+    // button.textContent = "Unavailable";
+    // button.classList.add("disabled");
+    // button.disabled = true;
+
+    
 });
 
 
@@ -78,57 +83,59 @@ function addItemFunction(e){
 
 
 function updateCartUI(){
-    const cartWrapper = document.querySelector('.cart-content')
+    const cartWrapper = document.querySelector('.cart-content');
+    cartWrapper.innerHTML = "";
 
-    
-
-    cartWrapper.innerHTML=""
-    const items = LocalCart.getLocalCartItems()
-    if(items === null) return
-    let count = 0
-    let total = 0
-    for(const [key, value] of items.entries()){
-        const cartItem = document.createElement('div')
-        cartItem.classList.add('cart-content')
-        let price = value.price*value.quantity
-        price = Math.round(price*100)/100
-        count+=1
-        total += price
-        total = Math.round(total*100)/100
-        cartItem.innerHTML =
-        `
-
-
-        <div class="cart-box">
-            <img src="${value.img}" class="cart-img" alt="">
-            <div class="cart-detail">
-                <h2 class="cart-product-title">${value.name}</h2>
-                <span class="cart-price">KES ${price}</span>
-                
-            </div>
-            <i class="fa fa-trash cart-remove"" aria-hidden="true"></i>
-    
-
-        </div>
-    `;
-
-       cartItem.lastElementChild.addEventListener('click', ()=>{
-           LocalCart.removeItemFromCart(key)
-       })
-        cartWrapper.append(cartItem)
+    const items = LocalCart.getLocalCartItems();
+    if(items === null || items.size === 0) {
+        cartWrapper.innerHTML = "<p>Your collection is empty!</p>";
+        const subtotal = document.querySelector('.total-price');
+        subtotal.innerHTML = `KES 0`;
+        cartIcon.classList.remove('non-empty');
+        return;
     }
-    
+
+    let count = 0;
+    let total = 0;
+    for(const [key, value] of items.entries()){
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-content');
+        let price = value.price * value.quantity;
+        price = Math.round(price * 100) / 100;
+        count += 1;
+        total += price;
+        total = Math.round(total * 100) / 100;
+        cartItem.innerHTML = `
+            <div class="cart-box">
+                <img src="${value.img}" class="cart-img" alt="">
+                <div class="cart-detail">
+                    <h2 class="cart-product-title">${value.name}</h2>
+                    <span class="cart-price">KES ${price}</span>
+                </div>
+                <i class="fa fa-trash cart-remove" aria-hidden="true"></i>
+            </div>
+        `;
+        cartItem.lastElementChild.addEventListener('click', () => {
+            LocalCart.removeItemFromCart(key);
+        });
+        cartWrapper.append(cartItem);
+    }
 
     if(count > 0){
-        cartIcon.classList.add('non-empty')
-        let root = document.querySelector(':root')
-        root.style.setProperty('--after-content', `"${count}"`)
-        const subtotal = document.querySelector('.total-price')
-        subtotal.innerHTML = `: KES ${total}`
+        cartIcon.classList.add('non-empty');
+        let root = document.querySelector(':root');
+        root.style.setProperty('--after-content', `"${count}"`);
+        const subtotal = document.querySelector('.total-price');
+        subtotal.innerHTML = `KES ${total}`;
+    } else {
+        cartIcon.classList.remove('non-empty');
     }
-    else
-    cartIcon.classList.remove('non-empty')
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartUI();
+});
+
 
 document.addEventListener('DOMContentLoaded', ()=>{updateCartUI()})
     

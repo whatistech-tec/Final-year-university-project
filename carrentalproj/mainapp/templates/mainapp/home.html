@@ -29,10 +29,47 @@
                     <input type="text" name="stop" id="stop" placeholder="Aug 18, 10:00 AM">
                 </div>
 
-                <button class="btn " onclick="window.location.href='{% url 'search' %}'"><i class="ri-search-line"></i></button>
                 
-            </form>
-            <img src="{% static 'assets/home_img.png' %}" alt="header"/>
+                {% comment %} <button class="btn"><i class="ri-search-line"></i></button> {% endcomment %}
+            </form> 
+            
+            <div class="checkoutLayout">
+                <div class="right ">
+                    <h4 >Search With...</h4>
+                    
+                    <div class="form ">
+                        <div class="group">
+                            <input type="text" placeholder= "Vehicle Model.." name="name" id="name">
+                        </div>
+
+                        <div class="group">
+                            <input type="text"placeholder="Number of Seats.." name="phone" id="phone">
+                        </div>
+
+                        <div class="group">
+                            <input type="text"placeholder="Milage" name="address" id="address">
+                        </div>
+                        
+                        <div class="group">
+                            <select name="city" id="city" placeholder="City">
+                                <option value="">Nairobi</option>
+                                <option value="">Kisumu</option>
+                                <option value="">Eldoret</option>
+                                <option value="">Nakuru</option>
+                                <option value="">Naivasha</option>
+                                <option value="">Kisii</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <input type="budget" name="budget" id="budget" placeholder="Budget">
+                            
+                        </div>
+
+                    </div>
+                </div>
+                
+                
+                        <img src="{% static 'assets/home_img.png' %}" alt="header"/>
         </div>
         <a href="#about" class="scroll__down">
             <i class="ri-arrow-down-line"></i>

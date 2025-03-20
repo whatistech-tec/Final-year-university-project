@@ -21,7 +21,7 @@ class CreateRecordForm(forms.ModelForm):
     class Meta:
 
         model = VehicleDetail
-        fields = [ 'vehicle_image', 'plate_number', 'vehicle_name', 'vehicle_color', 'vehicle_category', 'milage','speed','settings','seats','location','hire_amount']
+        fields = [ 'vehicle_image', 'plate_number', 'vehicle_name', 'vehicle_color', 'vehicle_category', 'mileage','speed','settings','seats','location','hire_amount']
         
 #update a record
 class UpdateRecordForm(forms.ModelForm):
@@ -29,7 +29,7 @@ class UpdateRecordForm(forms.ModelForm):
     class Meta:
 
         model = VehicleDetail
-        fields = [ 'vehicle_image', 'plate_number', 'vehicle_name', 'vehicle_color', 'vehicle_category', 'milage','speed','settings','seats','location','hire_amount']
+        fields = [ 'vehicle_image', 'plate_number', 'vehicle_name', 'vehicle_color', 'vehicle_category', 'mileage','speed','settings','seats','location','hire_amount']
         
 #stories
 class CreateStoryForm(forms.ModelForm):
@@ -47,18 +47,22 @@ class UpdateStoryForm(forms.ModelForm):
         fields = [ 'story_image', 'date', 'month', 'year', 'header', 'story']
         
 class CreateRentalForm(forms.ModelForm):
-    
     class Meta:
-    
         model = RentedVehicle
-        fields = [ 'first_name', 'last_name', 'email', 'phone', 'address', 'company_branch','car_model','plate_number','car_color','agent_name','agent_number']
+        fields = [
+            'first_name', 'last_name', 'email', 'phone', 'address', 
+            'company_branch', 'car_model', 'plate_number', 'car_color', 
+            'hire_amount', 'transaction_id', 'status'
+        ]
         
 class UpdateRentalForm(forms.ModelForm):
-    
     class Meta:
-    
         model = RentedVehicle
-        fields = [ 'first_name', 'last_name', 'email', 'phone', 'address', 'company_branch','car_model','plate_number','car_color','agent_name','agent_number']
+        fields = [
+            'first_name', 'last_name', 'email', 'phone', 'address', 
+            'company_branch', 'car_model', 'plate_number', 'car_color', 
+            'hire_amount', 'transaction_id', 'status'
+        ]
         
 class PaymentForm(forms.Form):
     
