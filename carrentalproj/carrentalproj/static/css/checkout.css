@@ -7,15 +7,6 @@ a{
     text-decoration: none;
 }
 
-/* .return {
-    margin-top: 20px;
-}
-
-.buttonCheckout {
-    margin-top: 20px;
-} */
-
-
 
 @keyframes spin {
     from { transform: rotate(0deg); }
@@ -37,9 +28,8 @@ a{
 
 }
 .checkoutLayout .right .form{
-    display: flex;
-    flex-direction: column;
-    /* grid-template-columns: repeat(2, 1fr); */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     border-bottom: 1px solid rgb(39, 39, 129);
     padding-bottom: 20px;
@@ -50,7 +40,6 @@ a{
     grid-column-start: 1;
     grid-column-end: 3;
 }
-
 .checkoutLayout .form input, 
 .checkoutLayout .form select
 {
@@ -68,21 +57,10 @@ a{
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-   
 }
 .checkoutLayout .right .return .row div:nth-child(2){
     font-weight: bold;
     font-size: x-large;
-}
-
-.checkoutLayout .right .generals{
-    display: flex;
-    flex-direction: column;
-    justify-content:center;
-    align-items: center;
-    margin-top: 10px;
-    width: 100%;
-
 }
 
 .spinner {

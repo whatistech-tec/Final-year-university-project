@@ -89,17 +89,20 @@ ScrollReveal().reveal(".car__info__container .btn", {
     origin: "left",
 });
 
-const selectCards = document.querySelectorAll(".select__card");
-selectCards[0].classList.add("show__info");
 
-const price = ["1225", "2275", "10625", "22395","1025", "2375", "13625", "15395"];
+
+// const prices = {{ hire_amount|json|safe }};
+// console.log(prices);  // Check the loaded prices
+
 
 const priceEl = document.getElementById("select-price");
+const selectCards = document.querySelectorAll(".select__card");
 
-function updateSwiperImage(eventName, args){
-    if(eventName === "slideChangeTransitionStart"){
+// Function to update the displayed price and active card
+function updateSwiperImage(eventName, args) {
+    if (eventName === "slideChangeTransitionStart") {
         const index = args && args[0].realIndex;
-        priceEl.innerText = price[index];
+        priceEl.innerText = "KES " + prices[index];  // Update the displayed price
         selectCards.forEach((item) => {
             item.classList.remove("show__info");
         });
@@ -107,13 +110,18 @@ function updateSwiperImage(eventName, args){
     }
 }
 
-const swiper = new Swiper(".swiper",{
+// Initialize Swiper with auto-scroll (autoplay)
+const swiper = new Swiper(".swiper", {
     loop: true,
     effect: "coverflow",
-    grabCursor:true,
-    centeredSlides:true,
-    slidesPerView:"auto",
-    coverflowEffect:{
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    autoplay: {
+        delay: 3000,  // Auto-scroll every 3 seconds
+        disableOnInteraction: false,
+    },
+    coverflowEffect: {
         rotate: 0,
         depth: 500,
         modifier: 1,
@@ -121,8 +129,7 @@ const swiper = new Swiper(".swiper",{
         slideShadows: false,
         stretch: -100,
     },
-    
-    onAny(event, ...args){
+    onAny(event, ...args) {
         updateSwiperImage(event, args);
     },
 });

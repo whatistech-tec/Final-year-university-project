@@ -1,0 +1,51 @@
+{% extends 'mainapp/all_vehicles.html' %}
+
+{% block main %}
+
+{% comment %} <hr>
+
+<a class="btn btn-outline-primary btn-sm" href="{% url 'create_rental' %}">
+    Make rental record &nbsp; <i class='fa fa-plus-circle' aria-hidden="true"></i>
+</a>  {% endcomment %}
+
+<hr>
+
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>National ID</th>
+                <th>Total Quantity</th>
+                <th>Total Price</th>
+                <th>Date Created</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in my_clients %}
+            <tr>
+                <td>{{ rental.id }}</td>
+                <td>{{ rental.name }}</td>
+                <td>{{ rental.phone_number }}</td>
+                <td>{{ rental.address }}</td>
+                <td>{{ rental.city }}</td>
+                <td>{{ rental.national_id }}</td>
+                <td>{{ rental.quantity }}</td>
+                <td>{{ rental.amount }}</td>
+                <td>{{ rental.timestamp }}</td>
+                <td> <a class="btn btn-success btn-sm" href="#"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock main %}
+
+{% comment %} def incoming_client(request):
+    my_clients = Transaction.objects.all().order_by('-creation_date')
+    return render(request, 'mainapp/incoming_clients.html', {'my_clients': my_clients}) {% endcomment %}

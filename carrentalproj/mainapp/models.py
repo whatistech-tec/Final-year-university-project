@@ -26,6 +26,8 @@ class VehicleDetail(BaseModel):
     in_stock = models.BooleanField(default=True)
     quantity = models.PositiveIntegerField(default=0)
     
+    
+    
     def __str__(self):
         return f"{self.vehicle_name} ({self.plate_number})"
 
@@ -69,18 +71,21 @@ class Stories(BaseModel):
         return f"Story: {self.header} - {self.month} {self.year}"
 
 # Payment Transaction
-class Transaction(BaseModel):
-    STATUS_CHOICES = [
-        ('success', 'Success'),
-        ('failed', 'Failed'),
-        ('pending', 'Pending'),
-    ]
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    checkout_id = models.CharField(max_length=100, unique=True)
-    mpesa_code = models.CharField(max_length=100, unique=True)
-    phone_number = models.CharField(max_length=15)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    timestamp = models.DateTimeField(default=timezone.now)  # Make sure this field exists
-    
+class Transaction(models.Model):
+    name = models.CharField(max_length=100, default="")
+    phone_number = models.CharField(max_length=20, default="")
+    address = models.CharField(max_length=300, default="")
+    city = models.CharField(max_length=255, default='Nairobi')
+    national_id = models.CharField(max_length=200, default='')
+    amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    quantity = models.IntegerField(default=0)
+    vehicle_name = models.CharField(max_length=255, default='')
+    vehicle_color = models.CharField(max_length=200, default='')
+    plate_number =  models.CharField(max_length=200, default='')
+    transactionCode =  models.CharField(max_length=200, default='')
+    timestamp = models.DateTimeField(default=timezone.now)
+
     def __str__(self):
-        return f"Transaction: {self.mpesa_code} - {self.amount} KES"
+        return f"Rental: {self.name}"
+
+

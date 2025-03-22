@@ -30,8 +30,6 @@ class VehicleDetailAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('mpesa_code', 'amount', 'phone_number', 'status', 'timestamp')
-    list_filter = ('status', 'timestamp')
-    search_fields = ('mpesa_code', 'phone_number', 'status')
+    list_display = ('name', 'phone_number','address', 'city','amount','national_id','vehicle_name','vehicle_color','plate_number' ,'transactionCode','timestamp')
     
 admin.site.register(Stories)

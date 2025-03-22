@@ -52,7 +52,7 @@
             </div>
             <ul class="nav__links" id="nav-links">
                 <li><a href="{% url 'home' %}" class="{% if request.path == home %} active {% endif %}">Home</a></li>
-                {% comment %} <li><a href="{% url 'rent' %}" class="{% if request.path == rent %} active {% endif %}">Rent</a></li> {% endcomment %}
+                <li><a href="{% url 'rent' %}" class="{% if request.path == rent %} active {% endif %}">Rent</a></li> 
                 <li><a href="{% url 'ride' %}" class="{% if request.path == ride %} active {% endif %}">Ride</a></li>
                 <li><a href="{% url 'stories' %}" class="{% if request.path == stories %} active {% endif %}">Stories</a></li>
                 <li><a href="{% url 'contact' %}" class="{% if request.path == contact %} active {% endif %}">Contact</a></li>

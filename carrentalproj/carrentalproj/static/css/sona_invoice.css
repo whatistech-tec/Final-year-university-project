@@ -119,11 +119,9 @@ body{
 .invoice_wrapper .body .main_table .row .col{
 	padding: 10px;
 }
-.invoice_wrapper .body .main_table .row .col_no{width: 5%;}
-.invoice_wrapper .body .main_table .row .col_des{width: 45%;}
-.invoice_wrapper .body .main_table .row .col_price{width: 20%; text-align: center;}
-.invoice_wrapper .body .main_table .row .col_qty{width: 10%; text-align: center;}
-.invoice_wrapper .body .main_table .row .col_total{width: 20%; text-align: right;}
+.invoice_wrapper .body .main_table .row .col_no{width: 25%;}
+.invoice_wrapper .body .main_table .row .col_des{width: 50%;}
+.invoice_wrapper .body .main_table .row .col_total{width: 25%; text-align: right;}
 
 .invoice_wrapper .body .paymethod_grandtotal_wrap{
 	display: flex;

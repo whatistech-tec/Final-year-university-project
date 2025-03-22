@@ -50,98 +50,55 @@ MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 CALLBACK_URL = os.getenv("CALLBACK_URL")
 MPESA_BASE_URL = os.getenv("MPESA_BASE_URL")
 
-def checkout(request):
-    if request.method == 'POST':
-        full_name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        address = request.POST.get('address')
-        city = request.POST.get('city')
-        national_id = request.POST.get('national_id')
-        total_quantity = request.POST.get('total_quantity')
-        total_price = request.POST.get('total_price')
-
-        # Save to the RentedVehicle model
-        rental = RentedVehicle.objects.create(
-            first_name=full_name,
-            phone=phone,
-            address=address,
-            company_branch=city,
-            transaction_id=national_id,
-            total_quantity=total_quantity,
-            hire_amount=total_price
-        )
-        rental.save()
-
-        return redirect('all_rentals')  # Redirect to the rentals page after submission
-
-    return render(request, 'mainapp/checkout.html')
- 
- 
-def all_rentals(request):
-    my_rentals = RentedVehicle.objects.all()
-    return render(request, 'mainapp/all_rentals.html', {'my_rentals': my_rentals})       
+import json
 
 @csrf_exempt
-def checkout(request):
+def payment_view(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
 
-            # Extract details
-            full_name = data.get('name')
-            phone = data.get('phone')
-            address = data.get('address')
-            city = data.get('city')
-            national_id = data.get('national_id')
-            total_quantity = data.get('total_quantity')
-            price_per_car = data.get('price_per_car')
-            grand_total = data.get('grand_total')
-            plate_number = data.get('plate_number')
-            vehicle_model = data.get('vehicle_model')
-            vehicle_color = data.get('vehicle_color')
-            mpesa_code = data.get('mpesa_code')
+            name = data.get('name', '')
+            phone_number = format_phone_number(data.get("phone_number"))
+            address = data.get('address', '')
+            city = data.get('city', '')
+            national_id = data.get('national_id', '')
+            hire_amount = data.get('hire_amount', '')
+            vehicle_name = data.get('vehicle_name', '')
+            vehicle_color = data.get('vehicle_color', '')
+            plate_number = data.get('plate_number', '')
+            transactionCode = data.get('transactionCode', '')
+            
+            amount = data.get('amount', 0)
+            response = initiate_stk_push(phone_number, amount)
+            
 
-            # Save to the database
-            RentedVehicle.objects.create(
-                first_name=full_name,
-                phone=phone,
+            print("Received data:", data)  # Log received data
+
+            transaction = Transaction.objects.create(
+                name=name,
+                phone_number=phone_number,
                 address=address,
-                company_branch=city,
-                transaction_id=mpesa_code,
-                hire_amount=grand_total,
-                car_model=vehicle_model,
+                city=city,
+                national_id=national_id,
+                amount=amount,
+                hire_amount=hire_amount,
+                vehicle_name=vehicle_name,
+                vehicle_color=vehicle_color,
                 plate_number=plate_number,
-                car_color=vehicle_color,
-                status="Success"
+                transactionCode=transactionCode
             )
+            transaction.save()
 
-            return JsonResponse({"status": "success", "message": "Rental data saved successfully!"})
+            print("Transaction saved:", transaction)  # Log successful save
 
-        except Exception as e:
-            print(f"Error during checkout: {str(e)}")
-            return JsonResponse({"status": "error", "message": f"Failed to save rental data. Error: {str(e)}"})
-
-    return JsonResponse({"status": "error", "message": "Invalid request method"})
-
-
-@csrf_exempt
-def make_payment(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            phone_number = data.get('phone_number')
-            amount = data.get('amount')
-
-            # Simulate a successful payment (replace with actual Mpesa logic)
-            mpesa_code = "MPESA123456"  # Replace with the actual code from Mpesa response
-
-            return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
+            return JsonResponse({'status': 'success', 'message': 'Payment successful!'})
 
         except Exception as e:
-            print(f"Error during payment: {str(e)}")
-            return JsonResponse({"status": "error", "error_message": f"Payment failed. Error: {str(e)}"})
+            print("Error saving transaction:", str(e))  # Log the error
+            return JsonResponse({'status': 'error', 'message': str(e)})
 
-    return JsonResponse({"status": "error", "error_message": "Invalid request method"})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 # Generate M-Pesa access token
 def generate_access_token():
@@ -209,39 +166,17 @@ def initiate_stk_push(phone, amount):
 
 # Phone number formatting and validation
 def format_phone_number(phone):
-    phone = phone.replace("+", "")
-    if re.match(r"^254\d{9}$", phone):
-        return phone
-    elif phone.startswith("0") and len(phone) == 10:
-        return "254" + phone[1:]
-    else:
-        raise ValueError("Invalid phone number format")
+    try:
+        phone = phone.replace("+", "")
+        if re.match(r"^254\d{9}$", phone):
+            return phone
+        elif phone.startswith("0") and len(phone) == 10:
+            return "254" + phone[1:]
+        else:
+            raise ValueError("Invalid phone number format")
+    except Exception as e:
+        raise ValueError(f"Error formatting phone number: {str(e)}")
 
-
-from django.http import JsonResponse
-
-def payment_view(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            phone = format_phone_number(data.get("phone_number"))
-            amount = data.get("amount")
-            response = initiate_stk_push(phone, amount)
-            print(response)
-
-            if response.get("ResponseCode") == "0":
-                checkout_request_id = response["CheckoutRequestID"]
-                return JsonResponse({"status": "success", "checkout_request_id": checkout_request_id})
-            else:
-                error_message = response.get("errorMessage", "Failed to send STK push.")
-                return JsonResponse({"status": "failed", "error_message": error_message})
-
-        except ValueError as e:
-            return JsonResponse({"status": "failed", "error_message": str(e)})
-        except Exception as e:
-            return JsonResponse({"status": "failed", "error_message": f"Unexpected error: {str(e)}"})
-
-    return JsonResponse({"status": "failed", "error_message": "Invalid request method"})
 
 
 @csrf_exempt  # To allow POST requests from external sources like M-Pesa
@@ -445,9 +380,15 @@ def maps(request):
     
     return render(request, 'mainapp/maps.html')
 
-def sona_invoice(request):
-    
-    return render(request, 'mainapp/sona_invoice.html')
+
+
+def sona_invoice(request, pk):
+    transaction = Transaction.objects.get(id=pk)
+    return render(request, 'mainapp/sona_invoice.html',{'transaction':transaction})
+
+def incoming_client(request):
+    my_clients = Transaction.objects.all()
+    return render(request, 'mainapp/incoming_client.html',{'my_clients':my_clients})
 
 def search_form(request):
     
@@ -531,14 +472,7 @@ def all_stories(request):
     context = {'my_stories':my_stories}
 
     return render(request, 'mainapp/all_stories.html', context=context)
-def get_users(request):
-    
-    my_users = UsersInfo.objects.all()
 
-    context = {'my_users':my_users}
-
-    return render(request, 'mainapp/get_users.html', context=context)
-   
 def pending(request):
     
     return render(request, 'mainapp/pending.html')
@@ -720,7 +654,7 @@ def view_rental(request, pk):
 
 
 #delete a record
-@csrf_exempt
+
 @login_required(login_url='admin_login')
 def delete_detail(request, pk):
     
@@ -732,7 +666,7 @@ def delete_detail(request, pk):
 
     return redirect("all_vehicles")
 
-@csrf_exempt
+
 @login_required(login_url='admin_login')
 def delete_story(request, pk):
     
@@ -745,7 +679,7 @@ def delete_story(request, pk):
 
     return redirect("all_stories")
 
-@csrf_exempt
+
 @login_required(login_url='admin_login')
 def delete_rental(request, pk):
 
@@ -799,7 +733,22 @@ def search(request):
 
 def rent(request):
     renting_cars = VehicleDetail.objects.all()
-    return render(request, "mainapp/rent.html", {'renting_cars':renting_cars})
+    prices = list(renting_cars.values_list('hire_amount', flat=True))  # Get the list of prices
+    return render(request, 'mainapp/rent.html', {'renting_cars': renting_cars, 'hire_amount': prices})
+
+
+# def rent(request):
+#     renting_cars = VehicleDetail.objects.all()
+#     hire_amount = [vehicle.hire_amount for vehicle in renting_cars]
+#     context = {
+#         'renting_cars': renting_cars,
+#         'hire_amount': hire_amount,
+#     }
+#     return render(request, 'mainapp/rent.html', context)
+
+# # def rent(request):
+#     renting_cars = VehicleDetail.objects.all()
+#     return render(request, "mainapp/rent.html", {'renting_cars':renting_cars})
 
 def ride(request):
     context={}
