@@ -36,7 +36,7 @@ a{
     max-width: 500px;
 }
 .checkoutLayout .form h1,
-.checkoutLayout .form .group:nth-child(-n+3){
+.checkoutLayout .form .group:nth-child(-n+4){
     grid-column-start: 1;
     grid-column-end: 3;
 }
@@ -51,6 +51,12 @@ a{
     border:none;
     background-color: #6a6fc9;
     color: #fff;
+}
+
+.checkoutLayout .right .return{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    column-gap: 20px;
 }
 .checkoutLayout .right .return .row{
     display: flex;
@@ -114,4 +120,11 @@ a{
 .returnCart .checkout-box .returnPrice{
     font-size: large;
     font-weight: bold;
+}
+@media screen and(max-width:600px){
+    .checkoutLayout  {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        
+    }
 }

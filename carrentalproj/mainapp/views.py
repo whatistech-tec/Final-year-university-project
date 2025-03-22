@@ -90,9 +90,12 @@ def payment_view(request):
             )
             transaction.save()
 
+            return redirect("sona_invoice", transaction.id)
+        
             print("Transaction saved:", transaction)  # Log successful save
 
-            return JsonResponse({'status': 'success', 'message': 'Payment successful!'})
+            return JsonResponse({"status": "success", "transaction_id": transaction.id, "message": "Payment saved successfully!"})
+
 
         except Exception as e:
             print("Error saving transaction:", str(e))  # Log the error
@@ -387,7 +390,7 @@ def sona_invoice(request, pk):
     return render(request, 'mainapp/sona_invoice.html',{'transaction':transaction})
 
 def incoming_client(request):
-    my_clients = Transaction.objects.all()
+    my_clients = Transaction.objects.all().order_by('-timestamp')
     return render(request, 'mainapp/incoming_client.html',{'my_clients':my_clients})
 
 def search_form(request):
@@ -399,63 +402,44 @@ def checkout(request):
     return render(request, 'mainapp/checkout.html')
 
 @login_required(login_url='admin_login')
-def vehicle_categories(request,foo):
-    # foo = foo.replace('-',' ')
-    try:
-        vehicle_category = Category.objects.get(category_name=foo)
-        vehicle_detail = VehicleDetail.objects.filter(vehicle_category=vehicle_category)
-        return render(request, 'mainapp/vehicle_categories.html', {'vehicle_detail':vehicle_detail,'vehicle_category':vehicle_category})
-    except:
-        messages.success(request,("That Category Doesn't Exist!"))
-        return redirect('all_vehicles')
 
-
-@login_required(login_url='admin_login')
 def all_vehicles(request):
-    
-    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
-    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
-    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
-    electrics = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
-
+    vehicles = VehicleDetail.objects.all().order_by('-creation_date')  # Fetch all vehicles regardless of category
     context = {
-        'cars': cars,
-        'suvs': suvs,
-        'vans': vans,
-        'electrics': electrics,
+        'vehicles': vehicles,
     }
     return render(request, 'mainapp/all_vehicles.html', context=context)
 
 def admin_cars(request):
-    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
+    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car').order_by('-creation_date')
     return render(request, 'mainapp/admin_cars.html', {'vehicles': cars})
 
 def admin_suvs(request):
-    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
+    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv').order_by('-creation_date')
     return render(request, 'mainapp/admin_suvs.html', {'vehicles': suvs})
 
 def admin_vans(request):
-    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
+    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van').order_by('-creation_date')
     return render(request, 'mainapp/admin_vans.html', {'vehicles': vans})
 
 def admin_electrics(request):
-    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
+    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric').order_by('-creation_date')
     return render(request, 'mainapp/admin_electrics.html', {'vehicles': electric_cars})
 
 
 def cars(request):
-    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car')
+    cars = VehicleDetail.objects.filter(vehicle_category__iexact='car').order_by('-creation_date')
     return render(request, "mainapp/cars.html", {'vehicles': cars})
 
 def suvs(request):
-    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv')
+    suvs = VehicleDetail.objects.filter(vehicle_category__iexact='suv').order_by('-creation_date')
     return render(request, "mainapp/vans.html", {'vehicles': suvs})
 
 def vans(request):
-    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van')
+    vans = VehicleDetail.objects.filter(vehicle_category__iexact='van').order_by('-creation_date')
     return render(request, "mainapp/electric.html", {'vehicles': vans})
 def electric(request):
-    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric')
+    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric').order_by('-creation_date')
     return render(request, "mainapp/suvs.html", {'vehicles': electric_cars})
 
 

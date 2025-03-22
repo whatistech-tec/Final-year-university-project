@@ -38,7 +38,7 @@
            
 
             <form class="form" >
-                {% comment %} action="{% url 'make_payment' %}" {% endcomment %}
+                {% csrf_token %}
                 <div class="group">
                     <label for="name">Full Name</label>
                     <input type="text" name="name" id="name">
@@ -54,13 +54,7 @@
                     <input type="text" name="address" id="address">
                 </div>
                 
-                <!-- Hidden fields for car details and transaction code -->
-                <input type="hidden" name="hire_amount" id="hire_amount">
-                <input type="hidden" name="vehicle_name" id="vehicle_name">
-                <input type="hidden" name="vehicle_color" id="vehicle_color">
-                <input type="hidden" name="plate_number" id="plate_number">
-                <input type="hidden" name="transaction_code" id="transactionCode">
-
+               
 
                 <div class="group">
                     <label for="city">City</label>
@@ -78,6 +72,23 @@
                     <input type="text" name="address" id="national_id">
                    
                 </div>
+          
+                    <input type="hidden" name="hire_amount" id="hire_amount" value="{{ item.hire_amount }}">
+                
+                
+                    <input type="hidden" name="vehicle_name" id="vehicle_name" value="{{ item.vehicle_name }}">
+                
+                
+                    <input type="hidden" name="vehicle_color" id="vehicle_color" value="{{ item.vehicle_color }}">
+              
+                
+                    <input type="hidden" name="plate_number" id="plate_number" value="{{ item.plate_number }}">
+                
+                
+                    <input type="hidden" name="transaction_code" id="transactionCode">
+                
+                 <!-- Hidden fields for car details and transaction code -->
+ 
     
             </form>
            
@@ -105,7 +116,7 @@
             </div>
             {% comment %} <a id="invoiceLink" href="{% url 'sona_invoice' %}" style="display:none;"></a> {% endcomment %}
 
-            <button class="buttonCheckout" onclick="redirectToInvoice()">Make Payment</button>
+            <button class="buttonCheckout">Make Payment</button>
             </div>
     </div>
 </div>

@@ -6,6 +6,33 @@ const navLinkEls = document.querySelectorAll(".nav__links");
 const windowPathName = window.location.pathname;
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    const bookButton = document.querySelector(".add-cart");
+
+    bookButton.addEventListener("click", (event) => {
+        const carId = button.dataset.id;
+        const hireAmount = button.dataset.hireAmount;
+        const vehicleName = button.dataset.vehicleName;
+        const vehicleColor = button.dataset.vehicleColor;
+        const plateNumber = button.dataset.plateNumber;
+
+        const carDetails = {
+            hire_amount: hireAmount,
+            vehicle_name: vehicleName,
+            vehicle_color: vehicleColor,
+            plate_number: plateNumber,
+        };
+
+        localStorage.setItem("selectedCar", JSON.stringify(carDetails));
+
+        // Redirect to checkout page
+        window.location.href = "/checkout/";
+        
+    });
+});
+
+
+
 document.addEventListener('scroll', ()=>{
     const header = document.querySelector('nav-header');
     if (window.scrollY > 0){
@@ -119,7 +146,7 @@ const swiper = new Swiper(".swiper", {
     slidesPerView: "auto",
     autoplay: {
         delay: 3000,  // Auto-scroll every 3 seconds
-        disableOnInteraction: false,
+        disableOnInteraction: true,
     },
     coverflowEffect: {
         rotate: 0,

@@ -11,6 +11,11 @@
     <div class="collection__container">
         {% for item in vehicles %}
         <div class="collection__car__item" id="collection-car-item-page" data-id="{{ item.id }}">
+            <div class="hidden">
+                <p>{{ item.vehicle_color }}</p>
+                <p>{{ item.plate_number }}</p>
+               
+            </div>
             <div class="overlay"></div>
             <img src="{{ item.vehicle_image.url }}" alt="car" id="collection-page-img" />
             <div class="car__info__container">
@@ -25,7 +30,10 @@
                     </div>
                 </div>
                 <h2 class="product-title">{{ item.vehicle_name }}</h2>
-                <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}">Book Now</button>
+                <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}"
+                data-hire-amount="{{ item.hire_amount }}",data-vehicle-name="{{ item.vehicle_name }}",data-vehicle-color="{{ item.vehicle_color }}",
+                data-plate-number="{{ item.plate_number }}" ,data-id="{{ item.id }}"
+                >Book Now</button>
             </div>
         </div>
         

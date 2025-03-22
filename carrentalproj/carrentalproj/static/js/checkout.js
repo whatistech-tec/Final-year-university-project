@@ -54,32 +54,36 @@ function displayCheckoutCars() {
     totalPriceElement.textContent = `KES ${total}`;
 }
 
-function redirectToInvoice() {
-    document.getElementById("invoiceLink").click();
+function redirectToInvoice(transactionId) {
+    window.location.href = `/sona_invoice/${transactionId}`;
 }
 
 document.querySelector('.buttonCheckout').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    // Get form data
+    const button = document.querySelector('.buttonCheckout');
+    button.innerHTML = `<div class="spinner"></div> Processing...`;
+    button.disabled = true;
+    const selectedCar = JSON.parse(localStorage.getItem("selectedCar"));
+    
+    const bookingButton = document.querySelector('.add-cart');
+    const hireAmount = button.dataset.hireAmount;
+    const vehicleName = button.dataset.vehicleName;
+    const vehicleColor = button.dataset.vehicleColor;
+    const plateNumber = button.dataset.plateNumber;
     const phone = document.getElementById('phone').value;
     const name = document.getElementById('name').value;
     const address = document.getElementById('address').value;
     const city = document.getElementById('city').value;
-    const hire_amount = document.getElementById('hire_amount').value = "{{ item.hire_amount }}";
-    const vehicle_name = document.getElementById('vehicle_name').value = "{{ item.vehicle_name }}";
-    const vehicle_color = document.getElementById('vehicle_color').value = "{{ item.vehicle_color }}";
-    const plate_number = document.getElementById('plate_number').value = "{{ item.plate_number }}";
+    
     const transactionCode = document.getElementById('transactionCode').value;
 
     const totalPriceElement = document.querySelector('.totalPrice');
     const amount = totalPriceElement ? parseFloat(totalPriceElement.textContent.replace("KES ", "")) : 0;
 
-    console.log("Sending data to backend:", { phone, name, address, city, national_id });
+    console.log("Sending data to backend:", { phone, name, address, city, hire_amount, vehicle_name, vehicle_color, plate_number, transactionCode });
 
-    const button = document.querySelector('.buttonCheckout');
-    button.innerHTML = `<div class="spinner"></div> Processing...`;
-    button.disabled = true;
+
 
     try {
         // Send payment and form data to the backend
@@ -96,10 +100,10 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
                 city: city,
                 national_id: national_id,
                 amount: amount,
-                hire_amount: hire_amount,
-                vehicle_name: vehicle_name,
-                vehicle_color: vehicle_color,
-                plate_number: plate_number,
+                hire_amount: hireAmount,  // Ensure this is a number
+                vehicle_name: vehicleName,
+                vehicle_color: vehicleColor,
+                plate_number: plateNumber,
                 transactionCode: transactionCode,
             }),
         });

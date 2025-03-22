@@ -144,7 +144,9 @@ header{
 }
 
 
-
+.hidden{
+    visibility: hidden;
+}
 .my-mapcontainer{
     width: 100%;
     display: flex;
