@@ -58,6 +58,7 @@ urlpatterns = [
     
     path('payment_view/', views.payment_view, name="make_payment"),
     path('payment_callback/', views.payment_callback, name='payment_callback'),
+    path('book_vehicle/', views.book_vehicle, name='book_vehicle'),
 
 
  

@@ -179,4 +179,13 @@ sr.reveal(".about", {delay: "700"});
 sr.reveal(".about", {delay: "1000"});
 sr.reveal(".contact");
 
-
+// function disableButton(button) {
+//     const carItem = button.closest(".collection__car__item");
+//     const overlay = carItem.querySelector(".dimming-overlay");
+//     button.disabled = true;
+//     button.textContent = "Unavailable";
+//     button.style.backgroundColor = "grey";
+//     button.style.color = "white";
+//     overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+//     overlay.style.display = "block";
+// }

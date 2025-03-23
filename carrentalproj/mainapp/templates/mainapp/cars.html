@@ -10,7 +10,8 @@
     <hr />
     <div class="collection__container">
         {% for item in vehicles %}
-        <div class="collection__car__item" id="collection-car-item-page" data-id="{{ item.id }}">
+        <div class="collection__car__item {% if not item.is_available %} unavailable{% endif %}" id="collection-car-item-page" data-id="{{ item.id }}">
+            
             <div class="hidden">
                 <p>{{ item.vehicle_color }}</p>
                 <p>{{ item.plate_number }}</p>
@@ -30,7 +31,11 @@
                     </div>
                 </div>
                 <h2 class="product-title">{{ item.vehicle_name }}</h2>
-                <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}">Book Now</button>
+                <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}"
+                {% if not item.in_stock %}disabled{% endif %}>
+                    {% if not item.in_stock %}Unavailable{% else %}Book Now{% endif %}
+                    
+                </button>
             </div>
         </div>
         

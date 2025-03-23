@@ -22,13 +22,14 @@
             <th scope="col"> Vehicle Model </th>
             <th scope="col"> Vehicle Color </th>
             <th scope="col"> Category</th>
-            <th scope="col"> Milage </th>
+            <th scope="col"> Mileage </th>
             {% comment %} <th scope="col"> Speed </th> {% endcomment %}
             <th scope="col"> Acceleration </th>
             <th scope="col"> Seats</th>
             <th scope="col"> Location </th>
             <th scope="col"> Hire Amount </th>
             <th scope="col"> Date Created </th>
+            <th scope="col"> Availability </th>
             <th scope="col"> View </th>
             
         </tr>
@@ -53,13 +54,14 @@
                     <td>{{detail.vehicle_name}}</td>
                     <td>{{detail.vehicle_color}}</td>
                     <td>{{detail.vehicle_category}}</td>
-                    <td>{{detail.milage}}</td>
+                    <td>{{detail.mileage}}</td>
                     {% comment %} <td>{{detail.speed}}&nbsp;km/h</td> {% endcomment %}
                     <td>{{detail.settings}}</td>
                     <td>{{detail.seats}}</td>
                     <td>{{detail.location}}</td>
                     <td>KES {{detail.hire_amount}}</td>
                     <td>{{detail.creation_date}}</td>
+                    <td>{% if not item.in_stock %}<i class="fa fa-times-circle" aria-hidden="true"></i>{% else %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td> 
             
                     <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
             

@@ -55,9 +55,9 @@ function displayCheckoutCars() {
     totalPriceElement.textContent = `KES ${total}`;
 }
 
-function redirectToInvoice(transactionId) {
-    if (transactionId) {
-        window.location.href = `/sona_invoice/${transactionId}`;
+function redirectToInvoice(transaction_id) {
+    if (transaction_id) {
+        window.location.href = `/sona_invoice/${transaction_id}`;
     } else {
         console.error("Transaction ID is undefined.");
     }
@@ -65,8 +65,9 @@ function redirectToInvoice(transactionId) {
 
 document.querySelector('.buttonCheckout').addEventListener('click', async (event) => {
     event.preventDefault();
-
+    
     const button = document.querySelector('.buttonCheckout');
+   
     button.innerHTML = `<div class="spinner"></div> Processing...`;
     button.disabled = true;
 
@@ -126,7 +127,7 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
         if (data.status === 'success') {
             alert('Payment successful!');
             localStorage.removeItem("cartItems");
-            redirectToInvoice(data.transactionId); // Pass transaction ID for invoice
+            redirectToInvoice(data.transaction_id); // Pass transaction ID for invoice
         } else {
             alert(`Payment failed: ${data.error_message}`);
         }
@@ -139,6 +140,33 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
     }
 });
 
+const bookButton = document.querySelector('.buttonCheckout');
+bookButton.forEach(button => {
+    button.addEventListener("click", function () {
+        const carItem = this.closest(".collection__car__item");
+        const vehicleId = this.getAttribute("data-id");
+
+        fetch('/book_vehicle/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `vehicle_id=${vehicleId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mark as unavailable
+                carItem.classList.add("unavailable");
+                this.textContent = "Unavailable";
+                this.disabled = true;
+            } else {
+                alert(data.message || "Booking failed!");
+            }
+        });
+    });
+});
 
 // Helper function to get CSRF token
 function getCookie(name) {

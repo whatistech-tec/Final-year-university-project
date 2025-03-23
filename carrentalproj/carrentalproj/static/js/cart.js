@@ -10,11 +10,6 @@ const addCartButtons = document.querySelectorAll(".add-cart");
 addCartButtons.forEach(btn =>{
     btn.addEventListener("click", addItemFunction)
 
-    // button.textContent = "Unavailable";
-    // button.classList.add("disabled");
-    // button.disabled = true;
-
-    
 });
 
 

@@ -50,7 +50,6 @@ MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 CALLBACK_URL = os.getenv("CALLBACK_URL")
 MPESA_BASE_URL = os.getenv("MPESA_BASE_URL")
 
-import json
 
 @csrf_exempt
 def payment_view(request):
@@ -102,6 +101,19 @@ def payment_view(request):
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def book_vehicle(request):
+    if request.method == "POST":
+        vehicle_id = request.POST.get("detail.id")
+        try:
+            vehicle = VehicleDetail.objects.get(id=vehicle_id)
+            vehicle.in_stock = False  # Mark as unavailable
+            vehicle.save()
+            return JsonResponse({"success": True})
+        except Vehicle.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Vehicle not found"})
+    return JsonResponse({"success": False, "message": "Invalid request"})
 
 # Generate M-Pesa access token
 def generate_access_token():
@@ -421,6 +433,15 @@ def admin_suvs(request):
 def admin_vans(request):
     vans = VehicleDetail.objects.filter(vehicle_category__iexact='van').order_by('-creation_date')
     return render(request, 'mainapp/admin_vans.html', {'vehicles': vans})
+
+# def vehicles_instock(request):
+#     available_vehicles = VehicleDetail.objects.filter(in_stock=True).order_by('-creation_date')
+#     Unavailable_vehicles = VehicleDetail.objects.filter(in_stock=False).order_by('-creation_date')
+#     return render(request, 'mainapp/admin_vans.html', {'available_vans': available_vans, 'unavailable_vans': unavailable_vans})
+
+def admin_electrics(request):
+    electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric').order_by('-creation_date')
+    return render(request, 'mainapp/admin_electrics.html', {'vehicles': electric_cars})
 
 def admin_electrics(request):
     electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric').order_by('-creation_date')
