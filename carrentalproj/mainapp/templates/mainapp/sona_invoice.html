@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper" data-id="transactionId">
 	<div class="invoice_wrapper">
 		<div class="header">
 			<div class="logo_invoice_wrap">
@@ -89,17 +89,17 @@
 			            <span>SUB TOTAL</span>
 			            <span>{{transaction.amount}}</span>
 			        </p>
-			        <p>
+			        {% comment %} <p>
 			            <span>Tax Vat 18%</span>
 			            <span>$200</span>
 			        </p>
 			        <p>
 			            <span>Discount 10%</span>
 			            <span>-$700</span>
-			        </p>
+			        </p> {% endcomment %}
 			       	<p class="bold">
 			            <span>Grand Total</span>
-			            <span>$7000.0</span>
+			            <span>{{transaction.amount}}</span>
 			        </p>
 				</div>
 			</div>

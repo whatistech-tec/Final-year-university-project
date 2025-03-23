@@ -1,26 +1,21 @@
 {% load static %}
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Checkout</title>
     <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
 </head>
 <body>
     
 <div class="container">
     <div class="checkoutLayout">
-
-
         <div class="returnCart">
-            <a href="/">keep renting</a>
-            <h1>List of car collection</h1>
+            <a href="/">Keep Renting</a>
+            <h1>List of Car Collection</h1>
             <div class="list">
-           
                 <div class="checkout-item">
                     {% comment %} <img src="images/1.webp">
                     <div class="info">
@@ -35,13 +30,11 @@
        
         <div class="right">
             <h1>Complete Transaction</h1>
-           
-
-            <form class="form" >
+            <form class="form">
                 {% csrf_token %}
                 <div class="group">
                     <label for="name">Full Name</label>
-                    <input type="text" name="name" id="name">
+                    <input type="text" name="name" id="name" >
                 </div>
     
                 <div class="group">
@@ -51,47 +44,33 @@
     
                 <div class="group">
                     <label for="address">Address</label>
-                    <input type="text" name="address" id="address">
+                    <input type="text" name="address" id="address" >
                 </div>
                 
-               
-
                 <div class="group">
                     <label for="city">City</label>
-                    <select name="city" id="city">
-                        <option value="">Nairobi</option>
-                        <option value="">Kisumu</option>
-                        <option value="">Eldoret</option>
-                        <option value="">Nakuru</option>
-                        <option value="">Naivasha</option>
-                        <option value="">Kisii</option>
+                    <select name="city" id="city" >
+                        <option value="Nairobi">Nairobi</option>
+                        <option value="Kisumu">Kisumu</option>
+                        <option value="Eldoret">Eldoret</option>
+                        <option value="Nakuru">Nakuru</option>
+                        <option value="Naivasha">Naivasha</option>
+                        <option value="Kisii">Kisii</option>
                     </select>
                 </div>
                 <div class="group">
-                    <label for="country">National Id</label>
-                    <input type="text" name="address" id="national_id">
-                   
+                    <label for="address">National ID</label>
+                    <input type="text" name="national_id" id="national_id"  >
                 </div>
-          
-                    <input type="hidden" name="hire_amount" id="hire_amount" value="{{ item.hire_amount }}">
-                
-                
-                    <input type="hidden" name="vehicle_name" id="vehicle_name" value="{{ item.vehicle_name }}">
-                
-                
-                    <input type="hidden" name="vehicle_color" id="vehicle_color" value="{{ item.vehicle_color }}">
-              
-                
-                    <input type="hidden" name="plate_number" id="plate_number" value="{{ item.plate_number }}">
-                
-                
-                    <input type="hidden" name="transaction_code" id="transactionCode">
-                
-                 <!-- Hidden fields for car details and transaction code -->
- 
-    
             </form>
-           
+            <div class="hidden">
+                <input type="text" name="transactionCode" id="transactionCode"  >
+                <input type="text" id="plateNumber" name="plate_number" >
+                <input type="text" id="carModel" name="car_model" >
+                <input type="text" id="carColor" name="car_color" >
+                <input type="text" id="hireAmount" name="hire_amount">
+            </div>
+
             <div class="return">
                 <div class="row">
                     <div>Total Quantity</div>
@@ -114,15 +93,14 @@
                     <div class="totalPrice">KES 0</div>
                 </div>
             </div>
-            {% comment %} <a id="invoiceLink" href="{% url 'sona_invoice' %}" style="display:none;"></a> {% endcomment %}
 
             <button class="buttonCheckout">Make Payment</button>
-            </div>
+        </div>
     </div>
 </div>
 
-{% comment %} <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script> {% endcomment %}
 <script src="{% static 'js/checkout.js' %}" defer></script>
+<script src="{% static 'js/cart.js' %}" defer></script>
 
 </body>
 </html>

@@ -20,7 +20,10 @@
                 <th>Address</th>
                 <th>City</th>
                 <th>National ID</th>
-                <th>Total Quantity</th>
+                <th>Car Model</th>
+                <th>Color</th>
+                <th>Plate No.</th>
+                {% comment %} <th>Total Quantity</th> {% endcomment %}
                 <th>Total Price</th>
                 <th>Date Created</th>
                 <th>View</th>
@@ -35,7 +38,10 @@
                 <td>{{ rental.address }}</td>
                 <td>{{ rental.city }}</td>
                 <td>{{ rental.national_id }}</td>
-                <td>{{ rental.quantity }}</td>
+                <td>{{ rental.vehicle_name }}</td>
+                <td>{{ rental.vehicle_color }}</td>
+                <td>{{ rental.plate_number }}</td>
+                {% comment %} <td>{{ rental.quantity }}</td> {% endcomment %}
                 <td>{{ rental.amount }}</td>
                 <td>{{ rental.timestamp }}</td>
                 <td> <a class="btn btn-success btn-sm" href="#"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>

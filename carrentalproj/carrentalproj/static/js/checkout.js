@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     displayCheckoutCars();
+    autofillCarDetails();
 });
 
 function displayCheckoutCars() {
@@ -55,7 +56,11 @@ function displayCheckoutCars() {
 }
 
 function redirectToInvoice(transactionId) {
-    window.location.href = `/sona_invoice/${transactionId}`;
+    if (transactionId) {
+        window.location.href = `/sona_invoice/${transactionId}`;
+    } else {
+        console.error("Transaction ID is undefined.");
+    }
 }
 
 document.querySelector('.buttonCheckout').addEventListener('click', async (event) => {
@@ -64,26 +69,34 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
     const button = document.querySelector('.buttonCheckout');
     button.innerHTML = `<div class="spinner"></div> Processing...`;
     button.disabled = true;
-    const selectedCar = JSON.parse(localStorage.getItem("selectedCar"));
-    
-    const bookingButton = document.querySelector('.add-cart');
-    const hireAmount = button.dataset.hireAmount;
-    const vehicleName = button.dataset.vehicleName;
-    const vehicleColor = button.dataset.vehicleColor;
-    const plateNumber = button.dataset.plateNumber;
+
     const phone = document.getElementById('phone').value;
     const name = document.getElementById('name').value;
     const address = document.getElementById('address').value;
     const city = document.getElementById('city').value;
-    
     const transactionCode = document.getElementById('transactionCode').value;
+    const national_id = document.getElementById('national_id').value;
 
     const totalPriceElement = document.querySelector('.totalPrice');
     const amount = totalPriceElement ? parseFloat(totalPriceElement.textContent.replace("KES ", "")) : 0;
 
-    console.log("Sending data to backend:", { phone, name, address, city, hire_amount, vehicle_name, vehicle_color, plate_number, transactionCode });
+    const checkoutCart = JSON.parse(localStorage.getItem("checkoutCart"));
+    const hireAmount = amount;
+    let vehicleName = "";
+    let vehicleColor = "";
+    let plateNumber = "";
 
+    // Extract vehicle details from the cart
+    if (checkoutCart) {
+        for (const [key, value] of Object.entries(checkoutCart)) {
+            vehicleName = value.name;
+            vehicleColor = value.vehicle_color;
+            plateNumber = value.plate_number;
+            break; // Get the first vehicle as a representative (if multiple)
+        }
+    }
 
+   
 
     try {
         // Send payment and form data to the backend
@@ -100,7 +113,7 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
                 city: city,
                 national_id: national_id,
                 amount: amount,
-                hire_amount: hireAmount,  // Ensure this is a number
+                hire_amount: hireAmount,
                 vehicle_name: vehicleName,
                 vehicle_color: vehicleColor,
                 plate_number: plateNumber,
@@ -108,27 +121,24 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
             }),
         });
 
-        
         const data = await response.json();
         console.log("Response from backend:", data);
         if (data.status === 'success') {
             alert('Payment successful!');
             localStorage.removeItem("cartItems");
-            // updateCartUI();
-            
-            redirectToInvoice();
+            redirectToInvoice(data.transactionId); // Pass transaction ID for invoice
         } else {
             alert(`Payment failed: ${data.error_message}`);
         }
     } catch (error) {
         console.error('Error initiating payment:', error);
+        alert('An error occurred while processing the payment.');
     } finally {
-        setTimeout(() => {
-            button.innerHTML = `Make Payment`;
-            button.disabled = false;
-        }, 2000);
+        button.innerHTML = `Make Payment`;
+        button.disabled = false;
     }
 });
+
 
 // Helper function to get CSRF token
 function getCookie(name) {
@@ -144,4 +154,34 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function autofillCarDetails() {
+    const storedItems = localStorage.getItem("cartItems");
+
+    // Check if stored items exist and are not empty
+    if (!storedItems || storedItems === "undefined") {
+        console.warn("No car data found in localStorage.");
+        return;
+    }
+
+    const items = JSON.parse(storedItems);
+
+    // Assuming only one car is rented at a time, get the first car object
+    const carDetails = Object.values(items)[0];
+
+    if (carDetails) {
+        document.getElementById("plateNumber").value = carDetails.plate_number || "";
+        document.getElementById("carModel").value = carDetails.name || "";
+        document.getElementById("carColor").value = carDetails.vehicle_color || "";
+        document.getElementById("carCount").value = carDetails.quantity || 1;
+        document.getElementById("hireAmount").value = carDetails.price || 0;
+    } else {
+        console.warn("Car details not found in localStorage.");
+    }
+}
+
+function clearCart() {
+    localStorage.removeItem(LocalCart.key);
+    updateCartUI();
 }

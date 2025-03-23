@@ -78,7 +78,7 @@ class Transaction(models.Model):
     city = models.CharField(max_length=255, default='Nairobi')
     national_id = models.CharField(max_length=200, default='')
     amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    # hire_amount = models.IntegerField(default=0)
+    hire_amount = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField(default=0)
     vehicle_name = models.CharField(max_length=255, default='')
     vehicle_color = models.CharField(max_length=200, default='')

@@ -90,7 +90,7 @@ def payment_view(request):
             )
             transaction.save()
 
-            return redirect("sona_invoice", transaction.id)
+            # return redirect("sona_invoice", transaction.id)
         
             print("Transaction saved:", transaction)  # Log successful save
 
@@ -150,7 +150,7 @@ def initiate_stk_push(phone, amount):
             "PartyB": MPESA_SHORTCODE,
             "PhoneNumber": phone,
             "CallBackURL": CALLBACK_URL,
-            "AccountReference": "Rental Payment",
+            "AccountReference": "SONA PREMIUM",
             "TransactionDesc": "Car Rental Payment",
         }
 
@@ -197,14 +197,14 @@ def payment_callback(request):
             metadata = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
 
             amount = next(item["Value"] for item in metadata if item["Name"] == "Amount")
-            mpesa_code = next(item["Value"] for item in metadata if item["Name"] == "MpesaReceiptNumber")
+            transactionCode = next(item["Value"] for item in metadata if item["Name"] == "MpesaReceiptNumber")
             phone = next(item["Value"] for item in metadata if item["Name"] == "PhoneNumber")
 
             # Save transaction to the database
             Transaction.objects.create(
                 amount=amount, 
                 checkout_id=checkout_id, 
-                mpesa_code=mpesa_code, 
+                transactionCode=transactionCode, 
                 phone_number=phone, 
                 status="Success"
             )

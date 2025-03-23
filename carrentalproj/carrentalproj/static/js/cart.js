@@ -19,10 +19,12 @@ addCartButtons.forEach(btn =>{
 
 
 class CartItem{
-    constructor(name, img, price){
+    constructor(name, img, price, vehicle_color,plate_number){
         this.name = name
         this.img=img
         this.price = price
+        this.vehicle_color = vehicle_color
+        this.plate_number = plate_number
         this.quantity = 1
    }
 }
@@ -73,10 +75,12 @@ class LocalCart{
 function addItemFunction(e){
     const id = e.target.parentElement.parentElement.getAttribute("data-id")
     const img = e.target.parentElement.previousElementSibling.src
+    const vehicle_color = e.target.parentElement.parentElement.firstElementChild.firstElementChild.textContent
+    const plate_number = e.target.parentElement.parentElement.firstElementChild.children[1].textContent
     const name = e.target.previousElementSibling.textContent
     let price = e.target.parentElement.firstElementChild.firstElementChild.firstElementChild.textContent
     price = price.replace("KES", '')
-    const item = new CartItem(name, img, price)
+    const item = new CartItem(name, img, price, vehicle_color, plate_number)
     LocalCart.addItemToLocalCart(id, item)
 //  console.log(price)
 }
@@ -106,6 +110,10 @@ function updateCartUI(){
         total += price;
         total = Math.round(total * 100) / 100;
         cartItem.innerHTML = `
+            <div class="hidden">
+            <p>${value.vehicle_color}</p>
+            <p>${value.plate_number}</p>
+        </div>
             <div class="cart-box">
                 <img src="${value.img}" class="cart-img" alt="">
                 <div class="cart-detail">
@@ -149,6 +157,7 @@ buyNowButton.addEventListener("click", () => {
         alert("Your collection is empty!");
         return;
     }
+    localStorage.setItem("checkoutCart", JSON.stringify(Object.fromEntries(items)));
     // Redirect to checkout page
     const checkoutUrl = buyNowButton.getAttribute("data-url");
     window.location.href = checkoutUrl;
