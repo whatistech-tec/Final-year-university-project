@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm,CreateRecordForm,UpdateRecordForm,CreateStoryForm,UpdateStoryForm,CreateRentalForm,UpdateRentalForm,PaymentForm
-from .cart import Cart
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -51,6 +50,56 @@ CALLBACK_URL = os.getenv("CALLBACK_URL")
 MPESA_BASE_URL = os.getenv("MPESA_BASE_URL")
 
 
+
+
+from django.db.models import Q
+
+def vehicle_search(request):
+    query = request.GET.get('q', '')  # Get the search query from the request
+    vehicles = VehicleDetail.objects.filter(
+        Q(vehicle_name__icontains=query) |
+        Q(plate_number__icontains=query) |
+        Q(vehicle_color__icontains=query) |
+        Q(vehicle_category__icontains=query) |
+        Q(location__icontains=query)
+    ).order_by('-creation_date')
+
+    return render(request, 'mainapp/vehicle_search.html', {'vehicles': vehicles, 'query': query})
+
+def frontend_vehicle_search(request):
+    query = request.GET.get('q', '')  # Get the search query from the request
+    vehicles = VehicleDetail.objects.filter(
+        Q(vehicle_name__icontains=query) |
+        Q(vehicle_color__icontains=query) |
+        Q(vehicle_category__icontains=query) |
+        Q(location__icontains=query)
+    ).order_by('-creation_date')
+
+    return render(request, 'mainapp/frontend_vehicle_search.html', {'vehicles': vehicles, 'query': query})
+
+@csrf_exempt
+def toggle_availability(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            plate_number = data.get('plate_number')
+
+            # Fetch the vehicle by plate number
+            vehicle = VehicleDetail.objects.get(plate_number=plate_number)
+
+            # Toggle the availability status
+            vehicle.in_stock = not vehicle.in_stock
+            vehicle.save()
+
+            return JsonResponse({'status': 'success', 'in_stock': vehicle.in_stock})
+        
+        except VehicleDetail.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Vehicle not found'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
 @csrf_exempt
 def payment_view(request):
     if request.method == 'POST':
@@ -89,7 +138,13 @@ def payment_view(request):
             )
             transaction.save()
 
-            # return redirect("sona_invoice", transaction.id)
+            try:
+                vehicle = VehicleDetail.objects.get(plate_number=plate_number)
+                vehicle.in_stock = False
+                vehicle.save()
+                print(f"Vehicle {plate_number} marked as unavailable.")
+            except VehicleDetail.DoesNotExist:
+                print(f"Vehicle with plate number {plate_number} not found.")
         
             print("Transaction saved:", transaction)  # Log successful save
 
@@ -102,20 +157,7 @@ def payment_view(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
-@csrf_exempt
-def book_vehicle(request):
-    if request.method == "POST":
-        vehicle_id = request.POST.get("detail.id")
-        try:
-            vehicle = VehicleDetail.objects.get(id=vehicle_id)
-            vehicle.in_stock = False  # Mark as unavailable
-            vehicle.save()
-            return JsonResponse({"success": True})
-        except Vehicle.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Vehicle not found"})
-    return JsonResponse({"success": False, "message": "Invalid request"})
 
-# Generate M-Pesa access token
 def generate_access_token():
     try:
         credentials = f"{CONSUMER_KEY}:{CONSUMER_SECRET}"

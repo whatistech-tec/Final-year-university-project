@@ -4,42 +4,55 @@
 
 {% block content %}
 <div class="collection__category">
-    {% block categories %}
-    <h1>Choose Your Favorite Car</h1>
-    {% endblock categories %}
+    <div class="vehicle-header">
+        {% block categories %}
+        <h1>Choose Your Favorite Car</h1>
+        {% endblock categories %}
+        <div class="box">
+            <form action="{% url 'frontend_vehicle_search' %}" method="GET"   class="search-form">
+                
+                <input type="text" name="q" placeholder="Type..." value="{{ query|default:'' }}">
+                <input type="submit" name="" value="Search">
+            </form>
+        </div>
+    </div>
     <hr />
     <div class="collection__container">
+        {% if vehicles %}
         {% for item in vehicles %}
-        <div class="collection__car__item {% if not item.is_available %} unavailable{% endif %}" id="collection-car-item-page" data-id="{{ item.id }}">
-            
-            <div class="hidden">
-                <p>{{ item.vehicle_color }}</p>
-                <p>{{ item.plate_number }}</p>
-               
-            </div>
-            <div class="overlay"></div>
-            <img src="{{ item.vehicle_image.url }}" alt="car" id="collection-page-img" />
-            <div class="car__info__container">
-                <div class="car__info">
-                    <div class="car__price">
-                        <h5 class="price">KES {{ item.hire_amount }}</h5>
-                        <h6>/Day</h6>
-                    </div>
-                    <div class="car__location">
-                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                        <h6>{{ item.location }}</h6>
-                    </div>
+            <div class="collection__car__item {% if not item.in_stock %} unavailable{% endif %}" id="collection-car-item-page" data-id="{{ item.id }}">
+                
+                <div class="hidden">
+                    <p>{{ item.vehicle_color }}</p>
+                    <p>{{ item.plate_number }}</p>
+                
                 </div>
-                <h2 class="product-title">{{ item.vehicle_name }}</h2>
-                <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}"
-                {% if not item.in_stock %}disabled{% endif %}>
-                    {% if not item.in_stock %}Unavailable{% else %}Book Now{% endif %}
-                    
-                </button>
+                
+                <img src="{{ item.vehicle_image.url }}" alt="car" id="collection-page-img" />
+                <div class="car__info__container">
+                    <div class="car__info">
+                        <div class="car__price">
+                            <h5 class="price">KES {{ item.hire_amount }}</h5>
+                            <h6>/Day</h6>
+                        </div>
+                        <div class="car__location">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <h6>{{ item.location }}</h6>
+                        </div>
+                    </div>
+                    <h2 class="product-title">{{ item.vehicle_name }}</h2>
+                    <button type="submit" value="{{ item.id }}" class="btn btn__car btn__collection__page add-cart" data-id="{{ item.id }}"
+                    {% if not item.in_stock %}disabled{% endif %}>
+                        {% if not item.in_stock %}Unavailable{% else %}Book Now{% endif %}
+                        
+                    </button>
+                </div>
             </div>
-        </div>
         
         {% endfor %}
+        {% else %}
+            <p>No vehicles found matching your search criteria.</p>
+        {% endif %}
     </div>
     
     

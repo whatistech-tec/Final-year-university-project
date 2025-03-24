@@ -55,10 +55,13 @@ urlpatterns = [
     path('admin_electrics/', views.admin_electrics, name='admin_electrics'),
     
     path('maps', views.maps, name="maps"),
+    path('vehicle_search/', views.vehicle_search, name="vehicle_search"),
+    path('frontend_vehicle_search/', views.frontend_vehicle_search, name="frontend_vehicle_search"),
     
+    path('toggle_availability/', views.toggle_availability, name='toggle_availability'),
     path('payment_view/', views.payment_view, name="make_payment"),
     path('payment_callback/', views.payment_callback, name='payment_callback'),
-    path('book_vehicle/', views.book_vehicle, name='book_vehicle'),
+    # path('book_vehicle/', views.book_vehicle, name='book_vehicle'),
 
 
  

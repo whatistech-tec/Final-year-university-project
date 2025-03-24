@@ -28,6 +28,7 @@ class VehicleDetail(BaseModel):
     
     
     
+    
     def __str__(self):
         return f"{self.vehicle_name} ({self.plate_number})"
 

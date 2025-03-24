@@ -102,3 +102,46 @@ window.onscroll = () => {
         }
     });
 };
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButtons = document.querySelectorAll(".toggle-availability");
+
+    toggleButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const plateNumber = this.getAttribute("data-plate-number");
+            const url = this.getAttribute("data-url");
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ plate_number: plateNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    const icon = this.querySelector("i");
+                    if (data.in_stock) {
+                        icon.classList.remove("fa-times-circle", "unavailable");
+                        icon.classList.add("fa-check", "available");
+                        this.title = "Available";
+                    } else {
+                        icon.classList.remove("fa-check", "available");
+                        icon.classList.add("fa-times-circle", "unavailable");
+                        this.title = "Unavailable";
+                    }
+                    alert("Vehicle availability updated successfully!");
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                alert("Failed to update availability. Try again.");
+                console.error("Error:", error);
+            });
+        });
+    });
+});

@@ -155,38 +155,66 @@ header{
     flex-direction: column;
     margin-top: 50px;
 }
-
-/* .collection__car__item .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 255, 0.5); 
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.vehicle-header{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-} */
+    flex-direction: row;
+    align-items:center;
+    justify-content:space-between ;
+}
+
+.box{
+    position: relative;
+    
+    width: 500px;
+    transform: translate(-50%, -50%);
+
+}
+.box input{
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    box-sizing: border-box;
+    transition: -5s;
+
+}
+.box input[type="text"]{
+    background: #fff;
+    width: 300px;
+    height: 50px;
+    border: none;
+    outline: none;
+    padding: 0 25px;
+    border-radius: 25px 0 0 25px;
+    
+}
+.box input[type="submit"]{
+    position: relative;
+    border-radius: 0 25px 25px 0;
+    height: 50px;
+    width: 100px;
+    border: none;
+    cursor: pointer;
+    background: #340983;
+
+}
+.box input[type="submit"]:hover{
+    background: #2542a0;
+}
 
 .collection__car__item.unavailable .overlay {
     opacity: 1;
 }
 
-/* .collection__car__item.unavailable .btn__car {
+.collection__car__item.unavailable .btn__car {
     background-color: grey;
     color: white;
     cursor: not-allowed;
-} */
+}
 
-/* .collection__car__item.unavailable .btn__car:hover {
+.collection__car__item.unavailable .btn__car:hover {
     background-color: grey;
 }
- */
+
 
 iframe{
     width: 80%;

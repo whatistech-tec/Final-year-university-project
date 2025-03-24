@@ -61,13 +61,21 @@
                     <td>{{detail.location}}</td>
                     <td>KES {{detail.hire_amount}}</td>
                     <td>{{detail.creation_date}}</td>
-                    <td>{% if not item.in_stock %}<i class="fa fa-times-circle" aria-hidden="true"></i>{% else %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td> 
+                    <td><button class="toggle-availability" data-url="{% url 'toggle_availability' %}" data-plate-number="{{ detail.plate_number }}" title="{% if detail.in_stock %}Available{% else %}Unavailable{% endif %}">
+                        {% if detail.in_stock %}
+                            <i class="fa fa-check available" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa fa-times-circle unavailable" aria-hidden="true"></i>
+                        {% endif %}     
+                    </button></td> 
             
                     <td> <a class="btn btn-success btn-sm" href="{% url 'view_record' detail.id %}"> <i class='fa fa-eye' aria-hidden="true"></i></a> </td>
             
                 </tr>
             
             {% endfor %}
+            {% else %}
+                <p>No vehicles found matching your search criteria.</p>
         {% endif %}
     </tbody>
 </table>

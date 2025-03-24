@@ -140,31 +140,10 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
     }
 });
 
-const bookButton = document.querySelector('.buttonCheckout');
-bookButton.forEach(button => {
-    button.addEventListener("click", function () {
-        const carItem = this.closest(".collection__car__item");
-        const vehicleId = this.getAttribute("data-id");
-
-        fetch('/book_vehicle/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: `vehicle_id=${vehicleId}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Mark as unavailable
-                carItem.classList.add("unavailable");
-                this.textContent = "Unavailable";
-                this.disabled = true;
-            } else {
-                alert(data.message || "Booking failed!");
-            }
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    const unavailableButtons = document.querySelectorAll(".collection__car__item.unavailable .btn__car");
+    unavailableButtons.forEach(button => {
+        button.disabled = true;
     });
 });
 

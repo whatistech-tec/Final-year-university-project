@@ -5,18 +5,6 @@ import os
 from django.contrib.messages import constants as messages
 
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
-MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
-MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
-MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
-MPESA_PARTYB = os.getenv("MPESA_PARTYB")
-MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -82,7 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'mainapp.context_processors.cart',
+               
             ],
         },
     },
