@@ -31,6 +31,24 @@ body{
 	font-weight: 100;
 }
 
+.report{
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 36px;
+    background: var(--primary);
+    color: antiquewhite;
+	margin-bottom: 10px;
+	width: 110px;
+	text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    grid-gap: 10px;
+    font-weight: 500;
+	cursor: pointer;
+}
+
+
 .wrapper{
 	background: var(--white);
 	padding: 30px;

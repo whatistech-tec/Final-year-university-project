@@ -10,11 +10,8 @@ urlpatterns = [
     path('sona_invoice/<int:pk>', views.sona_invoice, name="sona_invoice"),
     path('checkout/', views.checkout, name="checkout"),
     path('incoming_client/', views.incoming_client, name="incoming_client"),
-    path('filtered_vehicles', views.filtered_vehicles, name="filtered_vehicles"),
-    path('filtered_vehicles', views.search_vehicles, name="filtered_vehicles"),
     path('all_rentals', views.rental_list, name="all_rentals"),
     path('all_stories', views.all_stories, name="all_stories"),
-    path('pending', views.pending, name="pending"),
     path('admin_logout', views.admin_logout, name="admin_logout"),
     path('create_record', views.create_record, name="create_record"),
     path('create_story', views.create_story, name="create_story"),
@@ -31,14 +28,13 @@ urlpatterns = [
     path('delete-rental/<int:pk>', views.delete_rental, name="delete_rental"),
 
     path('auth', views.auth, name="auth"),
-    path('login', views.handlelogin, name="login"),
+    path('login/', views.handlelogin, name="login"),
     path('logout', views.handlelogout, name="handlelogout"),
     
     path('activate/<uidb64>/<token>',views.ActivateAccountView.as_view(), name='activate'),
-    # path('request-reset-email/',views.ReqiuestResetEmailView.as_view(), name='request-reset-email'),
-    # path('set-new-password/<uidb64>/<token>',views.SetNewPasswordView.as_view(), name='set-new-password'),
+    path('request-reset-email/',views.ReqiuestResetEmailView.as_view(), name='request-reset-email'),
+    path('set-new-password/<uidb64>/<token>',views.SetNewPasswordView.as_view(), name='set-new-password'),
     
-    path('search', views.search, name="search"),
     path('rent', views.rent, name="rent"),
     path('ride/', views.ride, name="ride"),
     path('stories/', views.stories, name="stories"),
@@ -47,7 +43,6 @@ urlpatterns = [
     path('vans', views.vans, name="vans"),
     path('electric', views.electric, name="electric"),
     path('contact', views.contact, name="contact"),
-    path('search_form', views.search_form, name="search_form"),
     
     path('admin_cars/', views.admin_cars, name='admin_cars'),
     path('admin_suvs/', views.admin_suvs, name='admin_suvs'),
@@ -61,7 +56,7 @@ urlpatterns = [
     path('toggle_availability/', views.toggle_availability, name='toggle_availability'),
     path('payment_view/', views.payment_view, name="make_payment"),
     path('payment_callback/', views.payment_callback, name='payment_callback'),
-    # path('book_vehicle/', views.book_vehicle, name='book_vehicle'),
+    
 
 
  

@@ -31,13 +31,15 @@ from django.core.mail import BadHeaderError,send_mail
 from django.conf import settings
 from django.core import mail
 from django.core.mail.message import EmailMessage
-
+from decimal import Decimal
 #threading
 import threading
 import requests, base64, json, re, os
 
 from .models import VehicleDetail,RentedVehicle,Stories,UsersInfo,Transaction
 from .admin import VehicleDetailAdmin
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import six
 
 load_dotenv()
 
@@ -104,25 +106,32 @@ def toggle_availability(request):
 def payment_view(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
+            data = json.loads(request.body.decode('utf-8'))
 
             name = data.get('name', '')
             phone_number = format_phone_number(data.get("phone_number"))
             address = data.get('address', '')
             city = data.get('city', '')
             national_id = data.get('national_id', '')
-            hire_amount = data.get('hire_amount', '')
+            transactionCode = data.get('transactionCode', '')
             vehicle_name = data.get('vehicle_name', '')
             vehicle_color = data.get('vehicle_color', '')
             plate_number = data.get('plate_number', '')
-            transactionCode = data.get('transactionCode', '')
-            
-            amount = data.get('amount', 0)
+
+            # Get financial details from data
+            subtotal = Decimal(str(data.get('subtotal', 0)))
+            vat = Decimal(str(data.get('vat', 0)))
+            discount = Decimal(str(data.get('discount', 0)))
+            final_total = Decimal(str(data.get('final_total', 0)))
+            hire_amount = Decimal(str(data.get('hire_amount', 0)))
+            amount = Decimal(str(data.get('amount', 0)))
+
+            # Initiate M-Pesa payment
             response = initiate_stk_push(phone_number, amount)
-            
 
             print("Received data:", data)  # Log received data
 
+            # Save transaction to the database
             transaction = Transaction.objects.create(
                 name=name,
                 phone_number=phone_number,
@@ -134,7 +143,11 @@ def payment_view(request):
                 vehicle_name=vehicle_name,
                 vehicle_color=vehicle_color,
                 plate_number=plate_number,
-                transactionCode=transactionCode
+                transactionCode=transactionCode,
+                subtotal=subtotal,
+                vat=vat,
+                discount=discount,
+                final_total=final_total
             )
             transaction.save()
 
@@ -149,7 +162,6 @@ def payment_view(request):
             print("Transaction saved:", transaction)  # Log successful save
 
             return JsonResponse({"status": "success", "transaction_id": transaction.id, "message": "Payment saved successfully!"})
-
 
         except Exception as e:
             print("Error saving transaction:", str(e))  # Log the error
@@ -185,7 +197,7 @@ def generate_access_token():
         return None
 
 # Initiate STK Push and handle response
-def initiate_stk_push(phone, amount):
+def initiate_stk_push(phone_number, amount):
     try:
         token = generate_access_token()
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
@@ -200,9 +212,9 @@ def initiate_stk_push(phone, amount):
             "Timestamp": timestamp,
             "TransactionType": "CustomerPayBillOnline",
             "Amount": amount,
-            "PartyA": phone,
+            "PartyA": phone_number,
             "PartyB": MPESA_SHORTCODE,
-            "PhoneNumber": phone,
+            "PhoneNumber": phone_number,
             "CallBackURL": CALLBACK_URL,
             "AccountReference": "SONA PREMIUM",
             "TransactionDesc": "Car Rental Payment",
@@ -252,14 +264,14 @@ def payment_callback(request):
 
             amount = next(item["Value"] for item in metadata if item["Name"] == "Amount")
             transactionCode = next(item["Value"] for item in metadata if item["Name"] == "MpesaReceiptNumber")
-            phone = next(item["Value"] for item in metadata if item["Name"] == "PhoneNumber")
+            phone_number = next(item["Value"] for item in metadata if item["Name"] == "PhoneNumber")
 
             # Save transaction to the database
             Transaction.objects.create(
                 amount=amount, 
                 checkout_id=checkout_id, 
                 transactionCode=transactionCode, 
-                phone_number=phone, 
+                phone_number=phone_number, 
                 status="Success"
             )
             return JsonResponse({"ResultCode": 0, "ResultDesc": "Payment successful"})
@@ -350,6 +362,7 @@ def auth(request):
         user = User.objects.create_user(email,email,password)
         user.is_active=False
         user.save()
+        
         current_site=get_current_site(request)
         email_subject="Activate Your Account"
         message=render_to_string('mainapp/activate.html',{
@@ -367,6 +380,12 @@ def auth(request):
     context={}
     return render(request, "mainapp/auth.html", context)
 
+class TokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
+
+generate_token = TokenGenerator()
+
 class ActivateAccountView(View):
     def get(self, request, uidb64,token):
         try:
@@ -377,9 +396,77 @@ class ActivateAccountView(View):
         if user is not None and generate_token.check_token(user,token):
             user.is_active=True
             user.save()
-            messages.sucess(request, "Account activated successifully!")
+            messages.success(request, "Account activated successifully!")
             return redirect('/login')
-        return render(request,'activatefail.html')
+        return render(request,'mainapp/activatefail.html')
+
+
+class ReqiuestResetEmailView(View):
+    def get(self,request):
+        return render(request, 'mainapp/request-reset-email.html')
+    
+    def post(self,request):
+        email=request.POST['email']
+        user=User.objects.filter(email=email)
+        
+        if user.exists():
+            current_site=get_current_site(request)
+            email_subject='[Reset Your Password]'
+            message = render_to_string('mainapp/reset-user-password.html',
+            {
+                'domain':'127.0.0.1:8000',
+                'uid':urlsafe_base64_encode(force_bytes(user[0].pk)),
+                'token':PasswordResetTokenGenerator().make_token(user[0])
+
+            })
+            
+            email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[email])
+            EmailThread(email_message).start()
+            
+            messages.info(request,"WE SENT YOU AN EMAIL WITH INSTRUCTIONS TO RESET YOUR PASSWORD")
+            return render(request,'mainapp/request-reset-email.html')
+        
+        
+class SetNewPasswordView(View):
+    def get(self,request,uidb64,token):
+        context = {
+            'uidb64':uidb64,
+            'token':token
+        }
+        try:
+            user_id=force_str(urlsafe_base64_decode(uidb64))
+            user=User.objects.get(pk=user_id)
+            
+            if not PasswordResetTokenGenerator().check_token(user,token):
+                messages.warning(request,"Password Reset Link is Invalid!")
+                return render(request,'mainapp/request-reset-email.html')
+            
+        except DjangoUnicodeDecodeError as identifier:
+            pass
+        
+        return render(request,'mainapp/set-new-password.html',context)
+    
+    def post(self,request,uidb64,token):
+        context={
+            'uidb64':uidb64,
+            'token':token
+        }
+        password=request.POST['pass1']
+        confirm_password=request.POST['pass2']
+        if password!=confirm_password:
+            messages.warning(request,"Password is Not Matching")
+            return render(request,'mainapp/set-new-password.html',context)
+        try:
+            user_id=force_str(urlsafe_base64_decode(uidb64))
+            user=User.objects.get(pk=user_id)
+            user.set_password(password)
+            user.save()
+            messages.success(request,"Password Reset Success! Please login with the new password")  
+            return redirect('/login/')
+        
+        except DjangoUnicodeDecodeError as identifier:
+            messges.error(request,"Something Went Wrong!")
+            return render(request,'mainapp/set-new-password.html',context)
 
 
 def handlelogin(request):
@@ -458,7 +545,7 @@ def checkout(request):
 @login_required(login_url='admin_login')
 
 def all_vehicles(request):
-    vehicles = VehicleDetail.objects.all().order_by('-creation_date')  # Fetch all vehicles regardless of category
+    vehicles = VehicleDetail.objects.all().order_by('-creation_date')
     context = {
         'vehicles': vehicles,
     }
@@ -476,10 +563,6 @@ def admin_vans(request):
     vans = VehicleDetail.objects.filter(vehicle_category__iexact='van').order_by('-creation_date')
     return render(request, 'mainapp/admin_vans.html', {'vehicles': vans})
 
-# def vehicles_instock(request):
-#     available_vehicles = VehicleDetail.objects.filter(in_stock=True).order_by('-creation_date')
-#     Unavailable_vehicles = VehicleDetail.objects.filter(in_stock=False).order_by('-creation_date')
-#     return render(request, 'mainapp/admin_vans.html', {'available_vans': available_vans, 'unavailable_vans': unavailable_vans})
 
 def admin_electrics(request):
     electric_cars = VehicleDetail.objects.filter(vehicle_category__iexact='electric').order_by('-creation_date')
@@ -520,10 +603,6 @@ def all_stories(request):
 
     return render(request, 'mainapp/all_stories.html', context=context)
 
-def pending(request):
-    
-    return render(request, 'mainapp/pending.html')
-   
 
 @login_required(login_url='admin_login')
 def create_record(request): 
@@ -698,8 +777,6 @@ def view_rental(request, pk):
 
     return render(request, 'mainapp/view_rental.html', context=context)
 
-
-
 #delete a record
 
 @login_required(login_url='admin_login')
@@ -740,30 +817,6 @@ def delete_rental(request, pk):
     return redirect("all_rentals")
 
 
-
-
-#filters
-
-@login_required(login_url='admin_login')
-def filtered_vehicles(request):
-    
-    vehicles = VehicleDetail.objects.all()
-    
-    vehicle_filter = VehicleDetailFilter(request.GET, queryset=vehicles)
-
-    return render(request, "mainapp/filtered_vehicles.html", {'vehicle_filter':vehicle_filter})
-
-
-@login_required(login_url='admin_login')
-def search_vehicles(request):
-    
-    vehicles = VehicleDetail.objects.all()
-    
-    vehicle_filter = VehicleDetailAdmin(request.GET, queryset=vehicles)
-
-    return render(request, "mainapp/filtered_vehicles.html", {'vehicle_filter':vehicle_filter})
-
-
 def home(request):
     context={}
     return render(request, "mainapp/home.html", context)
@@ -774,28 +827,12 @@ def dash_board(request):
 def rent_now(request):
     return render(request, 'mainapp/rent_now.html')
 
-def search(request):
-    context={}
-    return render(request, "mainapp/search.html", context)
 
 def rent(request):
     renting_cars = VehicleDetail.objects.all()
     prices = list(renting_cars.values_list('hire_amount', flat=True))  # Get the list of prices
     return render(request, 'mainapp/rent.html', {'renting_cars': renting_cars, 'hire_amount': prices})
 
-
-# def rent(request):
-#     renting_cars = VehicleDetail.objects.all()
-#     hire_amount = [vehicle.hire_amount for vehicle in renting_cars]
-#     context = {
-#         'renting_cars': renting_cars,
-#         'hire_amount': hire_amount,
-#     }
-#     return render(request, 'mainapp/rent.html', context)
-
-# # def rent(request):
-#     renting_cars = VehicleDetail.objects.all()
-#     return render(request, "mainapp/rent.html", {'renting_cars':renting_cars})
 
 def ride(request):
     context={}

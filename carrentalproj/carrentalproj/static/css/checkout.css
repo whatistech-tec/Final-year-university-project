@@ -36,7 +36,7 @@ a{
     max-width: 500px;
 }
 .checkoutLayout .form h1,
-.checkoutLayout .form .group:nth-child(-n+4){
+.checkoutLayout .form .group:nth-child(-n+5){
     grid-column-start: 1;
     grid-column-end: 3;
 }

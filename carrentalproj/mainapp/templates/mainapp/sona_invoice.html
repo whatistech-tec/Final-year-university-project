@@ -6,10 +6,15 @@
 <head>
 	<title>Invoice </title>
 	<link rel="stylesheet" href="{% static 'css/sona_invoice.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
-
-<div class="wrapper" data-id="transactionId">
+	<div class="wrapper" data-id="transactionId">
+	<button class="report" onclick="downloadPDF()">
+		<i class="fa fa-download" aria-hidden="true"></i>
+		<span>Download</span>
+	</button>
 	<div class="invoice_wrapper">
 		<div class="header">
 			<div class="logo_invoice_wrap">
@@ -87,19 +92,19 @@
 				<div class="grandtotal_sec">
 			        <p class="bold">
 			            <span>SUB TOTAL</span>
-			            <span>{{transaction.amount}}</span>
+			            <span>{{transaction.subtotal}}</span>
 			        </p>
-			        {% comment %} <p>
+			        <p>
 			            <span>Tax Vat 18%</span>
-			            <span>$200</span>
+			            <span>KES {{transaction.vat}}</span>
 			        </p>
 			        <p>
 			            <span>Discount 10%</span>
-			            <span>-$700</span>
-			        </p> {% endcomment %}
+			            <span>KES {{transaction.discount}}</span>
+			        </p> 
 			       	<p class="bold">
 			            <span>Grand Total</span>
-			            <span>{{transaction.amount}}</span>
+			            <span>{{transaction.final_total}}</span>
 			        </p>
 				</div>
 			</div>
@@ -115,6 +120,22 @@
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+<script>
+    function downloadPDF() {
+        const element = document.querySelector('.wrapper'); // The entire receipt container
+        const options = {
+            margin: 0.5,
+            filename: 'receipt.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(options).save();
+    }
+</script>
 
 </body>
 </html>

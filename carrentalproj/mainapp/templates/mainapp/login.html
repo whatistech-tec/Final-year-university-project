@@ -3,11 +3,14 @@
 
 {% load static %}
 
+{% block title %}
+        <title>Login</title>
+    {% endblock title %}
 
 {% block content %}
 
 <div class="login">
-    <form action="/login" method="post">
+    <form action="/login/" method="post">
         {% csrf_token %}
         <label for="chk" aria-hidden="true">Login</label>
         {% for message in messages %}
@@ -25,7 +28,7 @@
         <input type="email" name="email" placeholder="Email">
         <input type="Password" name="pass1" placeholder="Password">
         <button> Login</button>
-        <p>Forgot Password? <a href="/">Reset</a></p>
+        <p>Forgot Password? <a href="/request-reset-email/">Reset</a></p>
         <p>Don't have account? <a href="/auth">Sign Up</a></p>
         <div class="admin">
 

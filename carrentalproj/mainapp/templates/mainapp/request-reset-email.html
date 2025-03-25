@@ -1,0 +1,31 @@
+{% extends 'mainapp/auth.html' %}
+
+{% block title %}
+        <title>Reset Password</title>
+    {% endblock title %}
+
+{% block content %}
+            <div class="signup">
+                <form action="/request-reset-email/" method="post">
+                    {% csrf_token %}
+                    <label for="chk" aria-hidden="true">Request Reset Password Link</label>
+                    {% for message in messages %}
+
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+                        <p id="message-timer" class="alert alert-success float-center text-center message-text">
+
+                            <i class='fa fa-check' aria-hidden="true"></i> &nbsp; {{message}}
+
+                        </P> 
+
+                        {% endif %}
+                    {% endfor %}
+                                    
+                    <input type="email" name="email"  id="email" placeholder="Email" required="">
+                    
+                    <button>Submit</button>
+                    <p><a href="/login">Back</a></p>
+                </form> 
+            </div>
+        {% endblock content %}

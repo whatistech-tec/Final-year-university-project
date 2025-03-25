@@ -85,6 +85,10 @@ class Transaction(models.Model):
     vehicle_color = models.CharField(max_length=200, default='')
     plate_number =  models.CharField(max_length=200, default='')
     transactionCode =  models.CharField(max_length=200, default='')
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    vat = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    final_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

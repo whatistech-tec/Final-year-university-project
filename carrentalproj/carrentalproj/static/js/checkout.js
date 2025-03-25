@@ -7,18 +7,29 @@ function displayCheckoutCars() {
     const checkoutWrapper = document.querySelector('.list');
     const totalQuantityElement = document.querySelector('.totalQuantity');
     const totalPriceElement = document.querySelector('.totalPrice');
+    const vatElement = document.querySelector('.vat');
+    const discountElement = document.querySelector('.discount');
+    const subtotalElement = document.querySelector('.subtotal');
+    const pickupDateInput = document.getElementById("pickup_date");
+    const returnDateInput = document.getElementById("return_date");
 
     // Fetch items from localStorage
     const storedItems = localStorage.getItem("cartItems");
-
+    const pickupDate = new Date(pickupDateInput.value);
+    const returnDate = new Date(returnDateInput.value);
     // Check if stored items exist and are not empty
-    if (!storedItems || storedItems === "undefined") {
+    if (isNaN(pickupDate) || isNaN(returnDate) || returnDate <= pickupDate) {
         checkoutWrapper.innerHTML = "<p>Your collection is empty!</p>";
         totalQuantityElement.textContent = "0";
         totalPriceElement.textContent = "KES 0";
+        vatElement.textContent = "KES 0";
+        discountElement.textContent = "KES 0";
+        subtotalElement.textContent = "KES 0";
         return;
     }
-
+    const days = Math.ceil((returnDate - pickupDate) / (1000 * 60 * 60 * 24));
+    const dailyRate = item.price;
+    const subtotal = days * dailyRate;
     const items = new Map(Object.entries(JSON.parse(storedItems)));
     let total = 0;
     let totalQuantity = 0;
@@ -49,11 +60,24 @@ function displayCheckoutCars() {
         checkoutWrapper.appendChild(checkoutCar);
     });
 
+    const taxRate = 0.16;
+    const discountRate = 0.10;
+
+    const vat = Math.round((subtotal * taxRate) * 100) / 100;
+    const discount = Math.round((subtotal * discountRate) * 100) / 100;
+    const finalTotal = Math.round((subtotal + vat - discount) * 100) / 100;
+
     // Update total quantity and price
-    total = Math.round(total * 100) / 100;
     totalQuantityElement.textContent = `${totalQuantity}`;
-    totalPriceElement.textContent = `KES ${total}`;
+    subtotalElement.textContent = `KES ${subtotal}`;
+    vatElement.textContent = `KES ${vat}`;
+    discountElement.textContent = `KES ${discount}`;
+    totalPriceElement.textContent = `KES ${finalTotal}`;
+
 }
+
+pickupDateInput.addEventListener("change", displayCheckoutCars);
+returnDateInput.addEventListener("change", displayCheckoutCars);
 
 function redirectToInvoice(transaction_id) {
     if (transaction_id) {
@@ -77,6 +101,13 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
     const city = document.getElementById('city').value;
     const transactionCode = document.getElementById('transactionCode').value;
     const national_id = document.getElementById('national_id').value;
+
+    const subtotal = parseFloat(document.querySelector('.subtotal').textContent.replace("KES ", "").replace(",", ""));
+    const vat = parseFloat(document.querySelector('.vat').textContent.replace("KES ", "").replace(",", ""));
+    const discount = parseFloat(document.querySelector('.discount').textContent.replace("KES ", "").replace(",", ""));
+    const final_total = parseFloat(document.querySelector('.totalPrice').textContent.replace("KES ", "").replace(",", ""));
+
+
 
     const totalPriceElement = document.querySelector('.totalPrice');
     const amount = totalPriceElement ? parseFloat(totalPriceElement.textContent.replace("KES ", "")) : 0;
@@ -119,6 +150,10 @@ document.querySelector('.buttonCheckout').addEventListener('click', async (event
                 vehicle_color: vehicleColor,
                 plate_number: plateNumber,
                 transactionCode: transactionCode,
+                subtotal: subtotal,
+                vat: vat,
+                discount: discount,
+                final_total: final_total
             }),
         });
 
