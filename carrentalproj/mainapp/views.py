@@ -527,6 +527,7 @@ def maps(request):
 
 def sona_invoice(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
+    # transaction.cart = json.loads(transaction.cart)
     return render(request, "mainapp/sona_invoice.html", {"transaction": transaction})
 
 

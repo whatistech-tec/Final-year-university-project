@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const checkoutButton = document.querySelector(".buttonCheckout");
     const pickupDateInput = document.querySelector("#pickup_date");
     const returnDateInput = document.querySelector("#return_date");
-    const rentalDaysInput = document.querySelector("#rental_days"); // Hidden field for rental days
+    const rentalDaysInput = document.querySelector("#rental_days");
 
     function displayCheckoutCars() {
         let items = JSON.parse(localStorage.getItem("checkoutCart")) || {};
@@ -25,10 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let totalQuantity = 0;
         let subtotal = 0;
+        let vehicleNames = [];
+        let vehicleColors = [];
+        let plateNumbers = [];
+        let hireAmounts = [];
 
         checkoutWrapper.innerHTML = ""; 
         Object.values(items).forEach((item) => {
-            let itemPrice = Number(item.price) || 0; // Ensure it's a number
+            let itemPrice = Number(item.price) || 0;
 
             let checkoutItem = document.createElement("div");
             checkoutItem.classList.add("checkout-box");
@@ -41,17 +45,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="plate">Plate No: ${item.plateNumber}</div>
                 </div>
             `;
-
+            
             checkoutWrapper.append(checkoutItem);
             totalQuantity++;
             subtotal += itemPrice;
 
-            // Auto-fill hidden fields with vehicle details
-            document.querySelector("#vehicle_name").value = item.name;
-            document.querySelector("#vehicle_color").value = item.color;
-            document.querySelector("#plate_number").value = item.plateNumber;
-            document.querySelector("#hire_amount").value = itemPrice;
+            vehicleNames.push(item.name);
+            vehicleColors.push(item.color);
+            plateNumbers.push(item.plateNumber);
+            hireAmounts.push(itemPrice);
         });
+
+        document.querySelector("#vehicle_name").value = vehicleNames.join(", ");
+        document.querySelector("#vehicle_color").value = vehicleColors.join(", ");
+        document.querySelector("#plate_number").value = plateNumbers.join(", ");
+        document.querySelector("#hire_amount").value = hireAmounts.join(", ");
 
         updateTotals(subtotal);
     }
@@ -61,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let discount = subtotal * 0.10;
         let totalPrice = subtotal + vat - discount;
 
-        totalQuantityElement.textContent = Object.keys(localStorage.getItem("checkoutCart") || {}).length;
+        totalQuantityElement.textContent = Object.keys(JSON.parse(localStorage.getItem("checkoutCart")) || {}).length;
         subtotalElement.textContent = `KES ${subtotal.toFixed(2)}`;
         vatElement.textContent = `KES ${vat.toFixed(2)}`;
         discountElement.textContent = `KES ${discount.toFixed(2)}`;
@@ -69,16 +77,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function calculateRentalDays() {
+        if (!pickupDateInput.value || !returnDateInput.value) {
+            return;
+        }
+
         let pickupDate = new Date(pickupDateInput.value);
         let returnDate = new Date(returnDateInput.value);
-
+        
         if (isNaN(pickupDate) || isNaN(returnDate)) {
-            rentalDaysInput.value = "1"; // Default to 1 day if dates are not selected
+            rentalDaysInput.value = "1";
             return;
         }
 
         let timeDifference = returnDate - pickupDate;
-        let days = Math.max(Math.ceil(timeDifference / (1000 * 60 * 60 * 24)), 1); // Ensure minimum 1 day
+        let days = Math.max(Math.ceil(timeDifference / (1000 * 60 * 60 * 24)), 1);
         rentalDaysInput.value = days;
 
         let items = JSON.parse(localStorage.getItem("checkoutCart")) || {};
@@ -86,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         Object.values(items).forEach((item) => {
             let itemPrice = Number(item.price) || 0;
-            subtotal += itemPrice * days; // Multiply by rental days
+            subtotal += itemPrice * days;
         });
 
         updateTotals(subtotal);
@@ -110,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Disable button and show processing state
         checkoutButton.innerHTML = `<span class="spinner"></span> Processing...`;
         checkoutButton.disabled = true;
 
@@ -138,24 +149,24 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(checkoutData),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    localStorage.removeItem("checkoutCart");
-                    localStorage.removeItem("cartItems");
-                    alert("Checkout successful! Proceed to payment.");
-                    window.location.href = `/sona_invoice/${data.transaction_id}`;
-                } else {
-                    alert("Checkout failed. Try again.");
-                    checkoutButton.innerHTML = "Make Payment";
-                    checkoutButton.disabled = false;
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                localStorage.removeItem("checkoutCart");
+                localStorage.removeItem("cartItems");
+                alert("Checkout successful! Proceed to payment.");
+                window.location.href = `/sona_invoice/${data.transaction_id}`;
+            } else {
+                alert("Checkout failed. Try again.");
                 checkoutButton.innerHTML = "Make Payment";
                 checkoutButton.disabled = false;
-            });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            checkoutButton.innerHTML = "Make Payment";
+            checkoutButton.disabled = false;
+        });
     });
 
     displayCheckoutCars();

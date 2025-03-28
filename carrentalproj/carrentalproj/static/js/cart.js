@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="cart-detail">
                     <h2 class="cart-product-title">${value.name}</h2>
                     <span class="cart-price">KES ${value.price.toFixed(2)}</span>
-                    <p class="car-color hidden">${value.color}</p>
+                    <p class="car-color">${value.color}</p>
                     <p class="plate-number">${value.plateNumber}</p>
                 </div>
                 <i class="fa fa-trash cart-remove" aria-hidden="true" data-id="${key}"></i>
