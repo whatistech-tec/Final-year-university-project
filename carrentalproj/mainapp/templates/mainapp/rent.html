@@ -42,8 +42,13 @@
             
                 
                 {% for item in renting_cars %}
-                <div class="swiper-slide">
-                    <div class="select__card">
+                <div class="swiper-slide vehicle-card">
+                    <div class="select__card list" data-price="{{ item.hire_amount }}" data-car-id="{{ item.id }}">
+                        <div class="hidden">
+                            <h4 class="vehicle-name">{{item.vehicle_name}}</h4>
+                            <h4 class="vehicle-color">{{item.vehicle_color}}</h4>
+                            <h4 class="vehicle-plate">{{item.plate_number}}</h4>
+                        </div>
                         <img src="{{item.vehicle_image.url}}" alt="select">
                         <div class="select__info">
                             <div class="select__info__card">
@@ -60,7 +65,7 @@
                             </div>
                             <div class="select__info__card">
                                 <span><i class="ri-signpost-line"></i></span>
-                                <h4>{{item.milage}} <span>milage</span></h4>
+                                <h4>{{item.mileage}} <span>milage</span></h4>
                             </div>
                             
                         </div>
@@ -74,17 +79,13 @@
         <div class="select__form">
             <div class="select__price">
                 <span><i class="ri-price-tag-3-line"></i></span>
-                <div><span class="price" id="select-price">KES 0</span> /day</div>
+                <div><span class="price" id="select-price">{{item.hire_amount}}</span> /day</div>
             </div>
             <div class="select__btns">
                 <button class="btn">View Details</button>
 
+                <button type="submit" class="btn btn-rent" value="{{item.id}}">Rent Now</button>
 
-                <button type="submit" value="{{detail.id}}" class="btn  add-cart">&nbsp;Rent Now</button>
-
-                {% comment %} <button class="btn add-cart">Rent Now</button> {% endcomment %}
-
-                {% comment %} <button class="btn" href="{% url 'rent_now' %}">Rent Now</button> {% endcomment %}
             </div>
         </div>
     </div>

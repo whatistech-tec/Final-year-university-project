@@ -108,30 +108,37 @@ def payment_view(request):
         try:
             data = json.loads(request.body.decode('utf-8'))
 
+            # Extract customer details
             name = data.get('name', '')
-            phone_number = format_phone_number(data.get("phone_number"))
+            phone_number = format_phone_number(data.get("phone"))
             address = data.get('address', '')
             city = data.get('city', '')
-            national_id = data.get('national_id', '')
-            transactionCode = data.get('transactionCode', '')
-            vehicle_name = data.get('vehicle_name', '')
-            vehicle_color = data.get('vehicle_color', '')
-            plate_number = data.get('plate_number', '')
+            national_id = data.get('nationalId', '')
 
-            # Get financial details from data
+            # Extract vehicle details
+            cart_items = data.get('cart', {})
+            first_vehicle = list(cart_items.values())[0] if cart_items else {}
+            vehicle_name = first_vehicle.get('name', '')
+            vehicle_color = first_vehicle.get('color', '')
+            plate_number = first_vehicle.get('plateNumber', '')
+
+            # Rental details
+            pickup_date = data.get('pickupDate', None)
+            return_date = data.get('returnDate', None)
+            rental_days = int(data.get('rentalDays', 1))
+
+            # Financial details
             subtotal = Decimal(str(data.get('subtotal', 0)))
             vat = Decimal(str(data.get('vat', 0)))
             discount = Decimal(str(data.get('discount', 0)))
-            final_total = Decimal(str(data.get('final_total', 0)))
-            hire_amount = Decimal(str(data.get('hire_amount', 0)))
-            amount = Decimal(str(data.get('amount', 0)))
+            final_total = Decimal(str(data.get('total', 0)))
+            hire_amount = subtotal  # Assuming this is the base rental cost
+            amount = final_total  # Total after VAT & discount
 
-            # Initiate M-Pesa payment
-            response = initiate_stk_push(phone_number, amount)
+            response = initiate_stk_push(phone_number, float(amount))
 
-            print("Received data:", data)  # Log received data
 
-            # Save transaction to the database
+            # Save transaction
             transaction = Transaction.objects.create(
                 name=name,
                 phone_number=phone_number,
@@ -143,32 +150,24 @@ def payment_view(request):
                 vehicle_name=vehicle_name,
                 vehicle_color=vehicle_color,
                 plate_number=plate_number,
-                transactionCode=transactionCode,
+                rental_days=rental_days,
+                pickup_date=pickup_date,
+                return_date=return_date,
                 subtotal=subtotal,
                 vat=vat,
                 discount=discount,
                 final_total=final_total
             )
-            transaction.save()
 
-            try:
-                vehicle = VehicleDetail.objects.get(plate_number=plate_number)
-                vehicle.in_stock = False
-                vehicle.save()
-                print(f"Vehicle {plate_number} marked as unavailable.")
-            except VehicleDetail.DoesNotExist:
-                print(f"Vehicle with plate number {plate_number} not found.")
-        
-            print("Transaction saved:", transaction)  # Log successful save
+            # Mark vehicle as unavailable
+            VehicleDetail.objects.filter(plate_number=plate_number).update(in_stock=False)
 
-            return JsonResponse({"status": "success", "transaction_id": transaction.id, "message": "Payment saved successfully!"})
+            return JsonResponse({"success": True, "transaction_id": transaction.id, "message": "Payment saved successfully!"})
 
         except Exception as e:
-            print("Error saving transaction:", str(e))  # Log the error
-            return JsonResponse({'status': 'error', 'message': str(e)})
+            return JsonResponse({'success': False, 'message': str(e)})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
-
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 def generate_access_token():
     try:
@@ -526,9 +525,10 @@ def maps(request):
 
 
 
-def sona_invoice(request, pk):
-    transaction = Transaction.objects.get(id=pk)
-    return render(request, 'mainapp/sona_invoice.html',{'transaction':transaction})
+def sona_invoice(request, transaction_id):
+    transaction = get_object_or_404(Transaction, id=transaction_id)
+    return render(request, "mainapp/sona_invoice.html", {"transaction": transaction})
+
 
 def incoming_client(request):
     my_clients = Transaction.objects.all().order_by('-timestamp')

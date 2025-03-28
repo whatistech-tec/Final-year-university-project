@@ -32,20 +32,33 @@ nav-header.navbar-scrolled{
     margin-left: 50px;
 }
 
-.non-empty::after{
-    content: var(--after-content);
-    top: 0;
+#cart-icon::after{
+    content: attr(data-count);
+    position: absolute;
+    top: -8px; 
+    right: -8px; 
     width: 20px;
     height: 20px;
     background-color: rgb(39, 39, 129);
     border-radius: 50%;
     font-size: 12px;
+    font-weight: bold;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    visibility: hidden; 
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
+
+/* Make the counter visible when cart has items */
+#cart-icon[data-count]:not([data-count="0"])::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+
 
 .product-box .img-box{
     display: flex;

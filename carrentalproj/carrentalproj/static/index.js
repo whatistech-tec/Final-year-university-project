@@ -90,45 +90,93 @@ ScrollReveal().reveal(".car__info__container .btn", {
     origin: "left",
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const rentNowButtons = document.querySelectorAll(".btn-rent");
 
-const priceEl = document.getElementById("select-price");
-const selectCards = document.querySelectorAll(".select__card");
+    rentNowButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            const vehicleCard = event.target.closest(".vehicle-card"); // Get the parent vehicle card
 
-// Function to update the displayed price and active card
-function updateSwiperImage(eventName, args) {
-    if (eventName === "slideChangeTransitionStart") {
-        const index = args && args[0].realIndex;
-        priceEl.innerText = "KES " + prices[index];  // Update the displayed price
-        selectCards.forEach((item) => {
-            item.classList.remove("show__info");
+            if (!vehicleCard) {
+                console.error("Vehicle card not found.");
+                return;
+            }
+
+            // Extract vehicle details
+            const vehicleId = vehicleCard.getAttribute("data-car-id");
+            const vehicleName = vehicleCard.querySelector(".vehicle-name").textContent;
+            const vehiclePrice = vehicleCard.querySelector("data-price").textContent.replace("KES", "").trim();
+            const vehicleColor = vehicleCard.querySelector(".vehicle-color").textContent;
+            const vehiclePlate = vehicleCard.querySelector(".vehicle-plate").textContent;
+            const vehicleImg = vehicleCard.querySelector("img").src;
+
+            // Store details in localStorage
+            const selectedVehicle = {
+                id: vehicleId,
+                name: vehicleName,
+                price: parseFloat(vehiclePrice),
+                vehicle_color: vehicleColor,
+                plate_number: vehiclePlate,
+                img: vehicleImg,
+                quantity: 1, // Default quantity
+            };
+
+            localStorage.setItem("checkoutCart", JSON.stringify(selectedVehicle));
+
+            // Redirect to checkout page
+            window.location.href = "/checkout/";
         });
-        selectCards[index].classList.add("show__info");
-    }
-}
-
-// Initialize Swiper with auto-scroll (autoplay)
-const swiper = new Swiper(".swiper", {
-    loop: true,
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: "auto",
-    autoplay: {
-        delay: 3000,  // Auto-scroll every 3 seconds
-        disableOnInteraction: true,
-    },
-    coverflowEffect: {
-        rotate: 0,
-        depth: 500,
-        modifier: 1,
-        scale: 0.75,
-        slideShadows: false,
-        stretch: -100,
-    },
-    onAny(event, ...args) {
-        updateSwiperImage(event, args);
-    },
+    });
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const priceEl = document.getElementById("select-price");
+   
+    // Initialize Swiper
+    const swiper = new Swiper(".swiper", {
+        loop: true,
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        speed: 4000,
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        coverflowEffect: {
+            rotate: 0,
+            depth: 500,
+            modifier: 1,
+            scale: 0.75,
+            slideShadows: false,
+            stretch: -100,
+        },
+        on: {
+            slideChangeTransitionEnd: function () {
+                updatePrice();
+            }
+        }
+    });
+
+    function updatePrice() {
+        const activeSlide = swiper.slides[swiper.realIndex]; // Get current slide
+        const activeCard = activeSlide.querySelector(".select__card"); // Get the card inside slide
+
+        if (activeCard) {
+            const price = activeCard.dataset.price;
+            const carId = activeCard.dataset.carId;
+
+            priceEl.innerText = "KES " + parseFloat(price).toLocaleString();
+            rentNowBtn.value = carId;
+        }
+    }
+    setTimeout(updatePrice, 100);
+});
+
+
 
 
 ScrollReveal().reveal(".story__card", {

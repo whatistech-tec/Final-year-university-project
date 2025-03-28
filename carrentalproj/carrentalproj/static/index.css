@@ -156,20 +156,18 @@ header{
     margin-top: 50px;
 }
 .vehicle-header{
-    display: flex;
-    flex-direction: row;
-    align-items:center;
-    justify-content:space-between ;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
 }
 
-.box{
+.search-box{
     position: relative;
     
     width: 500px;
     transform: translate(-50%, -50%);
 
 }
-.box input{
+.search-box input{
     position: relative;
     display: inline-block;
     font-size: 20px;
@@ -177,7 +175,7 @@ header{
     transition: -5s;
 
 }
-.box input[type="text"]{
+.search-box input[type="text"]{
     background: #fff;
     width: 300px;
     height: 50px;
@@ -187,22 +185,18 @@ header{
     border-radius: 25px 0 0 25px;
     
 }
-.box input[type="submit"]{
+.search-box input[type="submit"]{
     position: relative;
     border-radius: 0 25px 25px 0;
     height: 50px;
     width: 100px;
     border: none;
     cursor: pointer;
-    background: #340983;
+    background:var(--primary-color);
 
 }
-.box input[type="submit"]:hover{
+.search-box input[type="submit"]:hover{
     background: #2542a0;
-}
-
-.collection__car__item.unavailable .overlay {
-    opacity: 1;
 }
 
 .collection__car__item.unavailable .btn__car {
@@ -752,11 +746,12 @@ i .fa{
 }
 
 .select__card img{
-    max-width: 800px;
-    max-height: 450px;
+    max-width: 600px;
+    max-height: 400px;
     overflow: hidden;
     margin-inline: auto;
     margin-bottom: 2rem;
+    border-radius: 15px;
     filter: drop-shadow(0px 20px 20px rgba(0, 0, 0, 0.5));
 }
 
@@ -824,8 +819,8 @@ i .fa{
 }
 
 .select__price span{
-    font-size: 3rem;
-    line-height: 3rem;
+    font-size: 2rem;
+    line-height: 2rem;
     color: var(--text-dark);
 }
 
@@ -848,6 +843,10 @@ i .fa{
 .select__btns .btn:nth-child(2){
     color: var(--white);
     background-color: var(--primary-color);
+}
+
+.select__btns .btn:nth-child(2):hover{
+    background-color:  var(--text-dark);
 }
 
 .story__container .section__header {

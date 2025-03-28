@@ -23,7 +23,7 @@
         <li class="{% if request.path == admin_electrics %} active {% endif %}"><a href="{% url 'admin_electrics' %}">&nbsp;&nbsp;<i class="fa fa-taxi" aria-hidden="true"></i>&nbsp;Electrics</a></li>
         <li class="{% if request.path == admin_suvs %} active {% endif %}"><a href="{% url 'admin_suvs' %}">&nbsp;&nbsp;<i class="fa fa-train" aria-hidden="true"></i>&nbsp;SUVs</a></li>
         <li class="{% if request.path == all_stories %} active {% endif %}"><a href="{% url 'all_stories' %}">&nbsp;&nbsp;<i class="fa fa-rss" aria-hidden="true"></i> &nbsp;Stories</a></li>
-        <li class="{% if request.path == get_users %} active {% endif %}"><a href="{% url 'incoming_client' %}"><i class='bx bx-group'></i>Users</a></li>
+        <li class="{% if request.path == incoming_client %} active {% endif %}"><a href="{% url 'incoming_client' %}"><i class='bx bx-group'></i>Users</a></li>
     
         {% comment %} 
         <li type="submit"></li>

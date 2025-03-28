@@ -89,6 +89,9 @@ class Transaction(models.Model):
     vat = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     discount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     final_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    pickup_date = models.DateField(null=True, blank=True)
+    return_date = models.DateField(null=True, blank=True)
+    rental_days = models.IntegerField(default=1)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

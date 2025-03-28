@@ -8,7 +8,7 @@
         {% block categories %}
         <h1>Choose Your Favorite Car</h1>
         {% endblock categories %}
-        <div class="box">
+        <div class="search-box">
             <form action="{% url 'frontend_vehicle_search' %}" method="GET"   class="search-form">
                 
                 <input type="text" name="q" placeholder="Type..." value="{{ query|default:'' }}">
@@ -23,8 +23,8 @@
             <div class="collection__car__item {% if not item.in_stock %} unavailable{% endif %}" id="collection-car-item-page" data-id="{{ item.id }}">
                 
                 <div class="hidden">
-                    <p>{{ item.vehicle_color }}</p>
-                    <p>{{ item.plate_number }}</p>
+                    <p class="car-color">{{ item.vehicle_color }}</p>
+                    <p class="plate-number">{{ item.plate_number }}</p>
                 
                 </div>
                 

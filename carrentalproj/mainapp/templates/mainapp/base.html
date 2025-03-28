@@ -57,7 +57,7 @@
                 <li><a href="{% url 'stories' %}" class="{% if request.path == stories %} active {% endif %}">Stories</a></li>
                 <li><a href="{% url 'contact' %}" class="{% if request.path == contact %} active {% endif %}">Contact</a></li>
             </ul>
-            <div id="cart-icon">
+            <div id="cart-icon" data-count="0">
                 <i class="fa fa-car" aria-hidden="true"></i>
             </div>    
 

@@ -1,160 +1,131 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const cartIcon = document.querySelector("#cart-icon");
+    const cart = document.querySelector(".cart");
+    const cartClose = document.querySelector("#cart-close");
+    const addCartButtons = document.querySelectorAll(".add-cart");
+    const cartWrapper = document.querySelector('.cart-content');
+    const buyNowButton = document.querySelector(".btn-buy");
+    const totalPriceElement = document.querySelector(".total-price");
 
-const cartIcon = document.querySelector("#cart-icon");
-const cart = document.querySelector(".cart");
-const cartClose = document.querySelector("#cart-close");
+    cartIcon.addEventListener("click", () => cart.classList.add("active"));
+    cartClose.addEventListener("click", () => cart.classList.remove("active"));
 
-cartIcon.addEventListener("click", () => cart.classList.add("active"));
-cartClose.addEventListener("click", () => cart.classList.remove("active"));
-
-const addCartButtons = document.querySelectorAll(".add-cart");
-addCartButtons.forEach(btn =>{
-    btn.addEventListener("click", addItemFunction)
-
-});
-
-
-class CartItem{
-    constructor(name, img, price, vehicle_color,plate_number){
-        this.name = name
-        this.img=img
-        this.price = price
-        this.vehicle_color = vehicle_color
-        this.plate_number = plate_number
-        this.quantity = 1
-   }
-}
-
-class LocalCart{
-    static key = "cartItems"
-
-    static getLocalCartItems(){
-        let cartMap = new Map()
-     const cart = localStorage.getItem(LocalCart.key)   
-     if(cart===null || cart.length===0)  return cartMap
-        return new Map(Object.entries(JSON.parse(cart)))
+    class CartItem {
+        constructor(id, name, img, price, color, plateNumber) {
+            this.id = id;
+            this.name = name;
+            this.img = img;
+            this.price = price;
+            this.color = color;
+            this.plateNumber = plateNumber;
+            this.quantity = 1;
+        }
     }
 
+    class LocalCart {
+        static key = "cartItems";
 
-    static addItemToLocalCart(id, item) {
-        let cart = LocalCart.getLocalCartItems();
-        if (cart.has(id)) {
-            alert("Car already in your collection");
+        static getLocalCartItems() {
+            let cart = localStorage.getItem(LocalCart.key);
+            return cart ? new Map(Object.entries(JSON.parse(cart))) : new Map();
+        }
+
+        static addItemToLocalCart(id, item) {
+            let cart = LocalCart.getLocalCartItems();
+            if (cart.has(id)) {
+                alert("Car already in your collection");
+                return;
+            }
+            cart.set(id, item);
+            localStorage.setItem(LocalCart.key, JSON.stringify(Object.fromEntries(cart)));
+            updateCartUI();
+        }
+
+        static removeItemFromCart(id) {
+            let cart = LocalCart.getLocalCartItems();
+            if (cart.has(id)) {
+                cart.delete(id);
+                localStorage.setItem(LocalCart.key, JSON.stringify(Object.fromEntries(cart)));
+            }
+            updateCartUI();
+        }
+    }
+
+    function addItemFunction(event) {
+        const parent = event.target.closest(".collection__car__item");
+        const id = parent.getAttribute("data-id");
+        const img = parent.querySelector("img").src;
+        const name = parent.querySelector(".product-title").textContent;
+        let price = parseFloat(parent.querySelector(".price").textContent.replace("KES", "").trim());
+        const carColor = parent.querySelector(".car-color").textContent;
+        const plateNumber = parent.querySelector(".plate-number").textContent;
+                
+
+        const item = new CartItem(id, name, img, price, carColor, plateNumber);
+        LocalCart.addItemToLocalCart(id, item);
+
+        updateCartUI();
+
+    }
+
+    function updateCartUI() {
+        cartWrapper.innerHTML = "";
+        let items = LocalCart.getLocalCartItems();
+        let total = 0;
+        let itemCount = items.size; // Get number of items in the cart
+    
+        if (itemCount === 0) {
+            cartWrapper.innerHTML = "<p>Your collection is empty!</p>";
+            totalPriceElement.textContent = "KES 0";
+            cartIcon.setAttribute("data-count", "0");
             return;
         }
-        cart.set(id, item);
-        localStorage.setItem(LocalCart.key, JSON.stringify(Object.fromEntries(cart)));
-        updateCartUI();
-    }
-
-
-    static removeItemFromCart(id){
-    let cart = LocalCart.getLocalCartItems()
-    if(cart.has(id)){
-        let mapItem = cart.get(id)
-        if(mapItem.quantity>1)
-       {
-        mapItem.quantity -=1
-        cart.set(id, mapItem)
-       }
-       else
-       cart.delete(id)
-    } 
-    if (cart.length===0)
-    localStorage.clear()
-    else
-    localStorage.setItem(LocalCart.key,  JSON.stringify(Object.fromEntries(cart)))
-       updateCartUI()
-    }
-}
-
-function addItemFunction(e){
-    const id = e.target.parentElement.parentElement.getAttribute("data-id")
-    const img = e.target.parentElement.previousElementSibling.src
-    const vehicle_color = e.target.parentElement.parentElement.firstElementChild.firstElementChild.textContent
-    const plate_number = e.target.parentElement.parentElement.firstElementChild.children[1].textContent
-    const name = e.target.previousElementSibling.textContent
-    let price = e.target.parentElement.firstElementChild.firstElementChild.firstElementChild.textContent
-    price = price.replace("KES", '')
-    const item = new CartItem(name, img, price, vehicle_color, plate_number)
-    LocalCart.addItemToLocalCart(id, item)
-//  console.log(price)
-}
-
-
-function updateCartUI(){
-    const cartWrapper = document.querySelector('.cart-content');
-    cartWrapper.innerHTML = "";
-
-    const items = LocalCart.getLocalCartItems();
-    if(items === null || items.size === 0) {
-        cartWrapper.innerHTML = "<p>Your collection is empty!</p>";
-        const subtotal = document.querySelector('.total-price');
-        subtotal.innerHTML = `KES 0`;
-        cartIcon.classList.remove('non-empty');
-        return;
-    }
-
-    let count = 0;
-    let total = 0;
-    for(const [key, value] of items.entries()){
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-content');
-        let price = value.price * value.quantity;
-        price = Math.round(price * 100) / 100;
-        count += 1;
-        total += price;
-        total = Math.round(total * 100) / 100;
-        cartItem.innerHTML = `
-            <div class="hidden">
-            <p>${value.vehicle_color}</p>
-            <p>${value.plate_number}</p>
-        </div>
-            <div class="cart-box">
+    
+        items.forEach((value, key) => {
+            let cartItem = document.createElement("div");
+            cartItem.classList.add("cart-box");
+            cartItem.innerHTML = `
                 <img src="${value.img}" class="cart-img" alt="">
                 <div class="cart-detail">
                     <h2 class="cart-product-title">${value.name}</h2>
-                    <span class="cart-price">KES ${price}</span>
+                    <span class="cart-price">KES ${value.price.toFixed(2)}</span>
+                    <p class="car-color hidden">${value.color}</p>
+                    <p class="plate-number">${value.plateNumber}</p>
                 </div>
-                <i class="fa fa-trash cart-remove" aria-hidden="true"></i>
-            </div>
-        `;
-        cartItem.lastElementChild.addEventListener('click', () => {
-            LocalCart.removeItemFromCart(key);
+                <i class="fa fa-trash cart-remove" aria-hidden="true" data-id="${key}"></i>
+            `;
+    
+            cartItem.querySelector(".cart-remove").addEventListener("click", () => {
+                LocalCart.removeItemFromCart(key);
+            });
+    
+            cartWrapper.append(cartItem);
+            total += value.price;
         });
-        cartWrapper.append(cartItem);
+    
+        totalPriceElement.textContent = `KES ${total.toFixed(2)}`;
+    
+        // Update the cart icon with item count
+        cartIcon.setAttribute("data-count", itemCount);
     }
-
-    if(count > 0){
-        cartIcon.classList.add('non-empty');
-        let root = document.querySelector(':root');
-        root.style.setProperty('--after-content', `"${count}"`);
-        const subtotal = document.querySelector('.total-price');
-        subtotal.innerHTML = `KES ${total}`;
-    } else {
-        cartIcon.classList.remove('non-empty');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+    
+    
+    // Call updateCartUI() after clearing the cart
     updateCartUI();
-});
-
-
-document.addEventListener('DOMContentLoaded', ()=>{updateCartUI()})
     
 
+    addCartButtons.forEach((btn) => btn.addEventListener("click", addItemFunction));
 
+    buyNowButton.addEventListener("click", () => {
+        let items = LocalCart.getLocalCartItems();
+        if (items.size === 0) {
+            alert("Your collection is empty!");
+            return;
+        }
+        localStorage.setItem("checkoutCart", JSON.stringify(Object.fromEntries(items)));
+        window.location.href = buyNowButton.getAttribute("data-url");
+    });
 
-const buyNowButton = document.querySelector(".btn-buy");
-buyNowButton.addEventListener("click", () => {
-    const items = LocalCart.getLocalCartItems();
-    if (items.size === 0) {
-        alert("Your collection is empty!");
-        return;
-    }
-    localStorage.setItem("checkoutCart", JSON.stringify(Object.fromEntries(items)));
-    // Redirect to checkout page
-    const checkoutUrl = buyNowButton.getAttribute("data-url");
-    window.location.href = checkoutUrl;
+    updateCartUI();
 });
 
